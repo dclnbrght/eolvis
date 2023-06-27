@@ -1,0 +1,150 @@
+
+BODY {
+    margin: 0;
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+    background-color: #fff;
+}
+
+header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background-color: #444;
+    color: #fff;
+    height: 2.4em;
+}
+#header-logo {
+    width: 1.6em;
+    height: 2em;
+    padding: 0.2em;
+    background-color: #0088ff;
+}
+#header-logo svg g {
+    fill: #0088ff;
+    stroke: #eee;
+    stroke-width: 2;
+}
+H1 {
+    margin: 0;
+    font-size: 120%;
+    display: inline-block;
+    padding: 0.4em 0.4em 0.4em 0.6em;
+}
+#header-right {
+    float: right;
+    padding: 0.3em;
+}
+.header-action {
+    float: right;
+    margin: 0 0.3em;
+}
+
+
+.section-eol {
+    margin: 0;
+}
+svg {
+    vertical-align: top;
+}
+
+.timeline-year {
+    fill: #777;
+    stroke: #333;
+    stroke-width: 1px;
+}
+.year-label {
+    padding: 0.2rem 0.6rem;
+    fill: #fff;
+}
+
+.timeline-month {
+    fill: #eee;
+    stroke: #d3d3d3;
+    stroke-width: 1px;
+}
+.timeline-month-alt {
+    fill: #ddd;
+}
+.timeline-month-cur {
+    fill: #00a0be;
+}
+.month-label {
+    fill: #555;
+    font-size: 90%;
+}
+.month-label-cur {
+    fill: #fff;
+}
+
+.category-divider {
+    stroke: #666;
+    stroke-width: 2px;
+    stroke-dasharray: 4 2;
+}
+.category-label {
+    fill: #444;
+    font-size: 110%;
+    font-weight: bold;
+}
+
+.item-label {
+    padding: 0.2rem 0.6rem;
+    fill: #fff;
+}
+.item-link {
+    fill: #ccc;
+}
+.item-link-icon {
+    fill: #ccc;
+}
+
+.item-supported {
+    fill: #666;
+}
+.item-supported-stopColour {
+    stop-color: #666;
+}
+.item-supported-noEnd {
+    fill: url(#item-supported-fadeRight);
+}
+
+.item {
+    fill: #aaa;
+}
+.item-inuse {
+    fill: #548235;
+}
+.item-inuse-stopColour {
+    stop-color: #548235;
+}
+.item-inuse-noEnd {
+    fill: url(#item-inuse-fadeRight);
+}
+.item-inuse-future {
+    fill: #888;
+}
+.item-inuse-future-stopColour {
+    stop-color: #888;
+}
+.item-inuse-future-noEnd {
+    fill: url(#item-inuse-future-fadeRight);
+}
+.item-inuse-near-eol {
+    fill: rgb(224, 114, 23);
+}
+.item-inuse-eol {
+    fill: rgb(220, 20, 20);
+}
+
+/*
+to correct scroll computations on android
+https://stackoverflow.com/questions/47456125/not-a-top-of-the-page-but-window-scrolly-equals-0-on-chrome-mobile-browser
+*/
+@media screen and (max-width: 992px) {
+    html, body {
+        overflow: auto !important;
+    }
+}
