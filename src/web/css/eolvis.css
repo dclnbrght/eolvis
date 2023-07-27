@@ -102,13 +102,25 @@ svg {
 }
 
 .item-supported {
-    fill: #666;
+    fill: #bbb;
 }
 .item-supported-stopColour {
-    stop-color: #666;
+    stop-color: #bbb;
 }
 .item-supported-noEnd {
     fill: url(#item-supported-fadeRight);
+}
+.item-supported-border {
+    fill-opacity: 0;
+    stroke: #666;
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+.item-supported-border-stopColour {
+    stop-color: #666;
+}
+.item-supported-border-noEnd {
+    stroke: url(#item-supported-border-fadeRight);
 }
 
 .item {

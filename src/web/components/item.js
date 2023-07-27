@@ -8,7 +8,7 @@ const render = (item, y, minDate, maxDate) => {
 
     const today = new Date();
     const itemBarHeightInUse = 20;
-    const itemBarHeightSupported = 5;
+    const itemBarHeightSupported = 22;
 
     const inUseStart = new Date(item.useFrom)
     const inUseEnd = (item.useTo === "") ? dateUtils.addMonths(inUseStart, 12) : new Date(item.useTo);
@@ -27,7 +27,7 @@ const render = (item, y, minDate, maxDate) => {
     let itemSupportedRect = svgUtils.renderSvgElement("rect");
     itemSupportedRect.classList.add("item-supported");
     itemSupportedRect.setAttribute("x", monthWidth * monthsSupportedFromStart);
-    itemSupportedRect.setAttribute("y", y + itemBarHeightInUse);
+    itemSupportedRect.setAttribute("y", y);
     itemSupportedRect.setAttribute("width", monthWidth * monthsSupported);
     itemSupportedRect.setAttribute("height", itemBarHeightSupported);
     if (item.supportedTo === "") {
@@ -39,7 +39,7 @@ const render = (item, y, minDate, maxDate) => {
     let itemInUseRect = svgUtils.renderSvgElement("rect");
     itemInUseRect.classList.add("item");
     itemInUseRect.setAttribute("x", monthWidth * monthsInUseFromStart);
-    itemInUseRect.setAttribute("y", y);
+    itemInUseRect.setAttribute("y", y + 1);
     itemInUseRect.setAttribute("width", monthWidth * monthsInUse);
     itemInUseRect.setAttribute("height", itemBarHeightInUse);
     if (inUseStart < today && inUseEnd > today) {
@@ -66,6 +66,18 @@ const render = (item, y, minDate, maxDate) => {
         itemInUseRect.classList.add("item-inuse-eol");
     }
     itemGroup.appendChild(itemInUseRect);
+
+    // item supported border
+    let itemSupportedBorder = svgUtils.renderSvgElement("rect");
+    itemSupportedBorder.classList.add("item-supported-border");
+    itemSupportedBorder.setAttribute("x", monthWidth * monthsSupportedFromStart);
+    itemSupportedBorder.setAttribute("y", y);
+    itemSupportedBorder.setAttribute("width", monthWidth * monthsSupported);
+    itemSupportedBorder.setAttribute("height", itemBarHeightSupported);
+    if (item.supportedTo === "") {
+        itemSupportedBorder.classList.add("item-supported-border-noEnd");
+    }
+    itemGroup.appendChild(itemSupportedBorder);
 
     // item label
     let itemLabel = svgUtils.renderSvgElement("text");
