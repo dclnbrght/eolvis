@@ -21,6 +21,14 @@
         </div>
         <h1 id="title">eolvis</h1>
         <div id="header-right">
+            <div id="action-options" class="header-action">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                  <g stroke="#eee" stroke-width="2">
+                    <title>options</title>
+                    <path d="M 3 3 L 16 3 M 3 9 L 16 9 M 3 15 L 16 15"/>
+                  </g>
+                </svg>
+            </div>
         </div>
     </header>
 
@@ -45,6 +53,33 @@
             </defs>
         </svg>
     </section>
+    
+    <dialog id="dialog-options">
+        <div id="dialog-options-close-x" class="dialog-close-x">X</div>
+        <h3>Options</h3>
+
+        <div id="options-exportEol">
+            <h4>Export Eol</h4>
+            <p>Export a Eol file in the Eolvis format.</p>
+            <div class="dialog-button-container">
+                <button id="dialog-options-export-eol" class="dialog-button">Export Eol</button>
+            </div>
+        </div>        
+        <br /><hr />
+
+        <div id="options-exportSBoM">
+            <h4>Export SBoM</h4>
+            <p>Export a SBoM (Software Bill of Materials) in CycloneDX format.</p>
+            <div class="dialog-button-container">
+                <button id="dialog-options-export-bom" class="dialog-button">Export SBoM</button>
+            </div>
+        </div>        
+        <br /><hr />
+
+        <div class="dialog-button-container">
+            <button id="dialog-options-close" class="dialog-button">Close</button>
+        </div>
+    </dialog>
 
     <script type="module" src="index.js"></script>
 </body>
