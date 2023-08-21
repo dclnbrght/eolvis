@@ -1,0 +1,51 @@
+import * as dataAccess from './dataAccess.js';
+
+const exportEol = () => {
+    const data = dataAccess.requestDataFromStore();    
+    downloadTextFile(JSON.stringify(data, null, 3), "eol.json");
+}
+
+const bomTypeMap = {
+    "Operating System": "operating-system",
+    "Application Framework": "framework"
+};
+
+const exportBom = () => {
+    const data = dataAccess.requestDataFromStore(); 
+    
+    const components = [].map.call(data.components, (i) => {
+        return {
+            type: bomTypeMap[i.category] ?? null,
+            name: i.name,
+            version: i.version,
+            externalReferences: [
+                {
+                    type: "website",
+                    url: i.link
+                }
+            ]
+        };
+    });
+
+    const bom = {
+        bomFormat: "CycloneDX",
+        specVersion: "1.5",
+        components: components
+    };
+
+    downloadTextFile(JSON.stringify(bom, null, 3), "bom.json");
+}
+
+const downloadTextFile = (text, name) => {
+    const a = document.createElement('a');
+    const type = name.split(".").pop();
+    a.href = URL.createObjectURL( new Blob([text], { type:`text/${type === "txt" ? "plain" : type}` }) );
+    a.download = name;
+    a.click();
+    a.remove();
+}
+
+export {
+    exportEol,
+    exportBom
+};

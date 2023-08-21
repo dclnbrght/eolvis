@@ -34,12 +34,60 @@ H1 {
     padding: 0.4em 0.4em 0.4em 0.6em;
 }
 #header-right {
-    float: right;
+    margin-left: auto;
     padding: 0.3em;
 }
 .header-action {
-    float: right;
     margin: 0 0.3em;
+}
+
+
+#dialog-options {
+    background-color: #fff;
+    color: #666;
+    text-align: left;
+    border: none;
+    padding: 0.6rem 1.6rem;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1), 0 0 10px rgba(0,0,0,0.25);
+    max-width: 80vw;
+}
+dialog::backdrop {
+    background: rgba(100,100,100,.5);
+}
+.dialog-button-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 2em 0 1.4em 0;
+}
+.dialog-button,
+.dialog-button-secondary {
+    background-color: #666; 
+    border: none;
+    color: white;
+    padding: 0.5em 1em;
+    margin: 0 0.2em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}
+.dialog-button-secondary {
+    background-color: #ddd; 
+    border: #666;
+    color: #666;
+}
+.dialog-close-x {
+    float: right;
+    font-weight: bold;
+    color: #bbb;
+    font-size: 120%;
+    margin-top: 0.4em;
+    cursor: pointer;
+}
+
+
+.hidden {
+    display: none;
 }
 
 
