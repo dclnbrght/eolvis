@@ -1,5 +1,6 @@
 import * as settings from '../settings.js';
 import * as dateUtils from './dateUtils.js';
+import * as dataUpdate from './dataUpdate.js';
 import * as svgUtils from './svgUtils.js';
 
 const monthWidth = settings.yearWidth / 12;
@@ -90,7 +91,9 @@ const render = (item, y, minDate, maxDate) => {
 
     // item group with link
     let itemGroupAnchor = svgUtils.renderSvgElement("a");
-    itemGroupAnchor.setAttribute("href", `${item.link}`);
+    itemGroupAnchor.addEventListener("click", function (e) {
+        dataUpdate.open(item);
+    });
     itemGroupAnchor.appendChild(itemGroup);
 
     return itemGroupAnchor;
