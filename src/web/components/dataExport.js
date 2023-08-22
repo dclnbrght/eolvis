@@ -2,7 +2,7 @@ import * as dataAccess from './dataAccess.js';
 
 const exportEol = () => {
     const data = dataAccess.requestDataFromStore();    
-    downloadTextFile(JSON.stringify(data, null, 3), "eol.json");
+    downloadTextFile(JSON.stringify(data, null, 4), "eol.json");
 }
 
 const bomTypeMap = {
@@ -33,7 +33,7 @@ const exportBom = () => {
         components: components
     };
 
-    downloadTextFile(JSON.stringify(bom, null, 3), "bom.json");
+    downloadTextFile(JSON.stringify(bom, null, 4), "bom.json");
 }
 
 const downloadTextFile = (text, name) => {

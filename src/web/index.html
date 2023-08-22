@@ -54,6 +54,76 @@
         </svg>
     </section>
     
+    <dialog id="dialog-details">
+        <h3>Details</h3>
+
+        <form id="formDetails" method="post" data-form-sync>
+            <div class="form-item">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-item">
+                <label for="version">Version:</label>
+                <input type="text" id="version" name="version">
+            </div>
+            <div class="form-item">
+                <label for="lts">LTS:</label>
+                <input type="checkbox" id="lts" name="lts" checked>
+            </div>
+            <div class="form-item">
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category">
+            </div>
+            <hr>
+            <div class="form-item">
+                <label for="supportedFrom">Supported From:</label>
+                <input type="date" id="supportedFrom" name="supportedFrom">
+            </div>
+            <div class="form-item">
+                <label for="supportedTo">Supported To:</label>
+                <input type="date" id="supportedTo" name="supportedTo">
+            </div>
+            <hr>
+            <div class="form-item">
+                <label for="latestPatch">Latest Patch:</label>
+                <input type="text" id="latestPatch" name="latestPatch">
+            </div>
+            <div class="form-item">
+                <label for="latestPatchReleased">Patch Released:</label>
+                <input type="date" id="latestPatchReleased" name="latestPatchReleased">
+            </div>
+            <hr>
+            <div class="form-item">
+                <label for="useFrom">Use From:</label>
+                <input type="date" id="useFrom" name="useFrom">
+            </div>
+            <div class="form-item">
+                <label for="useTo">Use To:</label>
+                <input type="date" id="useTo" name="useTo">
+            </div>
+            <hr>
+            <div class="form-item">
+                <label for="link">Link:</label>
+                <input type="text" id="link" name="link">
+                <a id="link-anchor" href="" target="_blank">(link)</a>
+            </div>
+            <div class="form-item">
+                <label for="notes">Notes:</label>
+                <textarea id="notes" name="notes"></textarea>
+            </div>
+            <hr>
+            <div class="form-item">
+                <label for="lastReviewed">Last Reviewed:</label>
+                <input type="date" id="lastReviewed" name="lastReviewed" readonly>
+            </div>
+        </form>
+
+        <div class="dialog-button-container">
+            <button id="dialog-details-cancel" class="dialog-button-secondary">Cancel</button>
+            <button id="dialog-details-save" class="dialog-button">Save</button>
+        </div>
+    </dialog>
+
     <dialog id="dialog-options">
         <div id="dialog-options-close-x" class="dialog-close-x">X</div>
         <h3>Options</h3>

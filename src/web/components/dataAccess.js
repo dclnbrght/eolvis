@@ -10,7 +10,7 @@ const requestDataFromServer = (filePath, callback) => {
             return response.json();
         })
         .then(data => {
-            sessionStorage.setItem(dataStoreKey, JSON.stringify(data));
+            saveDataToStore(data);
             callback();
         })
         .catch(error => {
@@ -18,6 +18,16 @@ const requestDataFromServer = (filePath, callback) => {
             console.error(msg);
             alert(msg);
         });
+}
+
+const saveDataToStore = (data) => {
+    try {   
+        sessionStorage.setItem(dataStoreKey, JSON.stringify(data));    
+    } catch (error) {
+        const msg = `Error saving data to store \r\n\r\n${error}`;
+        console.error(msg);
+        alert(msg);
+    }
 }
 
 const dataExistsInStore = () => {
@@ -36,5 +46,6 @@ const requestDataFromStore = () => {
 
 export {
     requestDataFromServer,
-    requestDataFromStore
+    requestDataFromStore,
+    saveDataToStore
 }; 

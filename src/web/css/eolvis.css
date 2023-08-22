@@ -42,6 +42,7 @@ H1 {
 }
 
 
+#dialog-details,
 #dialog-options {
     background-color: #fff;
     color: #666;
@@ -53,6 +54,7 @@ H1 {
 }
 dialog::backdrop {
     background: rgba(100,100,100,.5);
+    backdrop-filter: blur(0.04em);
 }
 .dialog-button-container {
     display: flex;
@@ -85,6 +87,22 @@ dialog::backdrop {
     cursor: pointer;
 }
 
+.form-item {
+    margin: 0.2em;
+}
+.form-item label {
+    display: inline-block;
+    min-width: 8em;
+    text-align: right;
+    vertical-align: top;
+}
+.form-item input[text] {
+    min-width: 8em;
+}
+.form-item textarea {
+    min-width: 20em;
+    min-height: 4em;
+}
 
 .hidden {
     display: none;
