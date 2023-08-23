@@ -17,15 +17,16 @@ export const warnNearEolDays = 90;
 /* display LTS in the item label where it's set to true  */
 export const displayLtsLabelIfTrue = true;
 
-/* the categories of items */
-export const categories = [
-    "Operating System",
-    "Application Framework",
-    "Application Component",
-    "Middleware",
-    "Data Storage",
-    "Protocol"
-];
+/* item types */
+export const types = {
+    "operating-system": "Operating System",
+    "platform": "Platform",
+    "framework": "Framework",
+    "library": "Library",
+    "middleware": "Middleware",
+    "data-store": "Data Store",
+    "protocol": "Protocol"
+};
 
 /* the text in the month labels on the timeline */
 export const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

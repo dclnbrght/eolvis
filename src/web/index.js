@@ -21,7 +21,7 @@ const renderDataFromStore = () => {
         document.getElementById("title").innerText = projectName;
 
         const items = data.components;
-        container.render(settings.categories, items, minDate, maxDate);
+        container.render(settings.types, items, minDate, maxDate);
 
     } catch (error) {
         const msg = `Error rendering data \r\n\r\n${error}`;
@@ -64,6 +64,7 @@ document.getElementById("dialog-options-export-bom").addEventListener("click", (
 
 window.onload = () => {
     requestData(renderDataFromStore);
+    dataUpdate.setup();
 };
 window.onscroll = () => {
     positionTimeline(document.getElementById("timeline"), pageHeaderHeight);

@@ -6,8 +6,7 @@ const exportEol = () => {
 }
 
 const bomTypeMap = {
-    "Operating System": "operating-system",
-    "Application Framework": "framework"
+    "middleware": "platform"
 };
 
 const exportBom = () => {
@@ -15,7 +14,7 @@ const exportBom = () => {
     
     const components = [].map.call(data.components, (i) => {
         return {
-            type: bomTypeMap[i.category] ?? null,
+            type: bomTypeMap[i.type] ?? i.type,
             name: i.name,
             version: i.version,
             externalReferences: [
