@@ -5,9 +5,9 @@ import * as timeline from './timeline.js';
 import * as item from './item.js';
 
 const timelineHeight = 52;
-const categoryHeaderPaddingTop = 22;
-const categoryHeaderPaddingBottom = 14;
-const categoryPaddingBottom = 6;
+const groupHeaderPaddingTop = 22;
+const groupHeaderPaddingBottom = 14;
+const groupPaddingBottom = 6;
 const itemHeight = 36;
 
 const renderTimelineMonthLines = (itemContainer, minDate, maxDate) => {
@@ -20,50 +20,50 @@ const renderTimeline = (itemContainer, minDate, maxDate) => {
     itemContainer.appendChild(timelineGroup);
 };
 
-const renderItems = (container, categories, items, minDate, maxDate) => {
+const renderItems = (container, types, items, minDate, maxDate) => {
 
     let containerY = timelineHeight;
-    categories.forEach((category) => {
+    Object.entries(types).forEach(([type, typeDisplay]) => {
 
-        const categoryItems = items.filter((item) => {
-            return item.category == category;
+        const itemGroupItems = items.filter((item) => {
+            return item.type == type;
         });
 
-        if (categoryItems.length > 0) {
-            let categoryGroup = svgUtils.renderSvgElement("g");
-            categoryGroup.id = `category-${category.replace(" ", "-").toLowerCase()}`;
+        if (itemGroupItems.length > 0) {
+            let itemGroup = svgUtils.renderSvgElement("g");
+            itemGroup.id = `type-${type.replace(" ", "-").toLowerCase()}`;
 
-            // category divider line
-            let categoryDivider = svgUtils.renderSvgElement("line");
-            categoryDivider.classList.add("category-divider");
-            categoryDivider.setAttribute("x1", 0);
-            categoryDivider.setAttribute("y1", containerY);
-            categoryDivider.setAttribute("x2", "100%");
-            categoryDivider.setAttribute("y2", containerY);
-            categoryGroup.appendChild(categoryDivider);
+            // group divider line
+            let itemGroupDivider = svgUtils.renderSvgElement("line");
+            itemGroupDivider.classList.add("item-group-divider");
+            itemGroupDivider.setAttribute("x1", 0);
+            itemGroupDivider.setAttribute("y1", containerY);
+            itemGroupDivider.setAttribute("x2", "100%");
+            itemGroupDivider.setAttribute("y2", containerY);
+            itemGroup.appendChild(itemGroupDivider);
 
-            containerY += categoryHeaderPaddingTop;
+            containerY += groupHeaderPaddingTop;
 
-            // category label
-            let categoryLabel = svgUtils.renderSvgElement("text");
-            categoryLabel.classList.add("category-label");
-            categoryLabel.textContent = `${category}`;
-            categoryLabel.setAttribute("x", 6);
-            categoryLabel.setAttribute("y", containerY);
-            categoryGroup.appendChild(categoryLabel);
+            // group label
+            let itemGroupLabel = svgUtils.renderSvgElement("text");
+            itemGroupLabel.classList.add("item-group-label");
+            itemGroupLabel.textContent = `${typeDisplay}`;
+            itemGroupLabel.setAttribute("x", 6);
+            itemGroupLabel.setAttribute("y", containerY);
+            itemGroup.appendChild(itemGroupLabel);
 
-            containerY += categoryHeaderPaddingBottom;
+            containerY += groupHeaderPaddingBottom;
 
-            // category items
-            categoryItems.map((itemData) => {
+            // group items
+            itemGroupItems.map((itemData) => {
                 const itemRendered = item.render(itemData, containerY, minDate, maxDate);
-                categoryGroup.appendChild(itemRendered);
+                itemGroup.appendChild(itemRendered);
                 containerY += itemHeight;
             });
 
-            containerY += categoryPaddingBottom;
+            containerY += groupPaddingBottom;
 
-            container.appendChild(categoryGroup);
+            container.appendChild(itemGroup);
         }
     });
 
@@ -83,12 +83,12 @@ const setContainerSize = (container, containerY, minDate, maxDate) => {
     header.style.width = containerWidth + 'px';
 };
 
-const render = (categories, items, minDate, maxDate) => {
+const render = (types, items, minDate, maxDate) => {
     const itemContainer = document.getElementById("itemContainer");
 
     renderTimelineMonthLines(itemContainer, minDate, maxDate);
 
-    const containerY = renderItems(itemContainer, categories, items, minDate, maxDate);
+    const containerY = renderItems(itemContainer, types, items, minDate, maxDate);
 
     renderTimeline(itemContainer, minDate, maxDate);
 

@@ -1,9 +1,20 @@
+import * as settings from '../settings.js';
 import * as dataAccess from './dataAccess.js';
 
 let curItem = {};
 
+const setup = () => {
+    const itemTypeSelect = document.getElementById('item-type');
+    Object.entries(settings.types).forEach(([type, typeDisplay]) => {
+        var option = document.createElement("option");
+        option.value = type;
+        option.innerHTML = typeDisplay;
+        itemTypeSelect.appendChild(option);
+    });
+}
+
 const open = (item) => {
-    curItem = item;    
+    curItem = item;
 
     // Populate the form
     Object.keys(item).forEach(key => {
@@ -26,7 +37,7 @@ const open = (item) => {
     });
 
     const anchorLink = document.getElementById('link-anchor');
-    if(item['link'].length > 0) {
+    if (item['link'].length > 0) {
         anchorLink.classList.remove('hidden');
         anchorLink.href = item['link'];
     } else {
@@ -67,7 +78,7 @@ const save = (callback) => {
         if (obj.name === curItem.name && obj.version === curItem.version) {
             return { 
                 ...curItem, 
-                'lastReviewed': new Date().toISOString().split('T')[0] 
+                'updated': new Date().toISOString().split('T')[0] 
             };
         }
         return obj;
@@ -89,6 +100,7 @@ const cancel = () => {
 }
 
 export {
+    setup,
     open,
     save,
     cancel

@@ -76,8 +76,8 @@
                 <input type="checkbox" id="lts" name="lts" checked>
             </div>
             <div class="form-item">
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category">
+                <label for="type">Type:</label>
+                <select id="item-type" name="type"></select>
             </div>
             <hr>
             <div class="form-item">
@@ -118,8 +118,8 @@
             </div>
             <hr>
             <div class="form-item">
-                <label for="lastReviewed">Last Reviewed:</label>
-                <input type="date" id="lastReviewed" name="lastReviewed" readonly>
+                <label for="updated">Last Updated:</label>
+                <input type="date" id="updated" name="updated" readonly>
             </div>
         </form>
 
@@ -134,10 +134,10 @@
         <h3>Options</h3>
 
         <div id="options-exportEol">
-            <h4>Export Eol</h4>
-            <p>Export a Eol file in the Eolvis format.</p>
+            <h4>Export Data</h4>
+            <p>Export a data file in the Eolvis format.</p>
             <div class="dialog-button-container">
-                <button id="dialog-options-export-eol" class="dialog-button">Export Eol</button>
+                <button id="dialog-options-export-eol" class="dialog-button">Export Data</button>
             </div>
         </div>        
         <br /><hr />

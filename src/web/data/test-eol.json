@@ -14,8 +14,8 @@
             "link": "",
             "notes": "test near EOL",
             "lts": false,
-            "category": "Operating System",
-            "lastReviewed": "2023-06-23"
+            "type": "operating-system",
+            "updated": "2023-06-23"
         }
     ]
 }
