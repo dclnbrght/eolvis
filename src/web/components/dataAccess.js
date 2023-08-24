@@ -21,7 +21,7 @@ const requestDataFromServer = (filePath, callback) => {
 }
 
 const saveDataToStore = (data) => {
-    try {   
+    try {
         sessionStorage.setItem(dataStoreKey, JSON.stringify(data));    
     } catch (error) {
         const msg = `Error saving data to store \r\n\r\n${error}`;

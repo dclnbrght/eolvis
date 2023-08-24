@@ -80,7 +80,7 @@ const render = (item, y, minDate, maxDate) => {
     // item group with link
     let itemGroupAnchor = svgUtils.renderSvgElement("a");
     itemGroupAnchor.addEventListener("click", function (e) {
-        dataUpdate.open(item);
+        dataUpdate.openForm(item);
     });
     itemGroupAnchor.appendChild(itemGroup);
 

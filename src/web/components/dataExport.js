@@ -14,10 +14,11 @@ const exportBom = () => {
     
     const components = [].map.call(data.components, (i) => {
         return {
-            type: bomTypeMap[i.type] ?? i.type,
-            name: i.name,
-            version: i.version,
-            externalReferences: [
+            "name": i.name,
+            "version": i.version,
+            "type": bomTypeMap[i.type] ?? i.type,
+            "bom-ref": i.id,
+            "externalReferences": [
                 {
                     type: "website",
                     url: i.link
@@ -27,9 +28,9 @@ const exportBom = () => {
     });
 
     const bom = {
-        bomFormat: "CycloneDX",
-        specVersion: "1.5",
-        components: components
+        "bomFormat": "CycloneDX",
+        "specVersion": "1.5",
+        "components": components
     };
 
     downloadTextFile(JSON.stringify(bom, null, 4), "bom.json");

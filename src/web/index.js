@@ -38,14 +38,19 @@ const positionTimeline = (timeline, pageHeaderHeight) => {
         timeline.removeAttribute("transform");
 }
 
-
 document.getElementById("dialog-details-save").addEventListener("click", (e) => {
-    dataUpdate.save(renderDataFromStore);
+    dataUpdate.updateItem(renderDataFromStore);
+});
+document.getElementById("dialog-details-delete").addEventListener("click", (e) => {
+    dataUpdate.deleteItem(renderDataFromStore);
 });
 document.getElementById("dialog-details-cancel").addEventListener("click", (e) => {
-    dataUpdate.cancel();
+    dataUpdate.cancelForm();
 });
 
+document.getElementById("action-new-item").addEventListener("click", (e) => {
+    dataUpdate.newItem();
+});
 document.getElementById("action-options").addEventListener("click", (e) => {
     options.optionsDialogOpen();
 });
@@ -64,7 +69,6 @@ document.getElementById("dialog-options-export-bom").addEventListener("click", (
 
 window.onload = () => {
     requestData(renderDataFromStore);
-    dataUpdate.setup();
 };
 window.onscroll = () => {
     positionTimeline(document.getElementById("timeline"), pageHeaderHeight);
