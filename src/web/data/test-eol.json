@@ -2,6 +2,7 @@
     "projectName": "Test EOL Roadmap",
     "components": [
         {
+            "id": "a00feab3-6c0f-4bc3-a14d-53e7afaf2161",
             "name": "Test OS",
             "version": "1",
             "supportedFrom": "2022-01-01",

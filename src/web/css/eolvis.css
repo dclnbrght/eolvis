@@ -44,6 +44,7 @@ H1 {
 }
 .header-action {
     margin: 0 0.3em;
+    display: inline-block;
 }
 
 
@@ -63,7 +64,7 @@ dialog::backdrop {
 }
 .dialog-button-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin: 2em 0 1.4em 0;
 }
 .dialog-button,
@@ -72,7 +73,7 @@ dialog::backdrop {
     border: none;
     color: white;
     padding: 0.5em 1em;
-    margin: 0 0.2em;
+    margin: 0 0.6em;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -82,6 +83,9 @@ dialog::backdrop {
     background-color: #ddd; 
     border: #666;
     color: #666;
+}
+.dialog-button-left {
+    margin-right: auto;
 }
 .dialog-close-x {
     float: right;
@@ -96,14 +100,13 @@ dialog::backdrop {
     margin: 0.2em;
 }
 .form-item label {
-    display: inline-block;
+    display: block;
     line-height: 1.4em;
     min-width: 8em;
-    text-align: right;
-    vertical-align: top;
 }
-.form-item input[text] {
-    min-width: 8em;
+.form-item input[type='text'],
+.form-item select {
+    min-width: 12em;
 }
 .form-item input:read-only {
     border: none;
@@ -233,5 +236,13 @@ https://stackoverflow.com/questions/47456125/not-a-top-of-the-page-but-window-sc
 @media screen and (max-width: 992px) {
     html, body {
         overflow: auto !important;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .form-item label {
+        display: inline-block;
+        text-align: right;
+        vertical-align: top;
     }
 }

@@ -26,7 +26,7 @@ const renderItems = (container, types, items, minDate, maxDate) => {
     Object.entries(types).forEach(([type, typeDisplay]) => {
 
         const itemGroupItems = items.filter((item) => {
-            return item.type == type;
+            return item.type == type && !item.deleted;
         });
 
         if (itemGroupItems.length > 0) {
@@ -70,13 +70,13 @@ const renderItems = (container, types, items, minDate, maxDate) => {
     return containerY;
 };
 
-const setContainerSize = (container, containerY, minDate, maxDate) => {
+const setSvgSize = (svg, containerY, minDate, maxDate) => {
     const monthWidth = settings.yearWidth / 12;
     const monthsCount = dateUtils.numberOfMonths(minDate, maxDate);
     const containerWidth = monthWidth * monthsCount;
 
-    container.setAttribute("width", containerWidth);
-    container.setAttribute("height", containerY);
+    svg.setAttribute("width", containerWidth);
+    svg.setAttribute("height", containerY);
 
     // Set width for Chrome on Android
     const header = document.getElementById("header");
@@ -84,7 +84,9 @@ const setContainerSize = (container, containerY, minDate, maxDate) => {
 };
 
 const render = (types, items, minDate, maxDate) => {
+    
     const itemContainer = document.getElementById("itemContainer");
+    itemContainer.replaceChildren(); // empty before rerendering
 
     renderTimelineMonthLines(itemContainer, minDate, maxDate);
 
@@ -92,7 +94,8 @@ const render = (types, items, minDate, maxDate) => {
 
     renderTimeline(itemContainer, minDate, maxDate);
 
-    setContainerSize(itemContainer, containerY, minDate, maxDate);
+    const itemSvg = document.getElementById("eolvisSvg");
+    setSvgSize(itemSvg, containerY, minDate, maxDate);
 }
 
 export { render };

@@ -3,17 +3,61 @@ import * as dataAccess from './dataAccess.js';
 
 let curItem = {};
 
-const setup = () => {
-    const itemTypeSelect = document.getElementById('item-type');
-    Object.entries(settings.types).forEach(([type, typeDisplay]) => {
-        var option = document.createElement("option");
-        option.value = type;
-        option.innerHTML = typeDisplay;
-        itemTypeSelect.appendChild(option);
+const createNewId = () => {
+    // create a UUID v4
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+    .replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0, 
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
     });
 }
 
-const open = (item) => {
+const setupForm = (isNew) => {
+    const itemTypeSelect = document.getElementById('item-type');
+    if (itemTypeSelect.options.length == 0) {
+        Object.entries(settings.types).forEach(([type, typeDisplay]) => {
+            var option = document.createElement("option");
+            option.value = type;
+            option.innerHTML = typeDisplay;
+            itemTypeSelect.appendChild(option);
+        });
+    }
+    
+    const deleteAction = document.getElementById('dialog-details-delete');
+    if (isNew) deleteAction.classList.add('hidden');
+    else deleteAction.classList.remove('hidden');
+    
+    const itemUpdated = document.getElementById('item-updated-wrapper');
+    if (isNew) itemUpdated.classList.add('hidden');
+    else itemUpdated.classList.remove('hidden');
+}
+
+const openForm = (item) => {
+    let isNew = false;
+
+    // adding a new item, clear form
+    if (typeof(item.id) === "undefined") {
+        isNew = true;
+        item = {
+            "name": "",
+            "version": "",
+            "supportedFrom": "",
+            "supportedTo": "",
+            "supportedToExtended": "",
+            "latestPatch": "",
+            "latestPatchReleased": "",
+            "useFrom": "",
+            "useTo": "",
+            "link": "",
+            "notes": "",
+            "lts": false,
+            "type": "",
+        };
+    }
+    
+    setupForm(isNew);
+    
     curItem = item;
 
     // Populate the form
@@ -22,9 +66,8 @@ const open = (item) => {
             const elem = document.getElementsByName(key)[0];
 
             switch (elem.type) {
-                case 'text':
                 case 'date':
-                    elem.value = item[key];
+                    elem.value = item[key].split('T')[0];
                     break;
                 case 'checkbox': 
                     elem.checked = !!item[key];
@@ -36,14 +79,13 @@ const open = (item) => {
         }
     });
 
-    const anchorLink = document.getElementById('link-anchor');
-    if (item['link'].length > 0) {
+    const anchorLink = document.getElementById('item-link-anchor');
+    if (item['link'] && item['link'].length > 0) {
         anchorLink.classList.remove('hidden');
         anchorLink.href = item['link'];
     } else {
         anchorLink.classList.add('hidden');
     }
-
    
     // Event handler to update from form input
     // Only run on form with data-form-sync attribute
@@ -52,7 +94,6 @@ const open = (item) => {
             return;
 
         switch (event.target.type) {
-            case 'text':
             case 'date':
                 curItem[event.target.name] = event.target.value;
                 break;
@@ -69,39 +110,93 @@ const open = (item) => {
     document.getElementById("dialog-details").showModal();
 }
 
-const save = (callback) => {
+const newItem = () => {
+    openForm({});
+}
+
+const updateItem = (callback) => {
 
     const data = dataAccess.requestDataFromStore();
     const components = data.components;
 
-    const newComponents = components.map(obj => {
-        if (obj.name === curItem.name && obj.version === curItem.version) {
-            return { 
-                ...curItem, 
-                'updated': new Date().toISOString().split('T')[0] 
-            };
-        }
-        return obj;
-    });
-    const newData = {
-        ...data,
-        'components': newComponents,
-    };
+    if (typeof(curItem.id) === "undefined") {
+        // adding new item
+        const newComponents = components.concat([
+            {
+                'id': createNewId(),
+                ...curItem,
+                'updated': new Date().toISOString()
+            }]
+        );
+        const newData = {
+            ...data,
+            'components': newComponents,
+        };
 
-    dataAccess.saveDataToStore(newData);
+        dataAccess.saveDataToStore(newData);
+    } else {
+        // updating existing item
+        const newComponents = components.map(obj => {
+            if (obj.id === curItem.id) {
+                return { 
+                    ...curItem,
+                    'updated': new Date().toISOString()
+                };
+            }
+            return obj;
+        });
+        const newData = {
+            ...data,
+            'components': newComponents,
+        };
+
+        dataAccess.saveDataToStore(newData);
+    }
 
     document.getElementById("dialog-details").close();
     
     callback();
 }
 
-const cancel = () => {
+const deleteItem = (callback) => {
+
+    var result = confirm("Are you sure you want to delete this item?");
+    if (result) {
+
+        const data = dataAccess.requestDataFromStore();
+        const components = data.components;
+
+        const newComponents = components.map(obj => {
+            if (obj.id === curItem.id) {
+                return { 
+                    ...curItem, 
+                    'updated': new Date().toISOString(),
+                    'deleted': true
+                };
+            }
+            return obj;
+        });
+        const newData = {
+            ...data,
+            'components': newComponents,
+        };
+
+        dataAccess.saveDataToStore(newData);
+
+        document.getElementById("dialog-details").close();
+        
+        callback();
+    }
+}
+
+const cancelForm = () => {
     document.getElementById("dialog-details").close();
 }
 
 export {
-    setup,
-    open,
-    save,
-    cancel
+    openForm,
+    newItem,
+    updateItem,
+    deleteItem,
+    cancelForm
 };

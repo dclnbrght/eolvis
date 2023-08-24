@@ -21,6 +21,14 @@
         </div>
         <h1 id="title">eolvis</h1>
         <div id="header-right">
+            <div id="action-new-item" class="header-action">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                  <g stroke="#eee" stroke-width="2">
+                    <title>add item</title>
+                    <path d="M 9.5 2.5 L 9.5 15.5 M 3 9 L 16 9"/>
+                  </g>
+                </svg>
+            </div>
             <div id="action-options" class="header-action">
                 <svg width="20" height="20" viewBox="0 0 20 20">
                   <g stroke="#eee" stroke-width="2">
@@ -33,7 +41,7 @@
     </header>
 
     <section id="section-eol" class="section-eol">
-        <svg id="itemContainer" xmlns="http://www.w3.org/2000/svg">
+        <svg id="eolvisSvg" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="item-supported-fadeRight">
                     <stop class="item-supported-stopColour" offset="0%" stop-opacity="1.0" />
@@ -56,27 +64,28 @@
                     <stop class="item-inuse-future-stopColour" offset="100%" stop-opacity="0" />
                 </linearGradient>
             </defs>
+            <g id="itemContainer"></g>
         </svg>
     </section>
     
     <dialog id="dialog-details">
-        <h3>Details</h3>
+        <h3>Software Details</h3>
 
         <form id="formDetails" method="post" data-form-sync>
             <div class="form-item">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
+                <label for="item-name">Name:</label>
+                <input type="text" id="item-name" name="name">
             </div>
             <div class="form-item">
-                <label for="version">Version:</label>
-                <input type="text" id="version" name="version">
+                <label for="item-version">Version:</label>
+                <input type="text" id="item-version" name="version">
             </div>
             <div class="form-item">
-                <label for="lts">LTS:</label>
-                <input type="checkbox" id="lts" name="lts" checked>
+                <label for="item-lts">LTS:</label>
+                <input type="checkbox" id="item-lts" name="lts" checked>
             </div>
             <div class="form-item">
-                <label for="type">Type:</label>
+                <label for="item-type">Type:</label>
                 <select id="item-type" name="type"></select>
             </div>
             <hr>
@@ -85,45 +94,46 @@
                 <input type="date" id="supportedFrom" name="supportedFrom">
             </div>
             <div class="form-item">
-                <label for="supportedTo">Supported To:</label>
-                <input type="date" id="supportedTo" name="supportedTo">
+                <label for="item-supportedTo">Supported To:</label>
+                <input type="date" id="item-supportedTo" name="supportedTo">
+            </div>
+            <div class="form-item">
+                <label for="item-link">Link:</label>
+                <input type="text" id="item-link" name="link">
+                <a id="item-link-anchor" href="" target="_blank">(link)</a>
             </div>
             <hr>
             <div class="form-item">
-                <label for="latestPatch">Latest Patch:</label>
-                <input type="text" id="latestPatch" name="latestPatch">
+                <label for="item-latestPatch">Latest Patch:</label>
+                <input type="text" id="item-latestPatch" name="latestPatch">
             </div>
             <div class="form-item">
-                <label for="latestPatchReleased">Patch Released:</label>
-                <input type="date" id="latestPatchReleased" name="latestPatchReleased">
-            </div>
-            <hr>
-            <div class="form-item">
-                <label for="useFrom">Use From:</label>
-                <input type="date" id="useFrom" name="useFrom">
-            </div>
-            <div class="form-item">
-                <label for="useTo">Use To:</label>
-                <input type="date" id="useTo" name="useTo">
+                <label for="item-latestPatchReleased">Patch Released:</label>
+                <input type="date" id="item-latestPatchReleased" name="latestPatchReleased">
             </div>
             <hr>
             <div class="form-item">
-                <label for="link">Link:</label>
-                <input type="text" id="link" name="link">
-                <a id="link-anchor" href="" target="_blank">(link)</a>
+                <label for="item-useFrom">Use From:</label>
+                <input type="date" id="item-useFrom" name="useFrom">
             </div>
             <div class="form-item">
-                <label for="notes">Notes:</label>
-                <textarea id="notes" name="notes"></textarea>
+                <label for="item-useTo">Use To:</label>
+                <input type="date" id="item-useTo" name="useTo">
             </div>
             <hr>
             <div class="form-item">
-                <label for="updated">Last Updated:</label>
-                <input type="date" id="updated" name="updated" readonly>
+                <label for="item-notes">Notes:</label>
+                <textarea id="item-notes" name="notes"></textarea>
+            </div>
+            <hr>
+            <div id="item-updated-wrapper" class="form-item">
+                <label for="item-updated">Last Updated:</label>
+                <input type="date" id="item-updated" name="updated" readonly>
             </div>
         </form>
 
         <div class="dialog-button-container">
+            <button id="dialog-details-delete" class="dialog-button-secondary dialog-button-left">Delete</button>
             <button id="dialog-details-cancel" class="dialog-button-secondary">Cancel</button>
             <button id="dialog-details-save" class="dialog-button">Save</button>
         </div>
