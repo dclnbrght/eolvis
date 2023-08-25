@@ -6,12 +6,60 @@ let curItem = {};
 const createNewId = () => {
     // create a UUID v4
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-    .replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, 
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        .replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, 
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 }
+
+const displayError = (msg) => {
+    const errorBox = document.getElementById("dialog-form-error");
+    errorBox.innerHTML = msg;
+    errorBox.classList.remove('hidden');
+    return false;
+}
+
+const validateItem = (item) => {
+
+    if (item.name === "")
+        return displayError("Please enter a Name");
+
+    if (item.name !== "" && item.name.length > 100)
+        return displayError("Name must be less than 100 characters");
+    
+    if (item.version === "")
+        return displayError("Please enter a Version");
+    
+    if (item.version !== "" && item.version.length > 50)
+        return displayError("Version must be less than 50 characters");
+    
+    if (item.type === "")
+        return displayError("Please select a Type");
+
+    if (item.supportedFrom === "")
+        return displayError("Please enter a Supported From date");
+
+    if (item.supportedFrom !== "" && item.supportedTo !== ""
+        && new Date(item.supportedFrom) >= new Date(item.supportedTo))
+        return displayError("The Supported To date must be greater than the Supported From date");
+    
+    if (item.link !== "" && item.link.length > 500)
+        return displayError("Link must be less than 500 characters");
+    
+    if (item.latestPatch !== "" && item.latestPatch.length > 50)
+        return displayError("Latest Patch must be less than 50 characters");
+
+    if (item.useFrom !== "" && item.useTo !== ""
+        && new Date(item.useFrom) >= new Date(item.useTo))
+        return displayError("The Use To date must be greater than the Use From date");
+    
+    if (item.notes !== "" && item.notes.length > 500)
+        return displayError("Notes must be less than 500 characters");
+
+    document.getElementById("dialog-form-error").classList.add('hidden');
+    return true;
+};
 
 const setupForm = (isNew) => {
     const itemTypeSelect = document.getElementById('item-type');
@@ -116,6 +164,9 @@ const newItem = () => {
 
 const updateItem = (callback) => {
 
+    if (!validateItem(curItem))
+        return;
+
     const data = dataAccess.requestDataFromStore();
     const components = data.components;
 
@@ -161,32 +212,31 @@ const updateItem = (callback) => {
 const deleteItem = (callback) => {
 
     var result = confirm("Are you sure you want to delete this item?");
-    if (result) {
+    if (!result) return;
 
-        const data = dataAccess.requestDataFromStore();
-        const components = data.components;
+    const data = dataAccess.requestDataFromStore();
+    const components = data.components;
 
-        const newComponents = components.map(obj => {
-            if (obj.id === curItem.id) {
-                return { 
-                    ...curItem, 
-                    'updated': new Date().toISOString(),
-                    'deleted': true
-                };
-            }
-            return obj;
-        });
-        const newData = {
-            ...data,
-            'components': newComponents,
-        };
+    const newComponents = components.map(obj => {
+        if (obj.id === curItem.id) {
+            return { 
+                ...curItem, 
+                'updated': new Date().toISOString(),
+                'isdeleted': true
+            };
+        }
+        return obj;
+    });
+    const newData = {
+        ...data,
+        'components': newComponents,
+    };
 
-        dataAccess.saveDataToStore(newData);
+    dataAccess.saveDataToStore(newData);
 
-        document.getElementById("dialog-details").close();
-        
-        callback();
-    }
+    document.getElementById("dialog-details").close();
+    
+    callback();
 }
 
 const cancelForm = () => {

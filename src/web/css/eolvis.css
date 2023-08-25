@@ -54,13 +54,22 @@ H1 {
     color: #666;
     text-align: left;
     border: none;
-    padding: 0.6rem 1.6rem;
+    padding: 0.5rem 1.6rem;
     box-shadow: 0 0 30px rgba(0,0,0,0.1), 0 0 10px rgba(0,0,0,0.25);
     max-width: 80vw;
+    border-radius: 0.5em;
 }
 dialog::backdrop {
     background: rgba(100,100,100,.5);
     backdrop-filter: blur(0.04em);
+}
+.dialog-form-error {
+    padding: 0.75rem;
+    color: #002840;
+    background-color: #ce8585;
+    border-radius: 0.25rem;
+    margin: 0.5rem 0 0 0;
+    max-width: 360px;
 }
 .dialog-button-container {
     display: flex;
@@ -78,6 +87,7 @@ dialog::backdrop {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
+    border-radius: 0.3em;
 }
 .dialog-button-secondary {
     background-color: #ddd; 
