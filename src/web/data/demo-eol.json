@@ -36,23 +36,6 @@
             "updated": "2023-06-16"
         },
         {
-            "id": "91e48010-4857-440f-be87-3c8c4258e214",
-            "name": ".NET Core",
-            "version": "3.1",
-            "supportedFrom": "2019-12-03",
-            "supportedTo": "2022-12-13",
-            "supportedToExtended": "",
-            "latestPatch": "3.1.32",
-            "latestPatchReleased": "2022-12-13",
-            "useFrom": "2020-03-01",
-            "useTo": "2023-08-31",
-            "link": "https://learn.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core",
-            "notes": "https://dotnet.microsoft.com/en-us/download/dotnet/3.1",
-            "lts": true,
-            "type": "platform",
-            "updated": "2023-06-13"
-        },
-        {
             "id": "0166192c-263a-49ac-a002-4125e3ca9eab",
             "name": ".NET Core",
             "version": "6.0",
@@ -82,6 +65,23 @@
             "useTo": "",
             "link": "https://github.com/dotnet/core/blob/a74eb1fa4ef497234ce6f8ff67378559f534f0bf/release-notes/README.md",
             "notes": "",
+            "lts": true,
+            "type": "platform",
+            "updated": "2023-06-13"
+        },
+        {
+            "id": "91e48010-4857-440f-be87-3c8c4258e214",
+            "name": ".NET Core",
+            "version": "3.1",
+            "supportedFrom": "2019-12-03",
+            "supportedTo": "2022-12-13",
+            "supportedToExtended": "",
+            "latestPatch": "3.1.32",
+            "latestPatchReleased": "2022-12-13",
+            "useFrom": "2020-03-01",
+            "useTo": "2023-08-31",
+            "link": "https://learn.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core",
+            "notes": "https://dotnet.microsoft.com/en-us/download/dotnet/3.1",
             "lts": true,
             "type": "platform",
             "updated": "2023-06-13"
@@ -136,6 +136,24 @@
             "lts": true,
             "type": "platform",
             "updated": "2023-06-23"
+        },
+        {
+            "id": "f5431e5e-a957-4f76-8ccc-ba6bef6b485b",
+            "name": "Windows",
+            "version": "1.0",
+            "supportedFrom": "1985-11-20",
+            "supportedTo": "1987-12-09",
+            "supportedToExtended": "",
+            "latestPatch": "",
+            "latestPatchReleased": "",
+            "useFrom": "1985-11-20",
+            "useTo": "2030-12-09",
+            "link": "https://en.wikipedia.org/wiki/Windows_1.0x",
+            "notes": "DEMO DELETED ITEM",
+            "lts": false,
+            "type": "operating-system",
+            "updated": "2023-08-25T13:47:07.251Z",
+            "isdeleted": true
         }
     ]
 }
