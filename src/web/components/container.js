@@ -20,14 +20,20 @@ const renderTimeline = (itemContainer, minDate, maxDate) => {
     itemContainer.appendChild(timelineGroup);
 };
 
+const itemSortComparator = (a, b) => {
+    // sort by name then version
+    return a.name.localeCompare(b.name) 
+        || a.version.localeCompare(b.version);
+};
+
 const renderItems = (container, types, items, minDate, maxDate) => {
 
     let containerY = timelineHeight;
     Object.entries(types).forEach(([type, typeDisplay]) => {
 
         const itemGroupItems = items.filter((item) => {
-            return item.type == type && !item.deleted;
-        });
+            return item.type == type && !item.isdeleted;
+        }).sort(itemSortComparator);
 
         if (itemGroupItems.length > 0) {
             let itemGroup = svgUtils.renderSvgElement("g");
@@ -86,7 +92,7 @@ const setSvgSize = (svg, containerY, minDate, maxDate) => {
 const render = (types, items, minDate, maxDate) => {
     
     const itemContainer = document.getElementById("itemContainer");
-    itemContainer.replaceChildren(); // empty before rerendering
+    itemContainer.replaceChildren(); // empty container before re-rendering
 
     renderTimelineMonthLines(itemContainer, minDate, maxDate);
 
