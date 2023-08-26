@@ -25,10 +25,9 @@ header {
     width: 1.6em;
     height: 2em;
     padding: 0.2em;
-    background-color: #0088ff;
+    background-color: #00a0be;
 }
 #header-logo svg g {
-    fill: #0088ff;
     stroke: #eee;
     stroke-width: 2;
 }
@@ -190,7 +189,7 @@ svg {
 }
 
 .item-supported {
-    fill: #bbb;
+    fill: hsla(0, 0%, 33%, 0.5);
 }
 .item-supported-stopColour {
     stop-color: #bbb;
@@ -212,7 +211,7 @@ svg {
 }
 
 .item {
-    fill: #aaa;
+    fill: #888;
 }
 .item-inuse {
     fill: #548235;
@@ -224,7 +223,7 @@ svg {
     fill: url(#item-inuse-fadeRight);
 }
 .item-inuse-future {
-    fill: #888;
+    fill: #777;
 }
 .item-inuse-future-stopColour {
     stop-color: #888;

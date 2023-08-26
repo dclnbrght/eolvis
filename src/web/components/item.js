@@ -84,12 +84,13 @@ const render = (item, y, minDate, maxDate) => {
     let itemLabel = svgUtils.renderSvgElement("text");
     itemLabel.classList.add("item-label");
     itemLabel.textContent = `${item.name} ${item.version} ${settings.displayLtsLabelIfTrue && item.lts ? "(LTS)" : ""}`;
-    itemLabel.setAttribute("x", ((monthWidth * monthsInUseFromStart) + (monthWidth * monthsInUse / 2)));
+    itemLabel.setAttribute("x", ((monthWidth * (monthsInUseFromStart > 0 ? monthsInUseFromStart : monthsSupportedFromStart)) 
+        + (monthWidth * (monthsInUse > 0 ?  monthsInUse : monthsSupported) / 2)));
     itemLabel.setAttribute("y", y + 15);
     itemLabel.setAttribute("text-anchor", "middle");
     itemGroup.appendChild(itemLabel);
 
-    // item group with link
+    // item group anchor
     let itemGroupAnchor = svgUtils.renderSvgElement("a");
     itemGroupAnchor.addEventListener("click", function (e) {
         dataUpdate.openForm(item);

@@ -136,6 +136,23 @@
             "lts": true,
             "type": "platform",
             "updated": "2023-06-23"
+        },
+        {
+            "id": "6e3017f1-3ad2-4395-a254-b671b1b26214",
+            "name": "Windows Server",
+            "version": "2025",
+            "supportedFrom": "2025-02-02",
+            "supportedTo": "2027-12-31",
+            "supportedToExtended": "",
+            "latestPatch": "",
+            "latestPatchReleased": "",
+            "useFrom": "",
+            "useTo": "",
+            "link": "",
+            "notes": "",
+            "lts": false,
+            "type": "operating-system",
+            "updated": "2023-08-26T21:05:17.548Z"
         }
     ]
 }
