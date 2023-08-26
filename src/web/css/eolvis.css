@@ -25,10 +25,9 @@ header {
     width: 1.6em;
     height: 2em;
     padding: 0.2em;
-    background-color: #0088ff;
+    background-color: #00a0be;
 }
 #header-logo svg g {
-    fill: #0088ff;
     stroke: #eee;
     stroke-width: 2;
 }
@@ -190,17 +189,29 @@ svg {
 }
 
 .item-supported {
-    fill: #666;
+    fill: hsla(0, 0%, 33%, 0.5);
 }
 .item-supported-stopColour {
-    stop-color: #666;
+    stop-color: #bbb;
 }
 .item-supported-noEnd {
     fill: url(#item-supported-fadeRight);
 }
+.item-supported-border {
+    fill-opacity: 0;
+    stroke: #666;
+    stroke-width: 2;
+    stroke-linejoin: round;
+}
+.item-supported-border-stopColour {
+    stop-color: #666;
+}
+.item-supported-border-noEnd {
+    stroke: url(#item-supported-border-fadeRight);
+}
 
 .item {
-    fill: #aaa;
+    fill: #888;
 }
 .item-inuse {
     fill: #548235;
@@ -212,7 +223,7 @@ svg {
     fill: url(#item-inuse-fadeRight);
 }
 .item-inuse-future {
-    fill: #888;
+    fill: #777;
 }
 .item-inuse-future-stopColour {
     stop-color: #888;

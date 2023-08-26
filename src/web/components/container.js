@@ -22,8 +22,8 @@ const renderTimeline = (itemContainer, minDate, maxDate) => {
 
 const itemSortComparator = (a, b) => {
     // sort by name then version
-    return a.name.localeCompare(b.name) 
-        || a.version.localeCompare(b.version);
+    return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }) 
+        || a.version.localeCompare(b.version, undefined, { 'numeric': true });
 };
 
 const renderItems = (container, types, items, minDate, maxDate) => {
