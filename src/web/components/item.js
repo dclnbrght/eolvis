@@ -57,14 +57,15 @@ const render = (item, y, minDate, maxDate) => {
     else if (inUseStart > today) {
         itemInUseRect.classList.add("item-inuse-future");
     }
+    else if (inUseStart < today 
+        && inUseEnd > today 
+        && inUseEnd > supportedEnd) {
+        itemInUseRect.classList.add("item-inuse-eol");
+    }
     else if (inUseStart < today
         && inUseEnd > today
-        && inUseEnd > supportedEnd
-        && inUseEnd < new Date((supportedEnd.getTime() + (settings.warnNearEolDays * 24 * 3600000)))) {
+        && supportedEnd < new Date((today.getTime() + (settings.warnNearEolDays * 24 * 3600000)))) {
         itemInUseRect.classList.add("item-inuse-near-eol");
-    }
-    else if (inUseStart < today && inUseEnd > today && inUseEnd > supportedEnd) {
-        itemInUseRect.classList.add("item-inuse-eol");
     }
     itemGroup.appendChild(itemInUseRect);
 
