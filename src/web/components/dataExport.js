@@ -11,8 +11,12 @@ const bomTypeMap = {
 
 const exportBom = () => {
     const data = dataAccess.requestDataFromStore(); 
+
+    const filteredComponents = data.components.filter((item) => {
+        return !item.isdeleted;
+    });
     
-    const components = [].map.call(data.components, (i) => {
+    const components = [].map.call(filteredComponents, (i) => {
         return {
             "name": i.name,
             "version": i.version,
