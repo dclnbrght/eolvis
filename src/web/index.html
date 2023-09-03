@@ -7,6 +7,7 @@
     <meta name="description" content="Visualise software EOL (End-Of-Life) timelines">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.5, user-scalable=yes">
+    <link rel="stylesheet" href="css/tail.select-light.css">
     <link rel="stylesheet" href="css/eolvis.css">
 </head>
 
@@ -41,6 +42,12 @@
     </header>
 
     <section id="section-eol" class="section-eol">
+        <div id="filter-bar" class="filter-bar">
+            <div id="typeNameFilter-container" class="filter-container">
+                <select id="typeNameFilter" multiple></select>
+            </div>
+        </div>
+
         <svg id="eolvisSvg" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="item-supported-fadeRight">
@@ -166,6 +173,7 @@
         </div>
     </dialog>
 
+    <script src="libs/tail.select-full.min.js"></script>
     <script type="module" src="index.js"></script>
 </body>
 
