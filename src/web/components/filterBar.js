@@ -1,3 +1,4 @@
+import * as settings from '../settings.js';
 
 const filterBarStoreKey = "eolvisSelectedFilters";
 
@@ -71,7 +72,7 @@ const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilter
 
     filterArray.forEach((group) => {
         const optgroup = document.createElement('optgroup');
-        optgroup.label = group.type;
+        optgroup.label = settings.types[group.type];
 
         group.names.forEach((name) => {
             const option = document.createElement('option');
@@ -102,7 +103,7 @@ const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilter
 
 
 const setupFilters = (data, filterSearch) => {
-    // Set value from: query string || previously selected values in localStorage || default values in settings.js
+    // Set value from: query string || previously selected values in localStorage
     const querystringParameters = new URLSearchParams(window.location.search);
     let previousSelectedFilterValues = [];
     if (localStorage.getItem(filterBarStoreKey))

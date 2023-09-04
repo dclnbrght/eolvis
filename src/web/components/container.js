@@ -83,10 +83,6 @@ const setSvgSize = (svg, containerY, minDate, maxDate) => {
 
     svg.setAttribute("width", containerWidth);
     svg.setAttribute("height", containerY);
-
-    // Set width for Chrome on Android
-    //const header = document.getElementById("header");
-    //header.style.width = containerWidth + 'px';
 };
 
 const render = (types, items, minDate, maxDate) => {

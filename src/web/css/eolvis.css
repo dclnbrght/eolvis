@@ -247,16 +247,6 @@ svg {
     fill: rgb(220, 20, 20);
 }
 
-/*
-to correct scroll computations on android
-https://stackoverflow.com/questions/47456125/not-a-top-of-the-page-but-window-scrolly-equals-0-on-chrome-mobile-browser
-*/
-@media screen and (max-width: 992px) {
-    html, body {
-        /* overflow: auto !important; */
-    }
-}
-
 @media only screen and (min-width: 600px) {
     .form-item label {
         display: inline-block;
