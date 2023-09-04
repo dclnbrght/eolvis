@@ -140,6 +140,7 @@ dialog::backdrop {
 
 .section-eol {
     margin: 0 0 6em 0;
+    overflow-x: scroll;
 }
 svg {
     vertical-align: top;
@@ -252,7 +253,7 @@ https://stackoverflow.com/questions/47456125/not-a-top-of-the-page-but-window-sc
 */
 @media screen and (max-width: 992px) {
     html, body {
-        overflow: auto !important;
+        /* overflow: auto !important; */
     }
 }
 
