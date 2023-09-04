@@ -90,7 +90,9 @@ const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilter
 
     tail.select("#typeNameFilter", {
         placeholder: 'Type / Name Filter',
-        multiSelectAll: true
+        multiSelectAll: true,
+        search: true,
+        searchFocus: false
     });
 
     selectElement.addEventListener("change", (e) => {
