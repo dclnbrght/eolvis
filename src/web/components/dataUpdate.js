@@ -53,6 +53,10 @@ const validateItem = (item) => {
     if (item.useFrom !== "" && item.useTo !== ""
         && new Date(item.useFrom) >= new Date(item.useTo))
         return displayError("The Use To date must be greater than the Use From date");
+
+    if (item.supportedFrom !== "" && item.useFrom !== ""
+        && new Date(item.useFrom) < new Date(item.supportedFrom))
+        return displayError("The Use From date must be greater than the Supported From date");
     
     if (item.notes !== "" && item.notes.length > 500)
         return displayError("Notes must be less than 500 characters");

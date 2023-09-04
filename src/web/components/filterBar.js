@@ -48,11 +48,13 @@ const typeNameFilterArray = (data) => {
     const componentNamesByType = {};
 
     data.components.forEach((component) => {
-        const { type, name } = component;
-        if (!componentNamesByType[type]) {
-            componentNamesByType[type] = new Set();
+        if (!component.isdeleted) {
+            const { type, name } = component;
+            if (!componentNamesByType[type]) {
+                componentNamesByType[type] = new Set();
+            }
+            componentNamesByType[type].add(name);
         }
-        componentNamesByType[type].add(name);
     });
 
     const sortedTypes = Object.keys(componentNamesByType).sort();
