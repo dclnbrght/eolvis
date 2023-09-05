@@ -69,6 +69,7 @@ const typeNameFilterArray = (data) => {
 
 const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilterValues, filterSearch) => {
     const selectElement = document.getElementById('typeNameFilter');
+    selectElement.replaceChildren();
 
     const filterArray = typeNameFilterArray(data);
 
@@ -96,7 +97,7 @@ const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilter
         multiSelectAll: true,
         search: true,
         searchFocus: false
-    });
+    }).reload();
 
     selectElement.addEventListener("change", (e) => {
         changeEventFunc(e, filterSearch);
