@@ -115,6 +115,16 @@ const setupFilters = (data, filterSearch) => {
     setupTypeNameFilter(data, querystringParameters, previousSelectedFilterValues, filterSearch);
 };
 
+const addToSelectedFilterValues = (filterName, value) => {
+    if (localStorage.getItem(filterBarStoreKey)) {
+        let previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
+
+        previousSelectedFilterValues[filterName].push(value);
+        
+        localStorage.setItem(filterBarStoreKey, JSON.stringify(previousSelectedFilterValues));
+    }
+};
+
 const selectedFilterValues = () => {
     const selectedNames = getSelectBoxValues("typeNameFilter");
 
@@ -129,4 +139,5 @@ const selectedFilterValues = () => {
 export {
     setupFilters,
     selectedFilterValues,
+    addToSelectedFilterValues
 }

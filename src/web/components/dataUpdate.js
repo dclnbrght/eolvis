@@ -1,4 +1,5 @@
 import * as settings from '../settings.js';
+import * as filterBar from './filterBar.js';
 import * as dataAccess from './dataAccess.js';
 
 let curItem = {};
@@ -187,6 +188,8 @@ const updateItem = (callback) => {
             ...data,
             'components': newComponents,
         };
+
+        filterBar.addToSelectedFilterValues("selectedNames", curItem.name);
 
         dataAccess.saveDataToStore(newData);
     } else {
