@@ -3,7 +3,7 @@ import * as dataAccess from './components/dataAccess.js';
 import * as filterBar from './components/filterBar.js';
 import * as dataSearch from './components/dataSearch.js';
 import * as dataUpdate from './components/dataUpdate.js';
-import * as container from './components/container.js';
+import * as itemBoard from './components/itemBoard.js';
 import * as options from './components/options.js';
 
 const pageHeaderHeight = 75;
@@ -46,7 +46,8 @@ const filterSearch = () => {
             filterValues.selectedNames
         );
 
-        container.render(settings.types, filteredItems, minDate, maxDate);
+        const today = new Date();
+        itemBoard.render(settings.types, filteredItems, today, minDate, maxDate);
 
     } catch (error) {
         const msg = `Error searching \r\n\r\n${error}`;

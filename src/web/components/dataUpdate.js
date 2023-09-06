@@ -250,10 +250,16 @@ const cancelForm = () => {
     document.getElementById("dialog-details").close();
 }
 
+const exportForTesting = {
+    validateItem,
+    displayError
+}
+
 export {
     openForm,
     newItem,
     updateItem,
     deleteItem,
-    cancelForm
+    cancelForm,
+    exportForTesting
 };

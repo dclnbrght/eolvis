@@ -6,7 +6,7 @@ const monthWidth = settings.yearWidth / 12;
 const today = new Date();
 
 const renderYears = (minDate, maxDate) => {
-    let yearsGroup = svgUtils.renderSvgElement("g");
+    let yearsGroup = svgUtils.createSvgElement("g");
     yearsGroup.Id = "timeline-years";
 
     const fromYear = new Date(minDate).getFullYear();
@@ -15,7 +15,7 @@ const renderYears = (minDate, maxDate) => {
     let yearIndex = 0;
     for (let year = fromYear; year <= toYear; year++) {
         // year rect
-        let yearRect = svgUtils.renderSvgElement("rect");
+        let yearRect = svgUtils.createSvgElement("rect");
         yearRect.classList.add("timeline-year");
         yearRect.id = `year-${year}`;
         yearRect.setAttribute("x", settings.yearWidth * yearIndex);
@@ -25,7 +25,7 @@ const renderYears = (minDate, maxDate) => {
         yearsGroup.appendChild(yearRect);
 
         // year label
-        let yearLabel = svgUtils.renderSvgElement("text");
+        let yearLabel = svgUtils.createSvgElement("text");
         yearLabel.classList.add("year-label");
         yearLabel.setAttribute("text-anchor", "middle");
         yearLabel.setAttribute("x", (settings.yearWidth * yearIndex) + (settings.yearWidth / 2));
@@ -40,7 +40,7 @@ const renderYears = (minDate, maxDate) => {
 };
 
 const renderMonths = (minDate, maxDate, renderLabels, Y) => {
-    let monthsGroup = svgUtils.renderSvgElement("g");
+    let monthsGroup = svgUtils.createSvgElement("g");
     monthsGroup.id = "timeline-months";
 
     const monthsCount = dateUtils.numberOfMonths(minDate, maxDate);
@@ -50,7 +50,7 @@ const renderMonths = (minDate, maxDate, renderLabels, Y) => {
     let monthIndex = 0;
     for (let m = 0; m <= monthsCount; m++) {
         // month rect
-        let monthRect = svgUtils.renderSvgElement("rect");
+        let monthRect = svgUtils.createSvgElement("rect");
         monthRect.classList.add("timeline-month");
         if (altQuarterIndices.includes(monthIndex)) {
             monthRect.classList.add("timeline-month-alt");
@@ -72,7 +72,7 @@ const renderMonths = (minDate, maxDate, renderLabels, Y) => {
 
         if (renderLabels) {
             // month label
-            let monthLabel = svgUtils.renderSvgElement("text");
+            let monthLabel = svgUtils.createSvgElement("text");
             monthLabel.classList.add("month-label");
             if (activeMonth.getFullYear() == today.getFullYear() && activeMonth.getMonth() == today.getMonth()) {
                 monthLabel.classList.add("month-label-cur");
@@ -94,7 +94,7 @@ const renderMonths = (minDate, maxDate, renderLabels, Y) => {
 };
 
 const render = (minDate, maxDate) => {
-    let timelineGroup = svgUtils.renderSvgElement("g");
+    let timelineGroup = svgUtils.createSvgElement("g");
     timelineGroup.id = "timeline";
 
     timelineGroup.append(renderYears(minDate, maxDate));

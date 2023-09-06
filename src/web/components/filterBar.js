@@ -118,10 +118,10 @@ const setupFilters = (data, filterSearch) => {
 const addToSelectedFilterValues = (filterName, value) => {
     if (localStorage.getItem(filterBarStoreKey)) {
         let previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
-
-        previousSelectedFilterValues[filterName].push(value);
-        
-        localStorage.setItem(filterBarStoreKey, JSON.stringify(previousSelectedFilterValues));
+        if (!previousSelectedFilterValues[filterName].includes(value)) {
+            previousSelectedFilterValues[filterName].push(value);            
+            localStorage.setItem(filterBarStoreKey, JSON.stringify(previousSelectedFilterValues));
+        }
     }
 };
 
@@ -135,9 +135,15 @@ const selectedFilterValues = () => {
     return filterValues;
 };
 
+const exportForTesting = {
+    setSelectBoxValues,
+    getSelectBoxValues,
+    typeNameFilterArray
+}
 
 export {
     setupFilters,
     selectedFilterValues,
-    addToSelectedFilterValues
+    addToSelectedFilterValues,
+    exportForTesting
 }
