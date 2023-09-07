@@ -7,7 +7,7 @@ const today = new Date();
 
 const renderYears = (minDate, maxDate) => {
     let yearsGroup = svgUtils.createSvgElement("g");
-    yearsGroup.Id = "timeline-years";
+    yearsGroup.id = "timeline-years";
 
     const fromYear = new Date(minDate).getFullYear();
     const toYear = new Date(maxDate).getFullYear();
@@ -15,22 +15,23 @@ const renderYears = (minDate, maxDate) => {
     let yearIndex = 0;
     for (let year = fromYear; year <= toYear; year++) {
         // year rect
-        let yearRect = svgUtils.createSvgElement("rect");
-        yearRect.classList.add("timeline-year");
-        yearRect.id = `year-${year}`;
-        yearRect.setAttribute("x", settings.yearWidth * yearIndex);
-        yearRect.setAttribute("y", 0);
-        yearRect.setAttribute("width", settings.yearWidth);
-        yearRect.setAttribute("height", 20);
+        const yearRect = svgUtils.createSvgRect(
+            settings.yearWidth * yearIndex,
+            0,
+            settings.yearWidth,
+            20,
+            ["timeline-year"]
+        );
         yearsGroup.appendChild(yearRect);
 
         // year label
-        let yearLabel = svgUtils.createSvgElement("text");
-        yearLabel.classList.add("year-label");
-        yearLabel.setAttribute("text-anchor", "middle");
-        yearLabel.setAttribute("x", (settings.yearWidth * yearIndex) + (settings.yearWidth / 2));
-        yearLabel.setAttribute("y", 14);
-        yearLabel.textContent = `${year}`;
+        const yearLabel = svgUtils.createSvgText(
+            `${year}`,
+            (settings.yearWidth * yearIndex) + (settings.yearWidth / 2),
+            14,
+            "middle",
+            ["year-label"]
+        );
         yearsGroup.appendChild(yearLabel);
 
         yearIndex++;
@@ -58,7 +59,6 @@ const renderMonths = (minDate, maxDate, renderLabels, Y) => {
         if (activeMonth.getFullYear() == today.getFullYear() && activeMonth.getMonth() == today.getMonth()) {
             monthRect.classList.add("timeline-month-cur");
         }
-        monthRect.id = `month-${settings.monthLabels[activeMonth.getMonth()]}-${activeMonth.getFullYear()}`;
         monthRect.setAttribute("x", monthWidth * m);
         monthRect.setAttribute("y", Y);
         monthRect.setAttribute("width", monthWidth);
