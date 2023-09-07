@@ -177,8 +177,7 @@ svg {
 
 .item-group-divider {
     stroke: #666;
-    stroke-width: 2px;
-    stroke-dasharray: 4 2;
+    stroke-width: 1px;
 }
 .item-group-label {
     fill: #444;
@@ -217,6 +216,18 @@ svg {
 }
 .item-supported-border-noEnd {
     stroke: url(#item-supported-border-fadeRight);
+}
+
+
+.item-support-extended {
+    fill: hsla(0, 0%, 33%, 0.4);
+}
+.item-support-extended-border {
+    fill-opacity: 0;
+    stroke: #555;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-dasharray: 4 2;
 }
 
 .item {

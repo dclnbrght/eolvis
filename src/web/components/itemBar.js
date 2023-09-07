@@ -19,8 +19,16 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
     const supportedStart = new Date(item.supportedFrom);
     const supportedEndIsSet = item.supportedTo !== "";
     const supportedEndCalc = !supportedEndIsSet ? inUseEndCalc : new Date(item.supportedTo);
+
     const monthsSupportedFromStart = dateUtils.numberOfMonths(minDate, supportedStart) - 1;
     const monthsSupported = dateUtils.numberOfMonths(supportedStart, supportedEndCalc);
+
+    const supportExtendedStart = new Date(item.supportedTo);
+    const supportExtendedEndIsSet = item.supportedToExtended !== "";
+    const supportExtendedEndCalc = !supportExtendedEndIsSet ? supportedEndCalc : new Date(item.supportedToExtended);
+    
+    const monthsSupportExtendedFromStart = dateUtils.numberOfMonths(minDate, supportExtendedStart);
+    const monthsSupportExtended = dateUtils.numberOfMonths(supportExtendedStart, supportExtendedEndCalc) - 1;
 
     // Create item supported bar
     const itemSupportedRect = svgUtils.createSvgRect(
@@ -28,7 +36,16 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
         y,
         monthWidth * monthsSupported,
         itemBarHeightSupported,
-        ["item-supported", (item.supportedTo === "" ? "item-supported-noEnd" : "")]
+        ["item-supported", (supportedEndIsSet ? "": "item-supported-noEnd")]
+    );
+
+    // Create item supported bar
+    const itemSupportExtendedRect = svgUtils.createSvgRect(
+        monthWidth * monthsSupportExtendedFromStart,
+        y,
+        monthWidth * monthsSupportExtended,
+        itemBarHeightSupported,
+        ["item-support-extended", (supportExtendedEndIsSet ? "" : "item-supported-noEnd")]
     );
 
     // Create item in use bar
@@ -46,7 +63,16 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
         y,
         monthWidth * monthsSupported,
         itemBarHeightSupported,
-        ["item-supported-border", item.supportedTo === "" ? "item-supported-border-noEnd" : ""]
+        ["item-supported-border", supportedEndIsSet ? "" : "item-supported-border-noEnd"]
+    );
+    
+    // Create item supportextended border
+    const itemSupportExtendedBorder = svgUtils.createSvgRect(
+        monthWidth * monthsSupportExtendedFromStart,
+        y,
+        monthWidth * monthsSupportExtended,
+        itemBarHeightSupported,
+        ["item-support-extended-border", supportExtendedEndIsSet ? "" : "item-supported-border-noEnd"]
     );
 
     // Create item label
@@ -59,7 +85,7 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
         ["item-label"]
     );
 
-    return [itemSupportedRect, itemInUseRect, itemSupportedBorder, itemLabel];
+    return [itemSupportedRect, itemSupportExtendedRect, itemInUseRect, itemSupportedBorder, itemSupportExtendedBorder, itemLabel];
 };
 
 // Get the CSS classes for the item in use bar
@@ -90,7 +116,7 @@ const getClassNamesForItemInUse = (refDate, inUseStart, inUseEndIsSet, inUseEndC
 
 const render = (item, y, refDate, minDate, maxDate) => {
 
-    const [itemSupportedRect, itemInUseRect, itemSupportedBorder, itemLabel] = renderBarsAndLabel(
+    const [itemSupportedRect, itemSupportExtendedRect, itemInUseRect, itemSupportedBorder, itemSupportExtendedBorder, itemLabel] = renderBarsAndLabel(
         item,
         y,
         refDate,
@@ -106,8 +132,10 @@ const render = (item, y, refDate, minDate, maxDate) => {
     const itemGroup = svgUtils.createSvgElement("g");
     itemGroup.id = `${item.name}-${item.version}`;
     itemGroup.appendChild(itemSupportedRect);
+    itemGroup.appendChild(itemSupportExtendedRect);
     itemGroup.appendChild(itemInUseRect);
     itemGroup.appendChild(itemSupportedBorder);
+    itemGroup.appendChild(itemSupportExtendedBorder);
     itemGroup.appendChild(itemLabel);
     itemGroupAnchor.appendChild(itemGroup);
 
