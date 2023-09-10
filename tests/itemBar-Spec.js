@@ -8,31 +8,82 @@ describe("itemBar", function () {
 
         it('should return the correct class names for an item in use', () => {
 
-            const today = new Date('2023-08-01');
+            const refDate = new Date('2023-08-01');
             const inUseStart = new Date('2023-01-01');
             const inUseEndIsSet = true;
-            const inUseEndCalc = new Date('2023-12-31');
-            const supportedEndCalc = new Date('2024-06-01');
+            const inUseEnd = new Date('2023-12-31');
+            const supportedEnd = new Date('2024-06-01');
             const settings = {
                 warnNearEolDays: 90
             };
 
             const classNames = getClassNamesForItemInUse(
-                today,
+                refDate,
                 inUseStart,
                 inUseEndIsSet,
-                inUseEndCalc,
-                supportedEndCalc,
+                inUseEnd,
+                supportedEnd,
                 settings
             );
 
             expect(classNames).toContain("item");
             expect(classNames).toContain("item-inuse");
+            expect(classNames).not.toContain("item-inuse-eol");
+        });
+        
+        it('should return the correct class names for an item in use NEAR the supportedEnd date', () => {
+
+            const refDate = new Date('2023-12-01');
+            const inUseStart = new Date('2023-01-01');
+            const inUseEndIsSet = true;
+            const inUseEnd = new Date('2023-12-31');
+            const supportedEnd = new Date('2024-01-31');
+            const settings = {
+                warnNearEolDays: 90
+            };
+
+            const classNames = getClassNamesForItemInUse(
+                refDate,
+                inUseStart,
+                inUseEndIsSet,
+                inUseEnd,
+                supportedEnd,
+                settings
+            );
+
+            expect(classNames).toContain("item");
+            expect(classNames).toContain("item-inuse");
+            expect(classNames).toContain("item-inuse-near-eol");
+        });
+
+        it('should return the correct class names for an item in use PAST the supportedEnd date', () => {
+
+            const refDate = new Date('2023-08-01');
+            const inUseStart = new Date('2023-01-01');
+            const inUseEndIsSet = true;
+            const inUseEnd = new Date('2023-12-31');
+            const supportedEnd = new Date('2023-11-01');
+            const settings = {
+                warnNearEolDays: 90
+            };
+
+            const classNames = getClassNamesForItemInUse(
+                refDate,
+                inUseStart,
+                inUseEndIsSet,
+                inUseEnd,
+                supportedEnd,
+                settings
+            );
+
+            expect(classNames).toContain("item");
+            expect(classNames).toContain("item-inuse");
+            expect(classNames).toContain("item-inuse-eol");
         });
 
         it('should return the correct class names for an item in future use with no end date', () => {
 
-            const today = new Date('2023-01-01');
+            const refDate = new Date('2023-01-01');
             const inUseStart = new Date('2023-03-01');
             const inUseEndIsSet = false;
             const inUseEndCalc = new Date('2023-12-31');
@@ -42,7 +93,7 @@ describe("itemBar", function () {
             };
 
             const classNames = getClassNamesForItemInUse(
-                today,
+                refDate,
                 inUseStart,
                 inUseEndIsSet,
                 inUseEndCalc,
