@@ -160,7 +160,10 @@ const openForm = (item) => {
         
     });
     
-    document.getElementById("dialog-details").showModal();
+    const form = document.getElementById("dialog-details");
+    form.inert = true;
+    form.showModal();
+    form.inert = false;
 }
 
 const newItem = () => {

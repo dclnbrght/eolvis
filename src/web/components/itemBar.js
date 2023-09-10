@@ -116,7 +116,13 @@ const getClassNamesForItemInUse = (refDate, inUseStart, inUseEndIsSet, inUseEndC
 
 const render = (item, y, refDate, minDate, maxDate) => {
 
-    const [itemSupportedRect, itemSupportExtendedRect, itemInUseRect, itemSupportedBorder, itemSupportExtendedBorder, itemLabel] = renderBarsAndLabel(
+    const [itemSupportedRect, 
+        itemSupportExtendedRect, 
+        itemInUseRect, 
+        itemSupportedBorder, 
+        itemSupportExtendedBorder, 
+        itemLabel] 
+    = renderBarsAndLabel(
         item,
         y,
         refDate,
