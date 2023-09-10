@@ -54,7 +54,7 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
         y + 1,
         monthWidth * monthsInUse,
         itemBarHeightInUse,
-        getClassNamesForItemInUse(refDate, inUseStart, inUseEndIsSet, inUseEndCalc, supportedEndCalc)
+        getClassNamesForItemInUse(refDate, inUseStart, inUseEndIsSet, inUseEndCalc, supportExtendedEndCalc)
     );
 
     // Create item supported border
@@ -89,9 +89,9 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
 };
 
 // Get the CSS classes for the item in use bar
-const getClassNamesForItemInUse = (refDate, inUseStart, inUseEndIsSet, inUseEndCalc, supportedEndCalc) => {
+const getClassNamesForItemInUse = (refDate, inUseStart, inUseEndIsSet, inUseEnd, supportedEnd) => {
     const classNames = ["item"];
-    if (inUseStart < refDate && inUseEndCalc > refDate) {
+    if (inUseStart < refDate && inUseEnd > refDate) {
         classNames.push("item-inuse");
     }
     if (!inUseEndIsSet) {
@@ -103,12 +103,12 @@ const getClassNamesForItemInUse = (refDate, inUseStart, inUseEndIsSet, inUseEndC
     } else if (inUseStart > refDate) {
         classNames.push("item-inuse-future");
     } else if (inUseStart < refDate
-        && inUseEndCalc > refDate
-        && inUseEndCalc > supportedEndCalc) {
+        && inUseEnd > refDate
+        && inUseEnd > supportedEnd) {
         classNames.push("item-inuse-eol");
     } else if (inUseStart < refDate
-        && inUseEndCalc > refDate
-        && supportedEndCalc < new Date(refDate.getTime() + (settings.warnNearEolDays * 24 * 3600000))) {
+        && inUseEnd > refDate
+        && supportedEnd < new Date(refDate.getTime() + (settings.warnNearEolDays * 24 * 3600000))) {
         classNames.push("item-inuse-near-eol");
     }
     return classNames;
