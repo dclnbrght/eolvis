@@ -1,6 +1,6 @@
 
 /* the path to the data file */
-export const dataPath = "data/demo-eol.json";
+export const dataPath = "data/eolvis-demo.json";
 
 /* the number of years in the past to show on the timeline */
 export const yearsPast = 3;
