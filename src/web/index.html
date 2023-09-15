@@ -48,8 +48,8 @@
         <svg id="eolvisSvg" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="item-supported-fadeRight">
-                    <stop class="item-supported-stopColour" offset="0%" stop-opacity="1.0" />
-                    <stop class="item-supported-stopColour" offset="80%" stop-opacity="0.5" />
+                    <stop class="item-supported-stopColour" offset="0%" stop-opacity="0.5" />
+                    <stop class="item-supported-stopColour" offset="80%" stop-opacity="0.2" />
                     <stop class="item-supported-stopColour" offset="100%" stop-opacity="0" />
                 </linearGradient>
                 <linearGradient id="item-supported-border-fadeRight">
@@ -74,6 +74,9 @@
     
     <dialog id="dialog-details">
         <h3>Software Details</h3>
+
+        <!-- TODO - remove when database storage is implemented -->
+        <p style="color: darkred; max-width: 24rem;">*** Only saves updates to browser session storage for now although updates can be exported from the options menu ***</p>
 
         <form id="formDetails" method="post" data-form-sync>
             <div class="form-item">
@@ -102,8 +105,9 @@
                 <input type="date" id="item-supportedTo" name="supportedTo">
             </div>
             <div class="form-item">
-                <label for="item-supportToExtended">Supported Ext:</label>
+                <label for="item-supportToExtended">Extended Support To:</label>
                 <input type="date" id="item-supportedToExtended" name="supportedToExtended">
+                <span><em>(only if purchased)</em></span>
             </div>
             <div class="form-item">
                 <label for="item-link">Link:</label>

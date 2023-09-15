@@ -118,19 +118,19 @@ dialog::backdrop {
 }
 .form-item label {
     display: block;
-    line-height: 1.4em;
-    min-width: 8em;
+    line-height: 1.5em;
+    min-width: 10em;
 }
 .form-item input[type='text'],
 .form-item select {
-    min-width: 12em;
+    min-width: 13em;
 }
 .form-item input:read-only {
     border: none;
 }
 .form-item textarea {
-    min-width: 20em;
-    min-height: 4em;
+    min-width: 18em;
+    min-height: 6em;
 }
 
 .hidden {
@@ -200,7 +200,7 @@ svg {
     fill: hsla(0, 0%, 33%, 0.5);
 }
 .item-supported-stopColour {
-    stop-color: #bbb;
+    stop-color: #555;
 }
 .item-supported-noEnd {
     fill: url(#item-supported-fadeRight);
