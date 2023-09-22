@@ -1,5 +1,6 @@
 {
-    "projectName": "Demo EOL Roadmap",
+    "projectName": "eolvis Demo",
+    "projectKey": "eolvis-demo",
     "components": [
         {
             "id": "b1ec1a24-c1ed-4bef-87c3-87e663e4be37",

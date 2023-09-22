@@ -1,8 +1,9 @@
 import * as dataAccess from './dataAccess.js';
 
 const exportEol = () => {
-    const data = dataAccess.requestDataFromStore();    
-    downloadTextFile(JSON.stringify(data, null, 4), "eol.json");
+    const data = dataAccess.requestDataFromStore();
+    const fileName = data.projectKey + ".json";
+    downloadTextFile(JSON.stringify(data, null, 4), fileName);
 }
 
 const bomTypeMap = {
@@ -10,7 +11,8 @@ const bomTypeMap = {
 };
 
 const exportBom = () => {
-    const data = dataAccess.requestDataFromStore(); 
+    const data = dataAccess.requestDataFromStore();     
+    const fileName = data.projectKey + "-bom.json";
 
     const filteredComponents = data.components.filter((item) => {
         return !item.isdeleted;
@@ -37,7 +39,7 @@ const exportBom = () => {
         "components": components
     };
 
-    downloadTextFile(JSON.stringify(bom, null, 4), "bom.json");
+    downloadTextFile(JSON.stringify(bom, null, 4), fileName);
 }
 
 const downloadTextFile = (text, name) => {
