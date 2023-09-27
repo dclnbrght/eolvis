@@ -1,3 +1,4 @@
+import * as settings from '../settings.js';
 import * as dataAccess from './dataAccess.js';
 
 const exportEol = () => {
@@ -6,23 +7,20 @@ const exportEol = () => {
     downloadTextFile(JSON.stringify(data, null, 4), fileName);
 }
 
-const bomTypeMap = {
-    "middleware": "platform"
-};
-
 const exportBom = () => {
     const data = dataAccess.requestDataFromStore();     
     const fileName = data.projectKey + "-bom.json";
 
+    // filter out deleted items, and items not in the softwareBomTypeMap
     const filteredComponents = data.components.filter((item) => {
-        return !item.isdeleted;
+        return !item.isdeleted && settings.softwareBomTypeMap[item.type] !== undefined;
     });
     
     const components = [].map.call(filteredComponents, (i) => {
         return {
             "name": i.name,
             "version": i.version,
-            "type": bomTypeMap[i.type] ?? i.type,
+            "type": settings.softwareBomTypeMap[i.type] ?? i.type,
             "bom-ref": i.id,
             "externalReferences": [
                 {

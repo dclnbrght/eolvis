@@ -6,7 +6,7 @@ export const dataPath = "data/eolvis-demo.json";
 export const yearsPast = 3;
 
 /* the number of years in the future to show on the timeline */
-export const yearsFuture = 4;
+export const yearsFuture = 6;
 
 /* the width of year */
 export const yearWidth = 190;
@@ -19,6 +19,7 @@ export const displayLtsLabelIfTrue = true;
 
 /* item types */
 export const types = {
+    "device": "Device",
     "operating-system": "Operating System",
     "platform": "Platform",
     "framework": "Framework",
@@ -26,6 +27,15 @@ export const types = {
     "middleware": "Middleware",
     "data-store": "Data Store",
     "protocol": "Protocol"
+};
+
+/* SBoM types */
+export const softwareBomTypeMap = {
+    "operating-system": "operating-system",    
+    "middleware": "platform",
+    "platform": "platform",
+    "framework": "framework",
+    "library": "library",
 };
 
 /* the text in the month labels on the timeline */

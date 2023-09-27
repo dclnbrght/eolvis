@@ -185,7 +185,7 @@
             "useFrom": "2021-12-01",
             "useTo": "2022-11-31",
             "link": "https://rabbitmq.com/versions.html",
-            "notes": "INPT-11571, https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.9.13. Depends on Erlang 23.* or 24.*, https://www.rabbitmq.com/which-erlang.html",
+            "notes": "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.9.13. Depends on Erlang 23.* or 24.*, https://www.rabbitmq.com/which-erlang.html",
             "lts": false,
             "type": "middleware",
             "updated": "2023-06-13"
@@ -202,7 +202,7 @@
             "useFrom": "2022-10-01",
             "useTo": "2023-11-30",
             "link": "https://rabbitmq.com/versions.html",
-            "notes": "CEP-3021, https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.11.11. Depends on Erlang 25.*, https://www.rabbitmq.com/which-erlang.html",
+            "notes": "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.11.11. Depends on Erlang 25.*, https://www.rabbitmq.com/which-erlang.html",
             "lts": false,
             "type": "middleware",
             "updated": "2023-08-23"
@@ -219,7 +219,7 @@
             "useFrom": "2023-10-01",
             "useTo": "2024-04-031",
             "link": "https://rabbitmq.com/versions.html",
-            "notes": "CEP-3709, https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.12.0. Depends on Erlang 25.* or 26.*, https://www.rabbitmq.com/which-erlang.html",
+            "notes": "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.12.0. Depends on Erlang 25.* or 26.*, https://www.rabbitmq.com/which-erlang.html",
             "lts": false,
             "type": "middleware",
             "updated": "2023-08-23"
