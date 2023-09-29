@@ -1,6 +1,6 @@
 import * as settings from '../settings.js';
-import * as dateUtils from './dateUtils.js';
-import * as svgUtils from './svgUtils.js';
+import * as dateUtils from '../js/dateUtils.js';
+import * as svgUtils from '../js/svgUtils.js';
 import * as itemTimeline from './itemTimeline.js';
 import * as itemBar from './itemBar.js';
 

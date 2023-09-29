@@ -113,6 +113,9 @@ dialog::backdrop {
     cursor: pointer;
 }
 
+.form-fieldset {
+    border: none;
+}
 .form-item {
     margin: 0.2em;
 }

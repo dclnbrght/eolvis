@@ -1,4 +1,4 @@
-import { exportForTesting } from '../src/web/components/dataUpdate.js';
+import { exportForTesting } from '../src/web/js/dataUpdate.js';
 
 const { validateItem, displayError } = exportForTesting;
 

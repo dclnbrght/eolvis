@@ -1,6 +1,7 @@
 import * as settings from '../settings.js';
-import * as filterBar from './filterBar.js';
+import * as filterBar from '../components/filterBar.js';
 import * as dataAccess from './dataAccess.js';
+import * as user from './user.js';
 
 let curItem = {};
 
@@ -79,7 +80,11 @@ const setupForm = (isNew) => {
     
     const deleteAction = document.getElementById('dialog-details-delete');
     if (isNew) deleteAction.classList.add('hidden');
-    else deleteAction.classList.remove('hidden');
+    else {
+        if (user.hasPermission("edit")) {
+            deleteAction.classList.remove('hidden');
+        }
+    }
     
     const itemUpdated = document.getElementById('item-updated-wrapper');
     if (isNew) itemUpdated.classList.add('hidden');
