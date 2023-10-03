@@ -27,8 +27,8 @@ const renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
     const supportExtendedEndIsSet = item.supportedToExtended !== "";
     const supportExtendedEndCalc = !supportExtendedEndIsSet ? supportedEndCalc : new Date(item.supportedToExtended);
     
-    const monthsSupportExtendedFromStart = dateUtils.numberOfMonths(minDate, supportExtendedStart);
-    const monthsSupportExtended = dateUtils.numberOfMonths(supportExtendedStart, supportExtendedEndCalc) - 1;
+    const monthsSupportExtendedFromStart = supportedEndIsSet ? dateUtils.numberOfMonths(minDate, supportExtendedStart) : 0;
+    const monthsSupportExtended = supportedEndIsSet ? dateUtils.numberOfMonths(supportExtendedStart, supportExtendedEndCalc) - 1 : 0;
 
     // Create item supported bar
     const itemSupportedRect = svgUtils.createSvgRect(
