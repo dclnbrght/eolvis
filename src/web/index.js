@@ -16,6 +16,7 @@ const setupUser = () => {
     const actionNew = document.getElementById("action-new-item");
     const formDetailsFieldset = document.getElementById("formDetails-fieldset");
     const dialogDetailsSave = document.getElementById("dialog-details-save");
+    const dialogDetailsCancel = document.getElementById("dialog-details-cancel");    
     const dialogDetailsDelete = document.getElementById("dialog-details-delete");
     const dialogDetailsMessage = document.getElementById("dialog-details-message");
 
@@ -29,6 +30,7 @@ const setupUser = () => {
         actionNew.classList.add("hidden");
         formDetailsFieldset.disabled = true;
         dialogDetailsSave.classList.add("hidden");
+        dialogDetailsCancel.textContent = "Close";
         dialogDetailsDelete.classList.add("hidden");
         dialogDetailsMessage.classList.add("hidden");
     }
