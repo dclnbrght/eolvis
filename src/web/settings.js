@@ -32,6 +32,13 @@ export const types = {
     "protocol": "Protocol"
 };
 
+/* periods */
+export const periods = {
+    "past": "Past",
+    "current": "Current",
+    "future": "Future"
+};
+
 /* SBoM types */
 export const softwareBomTypeMap = {
     "operating-system": "operating-system",    

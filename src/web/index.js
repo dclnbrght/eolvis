@@ -24,6 +24,7 @@ const setupUser = () => {
         actionNew.classList.remove("hidden");
         formDetailsFieldset.disabled = false;
         dialogDetailsSave.classList.remove("hidden");
+        dialogDetailsCancel.classList.add("dialog-button-secondary");
         dialogDetailsDelete.classList.remove("hidden");
         dialogDetailsMessage.classList.remove("hidden");
     } else {
@@ -31,6 +32,7 @@ const setupUser = () => {
         formDetailsFieldset.disabled = true;
         dialogDetailsSave.classList.add("hidden");
         dialogDetailsCancel.textContent = "Close";
+        dialogDetailsCancel.classList.remove("dialog-button-secondary");
         dialogDetailsDelete.classList.add("hidden");
         dialogDetailsMessage.classList.add("hidden");
     }
@@ -47,8 +49,6 @@ const dataLoaded = () => {
         
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
-
-        //document.getElementById('loading-message').style.display = 'none';
 
         filterSearch();
     } catch (error) {
@@ -68,7 +68,9 @@ const filterSearch = () => {
 
         const filteredItems = dataSearch.search(
             items,
-            filterValues.selectedNames
+            filterValues.selectedNames,
+            filterValues.selectedPeriods,
+            new Date()
         );
 
         const today = new Date();

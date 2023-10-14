@@ -104,6 +104,36 @@ const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilter
     });
 };
 
+const setupPeriodFilter = (querystringParameters, previousSelectedFilterValues, filterSearch) => {
+    
+    const selectElement = document.getElementById('periodFilter');
+    selectElement.replaceChildren();
+
+    Object.entries(settings.periods).forEach(([key, value]) => {
+        const option = document.createElement('option');
+        option.textContent = value;
+        option.value = key;
+        selectElement.appendChild(option);
+    });
+    
+    setSelectBoxValues("periodFilter",
+        querystringParameters.get('periods')?.split(',')
+        ?? previousSelectedFilterValues.selectedPeriods
+        ?? ["All"]
+    );
+
+    tail.select("#periodFilter", {
+        placeholder: 'Period Filter',
+        multiSelectAll: true,
+        search: true,
+        searchFocus: false
+    }).reload();
+
+    selectElement.addEventListener("change", (e) => {
+        changeEventFunc(e, filterSearch);
+    });
+}
+
 
 const setupFilters = (data, filterSearch) => {
     // Set value from: query string || previously selected values in localStorage
@@ -113,6 +143,7 @@ const setupFilters = (data, filterSearch) => {
         previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
 
     setupTypeNameFilter(data, querystringParameters, previousSelectedFilterValues, filterSearch);
+    setupPeriodFilter(querystringParameters, previousSelectedFilterValues, filterSearch);
 };
 
 const addToSelectedFilterValues = (filterName, value) => {
@@ -127,8 +158,9 @@ const addToSelectedFilterValues = (filterName, value) => {
 
 const selectedFilterValues = () => {
     const selectedNames = getSelectBoxValues("typeNameFilter");
+    const selectedPeriods = getSelectBoxValues("periodFilter");
 
-    const filterValues = { selectedNames }
+    const filterValues = { selectedNames, selectedPeriods };
 
     localStorage.setItem(filterBarStoreKey, JSON.stringify(filterValues));
 
