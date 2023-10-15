@@ -66,6 +66,7 @@ const filterSearch = () => {
 
         const items = data.components;
 
+        // filter items by name and period
         const filteredItems = dataSearch.search(
             items,
             filterValues.selectedNames,
