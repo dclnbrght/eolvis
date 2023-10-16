@@ -64,16 +64,16 @@ const renderItemTable = (items) => {
         row.innerHTML = `
             <td>${item.name}</td>
             <td>${item.version}</td>
-            <td>${item.lts}</td>
-            <td>${item.type}</td>
+            <td>${item.lts ? "&check;" : ""}</td>
+            <td>${settings.types[item.type]}</td>
             <td>${item.supportedFrom}</td>
             <td>${item.supportedTo}</td>
             <td>${item.supportedToExtended}</td>
+            <td>${item.link.length > 0 ? '<a href="' + item.link +'" style="text-decoration:none;">&#128279;</a>' : ''}</td>
             <td>${item.latestPatch}</td>
             <td>${item.latestPatchReleased}</td>
             <td>${item.useFrom}</td>
             <td>${item.useTo}</td>
-            <td><a href="${item.link}">link</a></td>
             <td>${new Date(item.updated).toISOString().split('T')[0]}</td>
         `;
         itemTableBody.appendChild(row);
