@@ -1,67 +1,85 @@
-import { exportForTesting } from '../src/web/components/filterBar.js';
-
-const { setSelectBoxValues, getSelectBoxValues, typeNameFilterArray } = exportForTesting;
+import * as filterBar from '../src/web/components/filterBar.js';
 
 describe("filterBar", function () {
 
-  let mockNodeList = [];
+  let mockFilterBar = null;
+
   beforeEach(function () {
-    var mockOption0 = document.createElement('option');
-    mockOption0.value = "Value0";
-    var mockOption1 = document.createElement('option');
-    mockOption1.value = "Value1";
-    var mockOption2 = document.createElement('option');
-    mockOption2.value = "Value2";
-
-    mockNodeList = document.createDocumentFragment();
-    mockNodeList.appendChild(mockOption0);
-    mockNodeList.appendChild(mockOption1);
-    mockNodeList.appendChild(mockOption2);
-
-    document.querySelectorAll = jasmine.createSpy('Option Element').and.returnValue(mockNodeList.childNodes);
+    mockFilterBar = document.createElement('filter-bar');
+    mockFilterBar.id = "filter-bar";
   });
 
-  describe('setSelectBoxValues', () => {
-    it("should be able to set dropdown option values", () => {
-      setSelectBoxValues("dummy", ["Value0", "Value2"]);
-
-      expect(mockNodeList.childNodes[0].selected).toEqual(true);
-      expect(mockNodeList.childNodes[1].selected).toEqual(false);
-      expect(mockNodeList.childNodes[2].selected).toEqual(true);
-    });
-  });
-
-  describe('getSelectBoxValues', () => {
-    it("should be able to get dropdown option values", () => {
-      setSelectBoxValues("dummy", ["Value1", "Value2"]);
-
-      const selectedValues = getSelectBoxValues("dummy");
-
-      expect(selectedValues).toEqual(["Value1", "Value2"]);
-    });
-  });
-
-  describe('typeNameFilterArray', () => {
-    // Sample JSON data for testing
-    const jsonData = {
+  // Sample JSON data for testing
+  const jsonData = {
       components: [
         {
-          type: 'Type1',
-          name: 'Name1',
+            name: "Item 1",
+            version: "1",
+            type: 'Type1',
+            supportedFrom: "2020-01-01",
+            supportedTo: "2021-01-01",
+            supportedToExtended: "2021-01-01",
+            useFrom: "2020-01-01",
+            useTo: "2021-01-01",
         },
         {
-          type: 'Type2',
-          name: 'Name2',
+            name: "Item 1",
+            version: "2",
+            type: 'Type1',
+            supportedFrom: "2021-01-01",
+            supportedTo: "2022-01-01",
+            supportedToExtended: "2022-01-01",
+            useFrom: "2021-01-01",
+            useTo: "2022-01-01",
         },
         {
-          type: 'Type1',
-          name: 'Name3',
+            name: "Item 2",
+            version: "1",
+            type: 'Type2',
+            supportedFrom: "2023-01-01",
+            supportedTo: "2023-12-01",
+            supportedToExtended: "2023-12-01",
+            useFrom: "2023-03-01",
+            useTo: "2023-09-01",
         },
-      ],
-    };
+        {
+            name: "Item 3",
+            version: "1",
+            type: 'Type1',
+            supportedFrom: "2024-01-01",
+            supportedTo: "2024-12-01",
+            supportedToExtended: "2024-12-01",
+            useFrom: "2024-03-01",
+            useTo: "2024-09-01",
+        },
+    ]
+  };
+  
+  describe('setupFilters', () => {
 
+    it('should setup the filter bar with the correct number of filters', () => {
+      // Arrange
+      const data = jsonData;
+      const filterSearch = () => {};
+
+      // Act
+      mockFilterBar.connectedCallback();
+      mockFilterBar.setupFilters(data, filterSearch);
+
+      // Assert
+      const typeNameFilter = mockFilterBar.shadowRoot.querySelector('#typeNameFilter');
+      const periodFilter = mockFilterBar.shadowRoot.querySelector('#periodFilter');
+      expect(typeNameFilter.options.length).toBe(3);
+      expect(periodFilter.options.length).toBe(3);
+    });
+
+  });
+  
+
+  describe('typeNameFilterArray', () => {
+    
     it('should create a nested array of unique component names for each component type', () => {
-      const result = typeNameFilterArray(jsonData);
+      const result = mockFilterBar.typeNameFilterArray(jsonData);
 
       // Assert that the result is an array
       expect(Array.isArray(result)).toBe(true);
@@ -70,24 +88,24 @@ describe("filterBar", function () {
       expect(result).toEqual([
         {
           type: 'Type1',
-          names: ['Name1', 'Name3'],
+          names: ['Item 1', 'Item 3'],
         },
         {
           type: 'Type2',
-          names: ['Name2'],
+          names: ['Item 2'],
         },
       ]);
 
       // Check specific values if needed
       expect(result[0].type).toBe('Type1');
-      expect(result[1].names).toContain('Name2');
+      expect(result[1].names).toContain('Item 2');
     });
 
     it('should handle an empty input data', () => {
       const emptyData = {
         components: [],
       };
-      const result = typeNameFilterArray(emptyData);
+      const result = mockFilterBar.typeNameFilterArray(emptyData);
 
       // Assert that the result is an empty array
       expect(result).toEqual([]);

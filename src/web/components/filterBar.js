@@ -1,181 +1,231 @@
 import * as settings from '../settings.js';
 
+const template = document.createElement('template');
+template.innerHTML = `
+    <style>
+        .filter-bar {
+            background-color: #777;
+            padding: 0.3em;
+        }
+        .filter-container {
+            display: inline-block;
+        }
+    </style>
+    <section id="filter-bar" class="filter-bar">
+        <div id="typeNameFilter-container" class="filter-container">
+            <select id="typeNameFilter" multiple></select>
+        </div>
+        <div id="periodFilter-container" class="filter-container">
+            <select id="periodFilter" multiple></select>
+        </div>
+    </section>
+`;
+
 const filterBarStoreKey = "eolvisSelectedFilters";
 
-// Manage  multiple select events firings at once
-// i.e. when all or a group of options are selected
-const changeEventFunc = (e, filterSearch) => {
-    const v = document.getElementById("filter-bar");
-    if (v.classList.contains("updating")) {
-        e.preventDefault();
-        e.stopPropagation();
-    } else {
-        v.classList.add("updating");
-        setTimeout(() => {
-            v.classList.remove("updating");
-            filterSearch();
-        }, 4);
-    }
-}
+class FilterBar extends HTMLElement {
 
-const setSelectBoxValues = (id, values) => {
-    let options = document.querySelectorAll("#" + id + " option");
-    if (options?.length > 0 && values) {
+    #typeNameFilter = null;
+    #periodFilter = null;
+    #querystringParameters = "";
+    #previousSelectedFilterValues = [];
+
+    constructor() {
+        super();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.appendChild(template.content.cloneNode(true));
+
+        // Add stylesheets and js libs to the shadow dom
+        const tailStyles = document.createElement("link");
+        tailStyles.setAttribute("rel", "stylesheet");
+        tailStyles.setAttribute("href", "./css/tail.select-light.css");
+        shadow.appendChild(tailStyles);
+
+        const tailLib = document.createElement('script');
+        tailLib.type = 'text/javascript';
+        tailLib.async = true;
+        tailLib.setAttribute("src", "./libs/tail.select-full.min.js");
+        shadow.appendChild(tailLib);
+    }
+
+    connectedCallback() {
+        this.#typeNameFilter = this.shadowRoot.querySelector('#typeNameFilter');
+        this.#periodFilter = this.shadowRoot.querySelector('#periodFilter');
+
+        this.#querystringParameters = new URLSearchParams(window.location.search);
+        if (localStorage.getItem(filterBarStoreKey)) {
+            this.#previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
+        }
+    }
+
+    // Manage  multiple select events firings at once
+    // i.e. when all or a group of options are selected
+    #changeEventFunc = (e, filterSearch) => {
+        const v = this.shadowRoot.getElementById("filter-bar");
+        if (v.classList.contains("updating")) {
+            e.preventDefault();
+            e.stopPropagation();
+        } else {
+            v.classList.add("updating");
+            setTimeout(() => {
+                v.classList.remove("updating");
+                filterSearch();
+            }, 4);
+        }
+    }
+
+    #setupEventHandlers = (searchCallback) => {
+        this.#typeNameFilter.addEventListener("change", (e) => {
+            this.#changeEventFunc(e, searchCallback);
+        });
+
+        this.#periodFilter.addEventListener("change", (e) => {
+            this.#changeEventFunc(e, searchCallback);
+        });
+    };
+
+    #setSelectBoxValues = (selectElement, values) => {
+        let options = [...selectElement.options];
+        if (options?.length > 0 && values) {
+            options.forEach((x) => {
+                if (values[0] == "None") {
+                    x.selected = false;
+                } else if (values.includes(x.value) || values[0] == "All") {
+                    x.selected = true;
+                }
+            });
+        } else {
+            console.error(`Error in setSelectBoxValues, id: ${selectElement.id}, values: ${values}`);
+        }
+    }
+
+    #getSelectBoxValues = (selectElement) => {
+        let result = [];
+        let options = [...selectElement.options];
         options.forEach((x) => {
-            if (values[0] == "None") {
-                x.selected = false;
-            } else if (values.includes(x.value) || values[0] == "All") {
-                x.selected = true;
+            if (x.selected) {
+                result.push(x.value);
             }
         });
-    } else {
-        console.error(`Error in setSelectBoxValues, id: ${id}, values: ${values}`);
+        return result;
     }
-}
 
-const getSelectBoxValues = (id) => {
-    let result = [];
-    let options = document.querySelectorAll("#" + id + " option");
-    options.forEach((x) => {
-        if (x.selected) {
-            result.push(x.value);
-        }
-    });
-    return result;
-}
+    #setupTypeNameFilter = (data, selectElement, querystringParameters, previousSelectedFilterValues) => {
+        selectElement.replaceChildren();
 
-const typeNameFilterArray = (data) => {
-    const componentNamesByType = {};
+        const filterArray = this.typeNameFilterArray(data);
 
-    data.components.forEach((component) => {
-        if (!component.isdeleted) {
-            const { type, name } = component;
-            if (!componentNamesByType[type]) {
-                componentNamesByType[type] = new Set();
-            }
-            componentNamesByType[type].add(name);
-        }
-    });
+        filterArray.forEach((group) => {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = settings.types[group.type];
 
-    const sortedTypes = Object.keys(componentNamesByType).sort();
+            group.names.forEach((name) => {
+                const option = document.createElement('option');
+                option.textContent = name;
+                optgroup.appendChild(option);
+            });
 
-    const filterArray = sortedTypes.map((type) => ({
-        type,
-        names: [...componentNamesByType[type]].sort(),
-    }));
-
-    return filterArray;
-};
-
-const setupTypeNameFilter = (data, querystringParameters, previousSelectedFilterValues, filterSearch) => {
-    const selectElement = document.getElementById('typeNameFilter');
-    selectElement.replaceChildren();
-
-    const filterArray = typeNameFilterArray(data);
-
-    filterArray.forEach((group) => {
-        const optgroup = document.createElement('optgroup');
-        optgroup.label = settings.types[group.type];
-
-        group.names.forEach((name) => {
-            const option = document.createElement('option');
-            option.textContent = name;
-            optgroup.appendChild(option);
+            selectElement.appendChild(optgroup);
         });
 
-        selectElement.appendChild(optgroup);
-    });
+        this.#setSelectBoxValues(this.#typeNameFilter,
+            querystringParameters.get('names')?.split(',')
+            ?? previousSelectedFilterValues.selectedNames
+            ?? ["All"]
+        );
 
-    setSelectBoxValues("typeNameFilter",
-        querystringParameters.get('names')?.split(',')
-        ?? previousSelectedFilterValues.selectedNames
-        ?? ["All"]
-    );
+        tail.select(selectElement, {
+            placeholder: 'Type / Name Filter',
+            multiSelectAll: true,
+            search: true,
+            searchFocus: false
+        }).reload();
+    };
 
-    tail.select("#typeNameFilter", {
-        placeholder: 'Type / Name Filter',
-        multiSelectAll: true,
-        search: true,
-        searchFocus: false
-    }).reload();
+    #setupPeriodFilter = (selectElement, querystringParameters, previousSelectedFilterValues) => {
+        selectElement.replaceChildren();
 
-    selectElement.addEventListener("change", (e) => {
-        changeEventFunc(e, filterSearch);
-    });
-};
+        Object.entries(settings.periods).forEach(([key, value]) => {
+            const option = document.createElement('option');
+            option.textContent = value;
+            option.value = key;
+            selectElement.appendChild(option);
+        });
 
-const setupPeriodFilter = (querystringParameters, previousSelectedFilterValues, filterSearch) => {
-    
-    const selectElement = document.getElementById('periodFilter');
-    selectElement.replaceChildren();
+        this.#setSelectBoxValues(this.#periodFilter,
+            querystringParameters.get('periods')?.split(',')
+            ?? previousSelectedFilterValues.selectedPeriods
+            ?? ["All"]
+        );
 
-    Object.entries(settings.periods).forEach(([key, value]) => {
-        const option = document.createElement('option');
-        option.textContent = value;
-        option.value = key;
-        selectElement.appendChild(option);
-    });
-    
-    setSelectBoxValues("periodFilter",
-        querystringParameters.get('periods')?.split(',')
-        ?? previousSelectedFilterValues.selectedPeriods
-        ?? ["All"]
-    );
+        tail.select(selectElement, {
+            placeholder: 'Period Filter',
+            multiSelectAll: true,
+            search: true,
+            searchFocus: false
+        }).reload();
+    }
 
-    tail.select("#periodFilter", {
-        placeholder: 'Period Filter',
-        multiSelectAll: true,
-        search: true,
-        searchFocus: false
-    }).reload();
+    typeNameFilterArray = (data) => {
+        const componentNamesByType = {};
 
-    selectElement.addEventListener("change", (e) => {
-        changeEventFunc(e, filterSearch);
-    });
+        data.components.forEach((component) => {
+            if (!component.isdeleted) {
+                const { type, name } = component;
+                if (!componentNamesByType[type]) {
+                    componentNamesByType[type] = new Set();
+                }
+                componentNamesByType[type].add(name);
+            }
+        });
+
+        const sortedTypes = Object.keys(componentNamesByType).sort();
+
+        const filterArray = sortedTypes.map((type) => ({
+            type,
+            names: [...componentNamesByType[type]].sort(),
+        }));
+
+        return filterArray;
+    };
+
+    setupFilters = (data, searchCallback) => {
+        // Set value from: query string || previously selected values in localStorage
+        this.#setupTypeNameFilter(data, this.#typeNameFilter, this.#querystringParameters, this.#previousSelectedFilterValues);
+        this.#setupPeriodFilter(this.#periodFilter, this.#querystringParameters, this.#previousSelectedFilterValues);
+        this.#setupEventHandlers(searchCallback);
+    };
+
+    selectedFilterValues = () => {
+        const selectedNames = this.#getSelectBoxValues(this.#typeNameFilter);
+        const selectedPeriods = this.#getSelectBoxValues(this.#periodFilter);
+
+        const filterValues = { selectedNames, selectedPeriods };
+
+        localStorage.setItem(filterBarStoreKey, JSON.stringify(filterValues));
+
+        return filterValues;
+    };
 }
+customElements.define('filter-bar', FilterBar);
 
 
-const setupFilters = (data, filterSearch) => {
-    // Set value from: query string || previously selected values in localStorage
-    const querystringParameters = new URLSearchParams(window.location.search);
-    let previousSelectedFilterValues = [];
-    if (localStorage.getItem(filterBarStoreKey))
-        previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
+// ------------------------------------------------------------------------------------------------
+// Module Helper functions
+// ------------------------------------------------------------------------------------------------
 
-    setupTypeNameFilter(data, querystringParameters, previousSelectedFilterValues, filterSearch);
-    setupPeriodFilter(querystringParameters, previousSelectedFilterValues, filterSearch);
-};
-
+// when a new item is added, add it to the selected filter values
 const addToSelectedFilterValues = (filterName, value) => {
     if (localStorage.getItem(filterBarStoreKey)) {
         let previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
         if (!previousSelectedFilterValues[filterName].includes(value)) {
-            previousSelectedFilterValues[filterName].push(value);            
+            previousSelectedFilterValues[filterName].push(value);
             localStorage.setItem(filterBarStoreKey, JSON.stringify(previousSelectedFilterValues));
         }
     }
 };
 
-const selectedFilterValues = () => {
-    const selectedNames = getSelectBoxValues("typeNameFilter");
-    const selectedPeriods = getSelectBoxValues("periodFilter");
-
-    const filterValues = { selectedNames, selectedPeriods };
-
-    localStorage.setItem(filterBarStoreKey, JSON.stringify(filterValues));
-
-    return filterValues;
-};
-
-const exportForTesting = {
-    setSelectBoxValues,
-    getSelectBoxValues,
-    typeNameFilterArray
-}
-
 export {
-    setupFilters,
-    selectedFilterValues,
-    addToSelectedFilterValues,
-    exportForTesting
+    addToSelectedFilterValues
 }

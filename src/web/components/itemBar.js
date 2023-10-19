@@ -1,7 +1,9 @@
 import * as settings from '../settings.js';
 import * as dateUtils from '../js/dateUtils.js';
-import * as dataUpdate from '../js/dataUpdate.js';
+import * as itemDetailsForm from '../components/itemDetailsForm.js';
 import * as svgUtils from '../js/svgUtils.js';
+
+const itemDetailsFormComponent = document.getElementById("item-details-form");
 
 const monthWidth = settings.yearWidth / 12;
 
@@ -132,7 +134,7 @@ const render = (item, y, refDate, minDate, maxDate) => {
 
     const itemGroupAnchor = svgUtils.createSvgElement("a");
     itemGroupAnchor.addEventListener("click", (e) => {
-        dataUpdate.openForm(item);
+        itemDetailsFormComponent.showModal(item);
     });
 
     const itemGroup = svgUtils.createSvgElement("g");

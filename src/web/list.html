@@ -3,11 +3,10 @@
 <html lang="en">
 
 <head>
-    <title>eolvis</title>
+    <title>eolvis | list</title>
     <meta name="description" content="Visualise software EOL (End-Of-Life) timelines">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.5, user-scalable=yes">
-    <link rel="stylesheet" href="css/tail.select-light.css">
     <link rel="stylesheet" href="css/eolvis.css">
     <link rel="stylesheet" href="css/eolvis-table.css">
     <link rel="icon" href="eolvis-favicon.png" sizes="32x32" />
@@ -24,14 +23,8 @@
         </div>
     </header>
 
-    <section id="filter-bar" class="filter-bar">
-        <div id="typeNameFilter-container" class="filter-container">
-            <select id="typeNameFilter" multiple></select>
-        </div>
-        <div id="periodFilter-container" class="filter-container">
-            <select id="periodFilter" multiple></select>
-        </div>
-    </section>
+    <filter-bar id="filter-bar"></filter-bar>
+    <item-details-form id="item-details-form"></item-details-form>
 
     <table id="itemTable" class="item-table">
         <thead>
@@ -42,20 +35,20 @@
                 <th>Verison</th>
                 <th>Supported From</th>
                 <th>Supported To</th>
-                <th>Extended Support To</th>
+                <th>Ext. Support To</th>
                 <th>Source</th>
                 <th>Latest Patch</th>
                 <th>Patch Released</th>
                 <th>Use From</th>
                 <th>Use To</th>
                 <th>Updated</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
 
-    <script src="libs/tail.select-full.min.js"></script>
     <script type="module" src="list.js"></script>
 </body>
 

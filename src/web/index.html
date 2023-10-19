@@ -7,7 +7,6 @@
     <meta name="description" content="Visualise software EOL (End-Of-Life) timelines">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.5, user-scalable=yes">
-    <link rel="stylesheet" href="css/tail.select-light.css">
     <link rel="stylesheet" href="css/eolvis.css">
     <link rel="icon" href="eolvis-favicon.png" sizes="32x32" />
 </head>
@@ -38,14 +37,8 @@
         </div>
     </header>
 
-    <section id="filter-bar" class="filter-bar">
-        <div id="typeNameFilter-container" class="filter-container">
-            <select id="typeNameFilter" multiple></select>
-        </div>
-        <div id="periodFilter-container" class="filter-container">
-            <select id="periodFilter" multiple></select>
-        </div>
-    </section>
+    <filter-bar id="filter-bar"></filter-bar>
+    <item-details-form id="item-details-form"></item-details-form>
 
     <section id="section-eol" class="section-eol">
         <svg id="eolvisSvg" xmlns="http://www.w3.org/2000/svg">
@@ -75,87 +68,6 @@
         </svg>
     </section>
     
-    <dialog id="dialog-details">
-        <h3>Software Details</h3>
-
-        <!-- TODO - remove when database storage is implemented -->
-        <p id="dialog-details-message" style="color: darkred; max-width: 24rem;">*** Only saves updates to browser session storage for now although updates can be exported from the options menu ***</p>
-
-        <form id="formDetails" method="post" data-form-sync>
-            <fieldset id="formDetails-fieldset" class="form-fieldset">
-                <div class="form-item">
-                    <label for="item-name">Name:</label>
-                    <input type="text" id="item-name" name="name">
-                </div>
-                <div class="form-item">
-                    <label for="item-version">Version:</label>
-                    <input type="text" id="item-version" name="version">
-                </div>
-                <div class="form-item">
-                    <label for="item-lts">LTS:</label>
-                    <input type="checkbox" id="item-lts" name="lts" checked>
-                </div>
-                <div class="form-item">
-                    <label for="item-type">Type:</label>
-                    <select id="item-type" name="type"></select>
-                </div>
-                <hr>
-                <div class="form-item">
-                    <label for="supportedFrom">Supported From:</label>
-                    <input type="date" id="supportedFrom" name="supportedFrom">
-                </div>
-                <div class="form-item">
-                    <label for="item-supportedTo">Supported To:</label>
-                    <input type="date" id="item-supportedTo" name="supportedTo">
-                </div>
-                <div class="form-item">
-                    <label for="item-supportedToExtended">Extended Support To:</label>
-                    <input type="date" id="item-supportedToExtended" name="supportedToExtended">
-                    <span><em>(only if purchased)</em></span>
-                </div>
-                <div class="form-item">
-                    <label for="item-link">Link:</label>
-                    <input type="text" id="item-link" name="link">
-                    <a id="item-link-anchor" href="" target="_blank">(link)</a>
-                </div>
-                <hr>
-                <div class="form-item">
-                    <label for="item-latestPatch">Latest Patch:</label>
-                    <input type="text" id="item-latestPatch" name="latestPatch">
-                </div>
-                <div class="form-item">
-                    <label for="item-latestPatchReleased">Patch Released:</label>
-                    <input type="date" id="item-latestPatchReleased" name="latestPatchReleased">
-                </div>
-                <hr>
-                <div class="form-item">
-                    <label for="item-useFrom">Use From:</label>
-                    <input type="date" id="item-useFrom" name="useFrom">
-                </div>
-                <div class="form-item">
-                    <label for="item-useTo">Use To:</label>
-                    <input type="date" id="item-useTo" name="useTo">
-                </div>
-                <hr>
-                <div class="form-item">
-                    <label for="item-notes">Notes:</label>
-                    <textarea id="item-notes" name="notes"></textarea>
-                </div>
-                <hr>
-                <div id="item-updated-wrapper" class="form-item">
-                    <label for="item-updated">Last Updated:</label>
-                    <input type="date" id="item-updated" name="updated" readonly>
-                </div>
-            </fieldset>
-        </form>
-        <div id="dialog-form-error" class="dialog-form-error hidden"></div>
-        <div class="dialog-button-container">
-            <button id="dialog-details-delete" class="dialog-button dialog-button-secondary dialog-button-left">Delete</button>
-            <button id="dialog-details-cancel" class="dialog-button dialog-button-secondary">Cancel</button>
-            <button id="dialog-details-save" class="dialog-button">Save</button>
-        </div>
-    </dialog>
-
     <dialog id="dialog-options">
         <div id="dialog-options-close-x" class="dialog-close-x">X</div>
         <h3>Options</h3>
@@ -183,7 +95,6 @@
         </div>
     </dialog>
 
-    <script src="libs/tail.select-full.min.js"></script>
     <script type="module" src="index.js"></script>
 </body>
 

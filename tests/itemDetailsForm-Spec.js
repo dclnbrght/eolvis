@@ -1,23 +1,23 @@
-import { exportForTesting } from '../src/web/js/dataUpdate.js';
-
-const { validateItem, displayError } = exportForTesting;
+import * as itemDetailsForm from '../src/web/components/itemDetailsForm.js';
 
 describe("dataUpdate", function () {
     describe("validateItem", function () {
-        let errorBox;
+
+        let mockItemDetailsForm = null;
 
         beforeEach(function () {
-            // Create a mock error box element and add it to the document body
-            errorBox = document.createElement("div");
-            errorBox.id = "dialog-form-error";
-            document.body.appendChild(errorBox);
+            // Create a mock item details form element
+            mockItemDetailsForm = document.createElement('item-details-form');
+            mockItemDetailsForm.id = "item-details-form";
+            mockItemDetailsForm.connectedCallback();
+            document.body.appendChild(mockItemDetailsForm);
         });
 
         afterEach(function () {
-            // Remove the mock error box element after each test
-            document.body.removeChild(errorBox);
+            document.body.removeChild(mockItemDetailsForm);
         });
 
+        
         it("should return true for a valid item", function () {
             const validItem = {
                 name: "Valid Name",
@@ -32,10 +32,9 @@ describe("dataUpdate", function () {
                 notes: "",
             };
 
-            const result = validateItem(validItem);
+            const result = mockItemDetailsForm.validateItem(validItem);
 
-            expect(result).toBe(true);
-            expect(errorBox.classList.contains("hidden")).toBe(true);
+            expect(result.isValid).toBe(true);
         });
 
 
@@ -44,11 +43,10 @@ describe("dataUpdate", function () {
                 name: ""
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain("Please enter a Name");
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain("Please enter a Name");
         });
 
 
@@ -58,11 +56,10 @@ describe("dataUpdate", function () {
                 version: ""
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain("Please enter a Version");
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain("Please enter a Version");
         });
 
 
@@ -73,12 +70,12 @@ describe("dataUpdate", function () {
                 type: ""
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain("Please select a Type");
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain("Please select a Type");
         });
+
 
         it("should return false and display an error for an empty supportedFrom", function () {
             const invalidItem = {
@@ -88,11 +85,10 @@ describe("dataUpdate", function () {
                 supportedFrom: ""
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain("Please enter a Supported From date");
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain("Please enter a Supported From date");
         });
 
 
@@ -110,11 +106,10 @@ describe("dataUpdate", function () {
                 notes: "",
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain(
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain(
                 "The Supported To date must be greater than the Supported From date"
             );
         });
@@ -134,11 +129,10 @@ describe("dataUpdate", function () {
                 notes: "",
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain(
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain(
                 "The Use To date must be greater than the Use From date"
             );
         });
@@ -158,11 +152,10 @@ describe("dataUpdate", function () {
                 notes: "",
             };
 
-            const result = validateItem(invalidItem);
+            const result = mockItemDetailsForm.validateItem(invalidItem);
 
-            expect(result).toBe(false);
-            expect(errorBox.classList.contains("hidden")).toBe(false);
-            expect(errorBox.innerHTML).toContain(
+            expect(result.isValid).toBe(false);
+            expect(result.msg).toContain(
                 "The Use From date must be greater than the Supported From date"
             );
         });
@@ -182,10 +175,9 @@ describe("dataUpdate", function () {
                 notes: "",
             };
 
-            const result = validateItem(itemWithNoErrors);
+            const result = mockItemDetailsForm.validateItem(itemWithNoErrors);
 
-            expect(result).toBe(true);
-            expect(errorBox.classList.contains("hidden")).toBe(true);
+            expect(result.isValid).toBe(true);
         });
     });
 });

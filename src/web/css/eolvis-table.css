@@ -20,6 +20,7 @@
 .item-table td {
     padding: 0.5em;
     text-align: center;
+    white-space: nowrap;
 }
 
 .item-table tbody tr {
@@ -37,4 +38,17 @@
 .item-table tbody tr.active-row {
     font-weight: bold;
     color: #00a0be;
+}
+
+.table-button {
+    background-color: #ddd; 
+    border: #666;
+    color: #666;
+    padding: 0.2em 0.6em;
+    margin: 0 0.6em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 0.3em;
 }

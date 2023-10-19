@@ -1,7 +1,11 @@
 import * as settings from './settings.js';
 import * as dataAccess from './js/dataAccess.js';
 import * as filterBar from './components/filterBar.js';
+import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as dataSearch from './js/dataSearch.js';
+
+const filterBarComponent = document.getElementById("filter-bar");
+const itemDetailsFormComponent = document.getElementById("item-details-form");
 
 const requestData = (callback) => {
     dataAccess.requestDataFromServer(settings.dataPath, callback);
@@ -10,7 +14,9 @@ const requestData = (callback) => {
 const dataLoaded = () => {
     try {
         const data = dataAccess.requestDataFromStore();
-        filterBar.setupFilters(data, filterSearch);
+
+        filterBarComponent.setupFilters(data, filterSearch);
+        itemDetailsFormComponent.setupDialog(filterSearch);
         
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
@@ -26,7 +32,7 @@ const dataLoaded = () => {
 const filterSearch = () => {
     try {
         
-        const filterValues = filterBar.selectedFilterValues();         
+        const filterValues = filterBarComponent.selectedFilterValues();         
         const data = dataAccess.requestDataFromStore();
 
         const items = data.components;
@@ -60,6 +66,11 @@ const renderItemTable = (items) => {
     
     // populate table with items
     items.forEach(item => {
+
+        if (item.isdeleted) {
+            return;
+        }
+        
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${item.name}</td>
@@ -75,7 +86,14 @@ const renderItemTable = (items) => {
             <td>${item.useFrom}</td>
             <td>${item.useTo}</td>
             <td>${new Date(item.updated).toISOString().split('T')[0]}</td>
+            <td><button type="button" class="table-button">Edit</button></td>
         `;
+
+        const buttonEdit = row.getElementsByTagName("button")[0];
+        buttonEdit.addEventListener("click", (e) => {
+            itemDetailsFormComponent.showModal(item);
+        });
+
         itemTableBody.appendChild(row);
     });
 }
