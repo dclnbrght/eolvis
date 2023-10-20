@@ -3,12 +3,14 @@ import * as dataAccess from './js/dataAccess.js';
 import * as dataSearch from './js/dataSearch.js';
 import * as filterBar from './components/filterBar.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
+import * as informationDialog from './components/informationDialog.js';
 import * as itemBoard from './components/itemBoard.js';
 import * as options from './js/options.js';
 import * as user from './js/user.js';
 
 const filterBarComponent = document.getElementById("filter-bar");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
+const informationDialogComponent = document.getElementById("information-dialog");
 
 const pageHeaderHeight = 75;
 
@@ -34,7 +36,7 @@ const dataLoaded = () => {
         const data = dataAccess.requestDataFromStore();
 
         filterBarComponent.setupFilters(data, filterSearch);
-        itemDetailsFormComponent.setupDialog(filterSearch);
+        itemDetailsFormComponent.setupDialog(dataLoaded);
         
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
@@ -80,6 +82,9 @@ const positionTimeline = (timeline, pageHeaderHeight) => {
         timeline.removeAttribute("transform");
 }
 
+document.getElementById("action-overview").addEventListener("click", function (e) {    
+    informationDialogComponent.showModal();
+});
 document.getElementById("action-new-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
 });

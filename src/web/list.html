@@ -19,12 +19,36 @@
         </div>
         <h1 id="title">eolvis</h1>
         <div id="header-right">
-           
+            <div id="action-overview" class="header-action">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <g fill="#eee">
+                        <title>overview</title>
+                        <path
+                            d="M 12 2 A 1 1 0 0 0 12 18 A 1 1 0 0 0 12 2 V 4 A 1 1 0 0 1 12 16 A 1 1 0 0 1 12 4 Z M 11 8 V 15 H 12 H 13 V 8 Z M 11 7 H 13 V 5 H 11 Z" />
+                    </g>
+                </svg>
+            </div>
+            <div id="action-new-item" class="header-action">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <g stroke="#eee" stroke-width="2">
+                        <title>add item</title>
+                        <path d="M 9.5 2.5 L 9.5 15.5 M 3 9 L 16 9" />
+                    </g>
+                </svg>
+            </div>
         </div>
     </header>
 
     <filter-bar id="filter-bar"></filter-bar>
     <item-details-form id="item-details-form"></item-details-form>
+    <information-dialog id="information-dialog" data-project="eolvis">
+        <span slot="dialog-title">About eolvis</span>
+        <div slot="dialog-content" style="max-width: 40em;">            
+			<p>
+				The <em>eolvis</em> web application is used to represent the lifecycle of software (and devices).
+			</p>
+        </div>
+    </information-dialog>
 
     <table id="itemTable" class="item-table">
         <thead>
@@ -32,7 +56,7 @@
                 <th>Name</th>
                 <th>Version</th>
                 <th>LTS</th>
-                <th>Verison</th>
+                <th>Type</th>
                 <th>Supported From</th>
                 <th>Supported To</th>
                 <th>Ext. Support To</th>

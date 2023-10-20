@@ -2,10 +2,12 @@ import * as settings from './settings.js';
 import * as dataAccess from './js/dataAccess.js';
 import * as filterBar from './components/filterBar.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
+import * as informationDialog from './components/informationDialog.js';
 import * as dataSearch from './js/dataSearch.js';
 
 const filterBarComponent = document.getElementById("filter-bar");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
+const informationDialogComponent = document.getElementById("information-dialog");
 
 const requestData = (callback) => {
     dataAccess.requestDataFromServer(settings.dataPath, callback);
@@ -16,8 +18,8 @@ const dataLoaded = () => {
         const data = dataAccess.requestDataFromStore();
 
         filterBarComponent.setupFilters(data, filterSearch);
-        itemDetailsFormComponent.setupDialog(filterSearch);
-        
+        itemDetailsFormComponent.setupDialog(dataLoaded);
+
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
 
@@ -31,8 +33,8 @@ const dataLoaded = () => {
 
 const filterSearch = () => {
     try {
-        
-        const filterValues = filterBarComponent.selectedFilterValues();         
+
+        const filterValues = filterBarComponent.selectedFilterValues();
         const data = dataAccess.requestDataFromStore();
 
         const items = data.components;
@@ -46,7 +48,7 @@ const filterSearch = () => {
         );
 
         // sort items by updated date descending
-        const sortedItems = filteredItems.sort((a, b) => 
+        const sortedItems = filteredItems.sort((a, b) =>
             new Date(a.updated) - new Date(b.updated)
         );
 
@@ -63,14 +65,14 @@ const renderItemTable = (items) => {
     const itemTable = document.getElementById("itemTable");
     const itemTableBody = itemTable.getElementsByTagName("tbody")[0];
     itemTableBody.replaceChildren();
-    
+
     // populate table with items
     items.forEach(item => {
 
         if (item.isdeleted) {
             return;
         }
-        
+
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${item.name}</td>
@@ -80,7 +82,7 @@ const renderItemTable = (items) => {
             <td>${item.supportedFrom}</td>
             <td>${item.supportedTo}</td>
             <td>${item.supportedToExtended}</td>
-            <td>${item.link.length > 0 ? '<a href="' + item.link +'" style="text-decoration:none;">&#128279;</a>' : ''}</td>
+            <td>${item.link.length > 0 ? '<a href="' + item.link + '" target="_blank" style="text-decoration:none;">&#128279;</a>' : ''}</td>
             <td>${item.latestPatch}</td>
             <td>${item.latestPatchReleased}</td>
             <td>${item.useFrom}</td>
@@ -97,6 +99,13 @@ const renderItemTable = (items) => {
         itemTableBody.appendChild(row);
     });
 }
+
+document.getElementById("action-overview").addEventListener("click", function (e) {
+    informationDialogComponent.showModal();
+});
+document.getElementById("action-new-item").addEventListener("click", (e) => {
+    itemDetailsFormComponent.showModalNew();
+});
 
 window.onload = () => {
     requestData(dataLoaded);

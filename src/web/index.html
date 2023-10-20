@@ -18,20 +18,29 @@
         </div>
         <h1 id="title">eolvis</h1>
         <div id="header-right">
+            <div id="action-overview" class="header-action">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <g fill="#eee">
+                        <title>overview</title>
+                        <path
+                            d="M 12 2 A 1 1 0 0 0 12 18 A 1 1 0 0 0 12 2 V 4 A 1 1 0 0 1 12 16 A 1 1 0 0 1 12 4 Z M 11 8 V 15 H 12 H 13 V 8 Z M 11 7 H 13 V 5 H 11 Z" />
+                    </g>
+                </svg>
+            </div>
             <div id="action-new-item" class="header-action">
                 <svg width="20" height="20" viewBox="0 0 20 20">
-                  <g stroke="#eee" stroke-width="2">
-                    <title>add item</title>
-                    <path d="M 9.5 2.5 L 9.5 15.5 M 3 9 L 16 9"/>
-                  </g>
+                    <g stroke="#eee" stroke-width="2">
+                        <title>add item</title>
+                        <path d="M 9.5 2.5 L 9.5 15.5 M 3 9 L 16 9" />
+                    </g>
                 </svg>
             </div>
             <div id="action-options" class="header-action">
                 <svg width="20" height="20" viewBox="0 0 20 20">
-                  <g stroke="#eee" stroke-width="2">
-                    <title>options</title>
-                    <path d="M 3 3 L 16 3 M 3 9 L 16 9 M 3 15 L 16 15"/>
-                  </g>
+                    <g stroke="#eee" stroke-width="2">
+                        <title>options</title>
+                        <path d="M 3 3 L 16 3 M 3 9 L 16 9 M 3 15 L 16 15" />
+                    </g>
                 </svg>
             </div>
         </div>
@@ -39,6 +48,50 @@
 
     <filter-bar id="filter-bar"></filter-bar>
     <item-details-form id="item-details-form"></item-details-form>
+    <information-dialog id="information-dialog" data-project="eolvis">
+        <span slot="dialog-title">About eolvis</span>
+        <div slot="dialog-content" style="max-width: 40em;">
+            <p>
+                The <em>eolvis</em> web application is used to represent the lifecycle of software (and devices) on a
+                timeline, from release to EOL (End-Of-Life). This visualisation helps when planning a technical roadmap.
+            </p>
+            <p>
+                Each item is represented as a bar on the timeline:
+            </p>
+            <ul>
+                <li>
+                    The Supported From and To dates are represented as a bar with a solid outline.
+                </li>
+                <li>
+                    Extended Support is represented with a dashed outline.
+                </li>
+                <li>
+                    The Use From and To dates are represented as an inner bar with a solid colour.
+                </li>
+                <li>
+                    The colour depends on its position on the timeline relative to the current date.
+                </li>
+            </ul>
+            <p>
+                The colour of the bar depends on its position on the timeline relative to the current date:
+            </p>
+            <ul>
+                <li>
+                    Grey = Used From and To dates are in the future or in the past
+                </li>
+                <li>
+                    Green = Use From and To dates are between Supported From and To dates, and Current date is between
+                    the Use From and To dates
+                </li>
+                <li>
+                    Amber = Current date is near (i.e. 90 days (configurable)) to a future Use To date
+                </li>
+                <li>
+                    Red = the Use To date is in the future and after the Supported To date
+                </li>
+            </ul>
+        </div>
+    </information-dialog>
 
     <section id="section-eol" class="section-eol">
         <svg id="eolvisSvg" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +120,7 @@
             <g id="itemContainer"></g>
         </svg>
     </section>
-    
+
     <dialog id="dialog-options">
         <div id="dialog-options-close-x" class="dialog-close-x">X</div>
         <h3>Options</h3>
@@ -78,8 +131,9 @@
             <div class="dialog-button-container">
                 <button id="dialog-options-export-eol" class="dialog-button">Export Data</button>
             </div>
-        </div>        
-        <br /><hr />
+        </div>
+        <br />
+        <hr />
 
         <div id="options-exportSBoM">
             <h4>Export SBoM</h4>
@@ -87,8 +141,9 @@
             <div class="dialog-button-container">
                 <button id="dialog-options-export-bom" class="dialog-button">Export SBoM</button>
             </div>
-        </div>        
-        <br /><hr />
+        </div>
+        <br />
+        <hr />
 
         <div class="dialog-button-container">
             <button id="dialog-options-close" class="dialog-button">Close</button>
