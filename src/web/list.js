@@ -18,7 +18,6 @@ const dataLoaded = () => {
         const data = dataAccess.requestDataFromStore();
 
         filterBarComponent.setupFilters(data, filterSearch);
-        itemDetailsFormComponent.setupDialog(dataLoaded);
 
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
@@ -108,5 +107,6 @@ document.getElementById("action-new-item").addEventListener("click", (e) => {
 });
 
 window.onload = () => {
+    itemDetailsFormComponent.setupDialog(dataLoaded);
     requestData(dataLoaded);
 };

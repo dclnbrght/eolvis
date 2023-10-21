@@ -36,7 +36,6 @@ const dataLoaded = () => {
         const data = dataAccess.requestDataFromStore();
 
         filterBarComponent.setupFilters(data, filterSearch);
-        itemDetailsFormComponent.setupDialog(dataLoaded);
         
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
@@ -105,7 +104,8 @@ document.getElementById("dialog-options-export-bom").addEventListener("click", (
 });
 
 window.onload = () => {
-    setupUser();
+    setupUser();    
+    itemDetailsFormComponent.setupDialog(dataLoaded);
     requestData(dataLoaded);
 };
 window.onscroll = () => {
