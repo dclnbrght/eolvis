@@ -25,6 +25,7 @@ const filterBarStoreKey = "eolvisSelectedFilters";
 
 class FilterBar extends HTMLElement {
 
+    #initialSetupComplete = false;
     #typeNameFilter = null;
     #periodFilter = null;
     #querystringParameters = "";
@@ -61,21 +62,25 @@ class FilterBar extends HTMLElement {
 
     // Manage  multiple select events firings at once
     // i.e. when all or a group of options are selected
-    #changeEventFunc = (e, filterSearch) => {
-        const v = this.shadowRoot.getElementById("filter-bar");
-        if (v.classList.contains("updating")) {
+    #changeEventFunc = (e, searchCallback) => {
+        if (this.classList.contains("updating")) {
             e.preventDefault();
-            e.stopPropagation();
+            e.stopPropagation();            
         } else {
-            v.classList.add("updating");
+            this.classList.add("updating");
             setTimeout(() => {
-                v.classList.remove("updating");
-                filterSearch();
+                this.classList.remove("updating");
+                this.#processFilterChange();
+                searchCallback();
             }, 4);
         }
     }
 
     #setupEventHandlers = (searchCallback) => {
+        if (this.#initialSetupComplete) {
+            return;
+        }
+
         this.#typeNameFilter.addEventListener("change", (e) => {
             this.#changeEventFunc(e, searchCallback);
         });
@@ -83,7 +88,16 @@ class FilterBar extends HTMLElement {
         this.#periodFilter.addEventListener("change", (e) => {
             this.#changeEventFunc(e, searchCallback);
         });
+
+        this.#initialSetupComplete = true
     };
+
+    #processFilterChange = () => {
+        const selectedNames = this.#getSelectBoxValues(this.#typeNameFilter);
+        const selectedPeriods = this.#getSelectBoxValues(this.#periodFilter);
+        const filterValues = { selectedNames, selectedPeriods };
+        localStorage.setItem(filterBarStoreKey, JSON.stringify(filterValues));
+    }
 
     #setSelectBoxValues = (selectElement, values) => {
         let options = [...selectElement.options];
@@ -198,13 +212,8 @@ class FilterBar extends HTMLElement {
     };
 
     selectedFilterValues = () => {
-        const selectedNames = this.#getSelectBoxValues(this.#typeNameFilter);
-        const selectedPeriods = this.#getSelectBoxValues(this.#periodFilter);
-
-        const filterValues = { selectedNames, selectedPeriods };
-
-        localStorage.setItem(filterBarStoreKey, JSON.stringify(filterValues));
-
+        let filterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
+        this.#previousSelectedFilterValues = filterValues;
         return filterValues;
     };
 }

@@ -32,7 +32,6 @@ const dataLoaded = () => {
 
 const filterSearch = () => {
     try {
-
         const filterValues = filterBarComponent.selectedFilterValues();
         const data = dataAccess.requestDataFromStore();
 
@@ -107,6 +106,6 @@ document.getElementById("action-new-item").addEventListener("click", (e) => {
 });
 
 window.onload = () => {
-    itemDetailsFormComponent.setupDialog(dataLoaded);
     requestData(dataLoaded);
+    itemDetailsFormComponent.setupDialog(dataLoaded);
 };

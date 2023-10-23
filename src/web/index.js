@@ -104,9 +104,9 @@ document.getElementById("dialog-options-export-bom").addEventListener("click", (
 });
 
 window.onload = () => {
-    setupUser();    
-    itemDetailsFormComponent.setupDialog(dataLoaded);
+    setupUser();
     requestData(dataLoaded);
+    itemDetailsFormComponent.setupDialog(dataLoaded);
 };
 window.onscroll = () => {
     positionTimeline(document.getElementById("timeline"), pageHeaderHeight);
