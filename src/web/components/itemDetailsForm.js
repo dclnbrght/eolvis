@@ -99,7 +99,9 @@ class ItemDetailsForm extends HTMLElement {
 
     constructor() {
         super();
+    }
 
+    connectedCallback() {
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
 
@@ -108,9 +110,7 @@ class ItemDetailsForm extends HTMLElement {
         eolvisStyles.setAttribute("rel", "stylesheet");
         eolvisStyles.setAttribute("href", "./css/eolvis.css");
         shadow.appendChild(eolvisStyles);
-    }
 
-    connectedCallback() {
         this.dialog = this.shadowRoot.querySelector('#dialog-details');
         this.#dialogDetailsMessage = this.shadowRoot.querySelector('#dialog-details-message');
         this.#errorBox = this.shadowRoot.querySelector('#dialog-form-error');

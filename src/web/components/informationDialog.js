@@ -19,7 +19,9 @@ class InformationDialog extends HTMLElement {
 
     constructor() {
         super();
-        
+    }
+    
+    connectedCallback() {        
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
 
@@ -31,9 +33,7 @@ class InformationDialog extends HTMLElement {
         projectStyles.setAttribute("rel", "stylesheet");
         projectStyles.setAttribute("href", `./css/${projectName}.css`);
         shadow.appendChild(projectStyles);
-    }
-    
-    connectedCallback() {
+
         this.dialog = this.shadowRoot.querySelector('#dialog-information');
         this.#closeX = this.shadowRoot.querySelector('#dialog-close-x');
         this.#closeButton= this.shadowRoot.querySelector('#dialog-button-close');

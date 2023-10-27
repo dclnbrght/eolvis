@@ -67,8 +67,8 @@ describe("filterBar", function () {
       mockFilterBar.setupFilters(data, filterSearch);
 
       // Assert
-      const typeNameFilter = mockFilterBar.shadowRoot.querySelector('#typeNameFilter');
-      const periodFilter = mockFilterBar.shadowRoot.querySelector('#periodFilter');
+      const typeNameFilter = mockFilterBar.querySelector('#typeNameFilter');
+      const periodFilter = mockFilterBar.querySelector('#periodFilter');
       expect(typeNameFilter.options.length).toBe(3);
       expect(periodFilter.options.length).toBe(3);
     });

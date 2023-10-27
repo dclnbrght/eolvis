@@ -11,7 +11,7 @@ template.innerHTML = `
             display: inline-block;
         }
     </style>
-    <section id="filter-bar" class="filter-bar">
+    <section class="filter-bar">
         <div id="typeNameFilter-container" class="filter-container">
             <select id="typeNameFilter" multiple></select>
         </div>
@@ -23,53 +23,55 @@ template.innerHTML = `
 
 const filterBarStoreKey = "eolvisSelectedFilters";
 
+/*
+NOTE: not using the shadow DOM here as tail.select does not work correctly with it,
+      the dropdown closes immediately after selecting an option
+*/
 class FilterBar extends HTMLElement {
 
     #initialSetupComplete = false;
     #typeNameFilter = null;
     #periodFilter = null;
+    #isUpdating = false;
     #querystringParameters = "";
     #previousSelectedFilterValues = [];
 
     constructor() {
         super();
+    }
 
-        const shadow = this.attachShadow({ mode: 'open' });
-        shadow.appendChild(template.content.cloneNode(true));
+    connectedCallback() {
+        this.appendChild(template.content.cloneNode(true));
 
-        // Add stylesheets and js libs to the shadow dom
+        // Add stylesheets and js libs to the dom
         const tailStyles = document.createElement("link");
         tailStyles.setAttribute("rel", "stylesheet");
         tailStyles.setAttribute("href", "./css/tail.select-light.css");
-        shadow.appendChild(tailStyles);
+        this.appendChild(tailStyles);
 
         const tailLib = document.createElement('script');
         tailLib.type = 'text/javascript';
         tailLib.async = true;
         tailLib.setAttribute("src", "./libs/tail.select-full.min.js");
-        shadow.appendChild(tailLib);
-    }
+        this.appendChild(tailLib);
 
-    connectedCallback() {
-        this.#typeNameFilter = this.shadowRoot.querySelector('#typeNameFilter');
-        this.#periodFilter = this.shadowRoot.querySelector('#periodFilter');
+        this.#typeNameFilter = this.querySelector('#typeNameFilter');
+        this.#periodFilter = this.querySelector('#periodFilter');
 
         this.#querystringParameters = new URLSearchParams(window.location.search);
-        if (localStorage.getItem(filterBarStoreKey)) {
-            this.#previousSelectedFilterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
-        }
+        this.#previousSelectedFilterValues = this.selectedFilterValues();
     }
 
     // Manage  multiple select events firings at once
     // i.e. when all or a group of options are selected
     #changeEventFunc = (e, searchCallback) => {
-        if (this.classList.contains("updating")) {
+        if (this.#isUpdating) {
             e.preventDefault();
             e.stopPropagation();            
         } else {
-            this.classList.add("updating");
+            this.#isUpdating = true;
             setTimeout(() => {
-                this.classList.remove("updating");
+                this.#isUpdating = false;
                 this.#processFilterChange();
                 searchCallback();
             }, 4);
@@ -153,7 +155,7 @@ class FilterBar extends HTMLElement {
             placeholder: 'Type / Name Filter',
             multiSelectAll: true,
             search: true,
-            searchFocus: false
+            searchFocus: true
         }).reload();
     };
 
@@ -177,7 +179,7 @@ class FilterBar extends HTMLElement {
             placeholder: 'Period Filter',
             multiSelectAll: true,
             search: true,
-            searchFocus: false
+            searchFocus: true
         }).reload();
     }
 
@@ -212,9 +214,11 @@ class FilterBar extends HTMLElement {
     };
 
     selectedFilterValues = () => {
-        let filterValues = JSON.parse(localStorage.getItem(filterBarStoreKey));
-        this.#previousSelectedFilterValues = filterValues;
-        return filterValues;
+        if (localStorage.getItem(filterBarStoreKey) == null) {
+            return { selectedNames: ["All"], selectedPeriods: ["All"]};
+        }
+
+        return JSON.parse(localStorage.getItem(filterBarStoreKey));
     };
 }
 customElements.define('filter-bar', FilterBar);
