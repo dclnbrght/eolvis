@@ -10,13 +10,7 @@ describe("dataUpdate", function () {
             mockItemDetailsForm = document.createElement('item-details-form');
             mockItemDetailsForm.id = "item-details-form";
             mockItemDetailsForm.connectedCallback();
-            document.body.appendChild(mockItemDetailsForm);
         });
-
-        afterEach(function () {
-            document.body.removeChild(mockItemDetailsForm);
-        });
-
         
         it("should return true for a valid item", function () {
             const validItem = {

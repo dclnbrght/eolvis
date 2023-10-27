@@ -111,13 +111,13 @@ class ItemDetailsForm extends HTMLElement {
         eolvisStyles.setAttribute("href", "./css/eolvis.css");
         shadow.appendChild(eolvisStyles);
 
-        this.dialog = this.shadowRoot.querySelector('#dialog-details');
-        this.#dialogDetailsMessage = this.shadowRoot.querySelector('#dialog-details-message');
-        this.#errorBox = this.shadowRoot.querySelector('#dialog-form-error');
-        this.#fieldSet = this.shadowRoot.querySelector('#formDetails-fieldset');
-        this.#saveButton = this.shadowRoot.querySelector('#dialog-details-save');
-        this.#deleteButton = this.shadowRoot.querySelector('#dialog-details-delete');
-        this.#cancelButton = this.shadowRoot.querySelector('#dialog-details-cancel');
+        this.dialog = shadow.querySelector('#dialog-details');
+        this.#dialogDetailsMessage = shadow.querySelector('#dialog-details-message');
+        this.#errorBox = shadow.querySelector('#dialog-form-error');
+        this.#fieldSet = shadow.querySelector('#formDetails-fieldset');
+        this.#saveButton = shadow.querySelector('#dialog-details-save');
+        this.#deleteButton = shadow.querySelector('#dialog-details-delete');
+        this.#cancelButton = shadow.querySelector('#dialog-details-cancel');
 
         this.#setupUserPermissions();
     }
