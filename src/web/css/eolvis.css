@@ -135,6 +135,7 @@ dialog::backdrop {
 
 
 .section-eol {
+    display: block;
     margin: 0 0 6em 0;
     overflow-x: scroll;
 }

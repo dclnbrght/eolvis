@@ -6,7 +6,7 @@
     <title>eolvis</title>
     <meta name="description" content="Visualise software EOL (End-Of-Life) timelines">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.5, user-scalable=yes">
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=5, user-scalable=yes">
     <link rel="stylesheet" href="css/eolvis.css">
     <link rel="icon" href="eolvis-favicon.png" sizes="32x32" />
 </head>
@@ -47,13 +47,12 @@
     </header>
 
     <filter-bar id="filter-bar"></filter-bar>
-    <item-details-form id="item-details-form"></item-details-form>
     <information-dialog id="information-dialog" data-project="eolvis">
         <span slot="dialog-title">About eolvis</span>
         <div slot="dialog-content" style="max-width: 40em;">
             <p>
                 The <em>eolvis</em> web application is used to represent the lifecycle of software (and devices) on a
-                timeline, from release to EOL (End-Of-Life). This visualisation helps when planning a technical roadmap.
+                timeline, from release to EOL (End-Of-Life). This visualisation helps when managing and planning a technical roadmap.
             </p>
             <p>
                 Each item is represented as a bar on the timeline:
@@ -92,34 +91,8 @@
             </ul>
         </div>
     </information-dialog>
-
-    <section id="section-eol" class="section-eol">
-        <svg id="eolvisSvg" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="item-supported-fadeRight">
-                    <stop class="item-supported-stopColour" offset="0%" stop-opacity="0.5" />
-                    <stop class="item-supported-stopColour" offset="80%" stop-opacity="0.2" />
-                    <stop class="item-supported-stopColour" offset="100%" stop-opacity="0" />
-                </linearGradient>
-                <linearGradient id="item-supported-border-fadeRight">
-                    <stop class="item-supported-border-stopColour" offset="0%" stop-opacity="1.0" />
-                    <stop class="item-supported-border-stopColour" offset="80%" stop-opacity="0.5" />
-                    <stop class="item-supported-border-stopColour" offset="100%" stop-opacity="0" />
-                </linearGradient>
-                <linearGradient id="item-inuse-fadeRight">
-                    <stop class="item-inuse-stopColour" offset="0%" stop-opacity="1.0" />
-                    <stop class="item-inuse-stopColour" offset="80%" stop-opacity="0.5" />
-                    <stop class="item-inuse-stopColour" offset="100%" stop-opacity="0" />
-                </linearGradient>
-                <linearGradient id="item-inuse-future-fadeRight">
-                    <stop class="item-inuse-future-stopColour" offset="0%" stop-opacity="1.0" />
-                    <stop class="item-inuse-future-stopColour" offset="80%" stop-opacity="0.5" />
-                    <stop class="item-inuse-future-stopColour" offset="100%" stop-opacity="0" />
-                </linearGradient>
-            </defs>
-            <g id="itemContainer"></g>
-        </svg>
-    </section>
+    <item-details-form id="item-details-form"></item-details-form>
+    <item-board id="item-board" class="section-eol"></item-board>
 
     <dialog id="dialog-options">
         <div id="dialog-options-close-x" class="dialog-close-x">X</div>

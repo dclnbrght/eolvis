@@ -155,7 +155,7 @@ class FilterBar extends HTMLElement {
             placeholder: 'Type / Name Filter',
             multiSelectAll: true,
             search: true,
-            searchFocus: true
+            searchFocus: false
         }).reload();
     };
 
@@ -179,7 +179,7 @@ class FilterBar extends HTMLElement {
             placeholder: 'Period Filter',
             multiSelectAll: true,
             search: true,
-            searchFocus: true
+            searchFocus: false
         }).reload();
     }
 

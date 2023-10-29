@@ -2,15 +2,16 @@ import * as settings from './settings.js';
 import * as dataAccess from './js/dataAccess.js';
 import * as dataSearch from './js/dataSearch.js';
 import * as filterBar from './components/filterBar.js';
-import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as informationDialog from './components/informationDialog.js';
+import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as itemBoard from './components/itemBoard.js';
 import * as options from './js/options.js';
 import * as user from './js/user.js';
 
 const filterBarComponent = document.getElementById("filter-bar");
-const itemDetailsFormComponent = document.getElementById("item-details-form");
 const informationDialogComponent = document.getElementById("information-dialog");
+const itemDetailsFormComponent = document.getElementById("item-details-form");
+const itemBoardComponent = document.getElementById("item-board");
 
 const pageHeaderHeight = 75;
 
@@ -64,7 +65,7 @@ const filterSearch = () => {
         );
 
         const today = new Date();
-        itemBoard.render(settings.types, filteredItems, today, minDate, maxDate);
+        itemBoardComponent.render(settings.types, filteredItems, today, minDate, maxDate);
 
     } catch (error) {
         const msg = `Error searching \r\n\r\n${error}`;

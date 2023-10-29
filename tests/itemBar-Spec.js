@@ -1,8 +1,12 @@
-import { exportForTesting, render } from '../src/web/components/itemBar.js';
-
-const { renderBarsAndLabel, getClassNamesForItemInUse } = exportForTesting;
+import { ItemBar } from '../src/web/components/itemBar.js';
 
 describe("itemBar", function () {
+
+    let itemBar = null;
+    
+    beforeEach(function () {
+        itemBar = new ItemBar();
+    });
 
     describe('getClassNamesForItemInUse', () => {
 
@@ -17,7 +21,7 @@ describe("itemBar", function () {
                 warnNearEolDays: 90
             };
 
-            const classNames = getClassNamesForItemInUse(
+            const classNames = itemBar.getClassNamesForItemInUse(
                 refDate,
                 inUseStart,
                 inUseEndIsSet,
@@ -42,7 +46,7 @@ describe("itemBar", function () {
                 warnNearEolDays: 90
             };
 
-            const classNames = getClassNamesForItemInUse(
+            const classNames = itemBar.getClassNamesForItemInUse(
                 refDate,
                 inUseStart,
                 inUseEndIsSet,
@@ -67,7 +71,7 @@ describe("itemBar", function () {
                 warnNearEolDays: 90
             };
 
-            const classNames = getClassNamesForItemInUse(
+            const classNames = itemBar.getClassNamesForItemInUse(
                 refDate,
                 inUseStart,
                 inUseEndIsSet,
@@ -92,7 +96,7 @@ describe("itemBar", function () {
                 warnNearEolDays: 90
             };
 
-            const classNames = getClassNamesForItemInUse(
+            const classNames = itemBar.getClassNamesForItemInUse(
                 refDate,
                 inUseStart,
                 inUseEndIsSet,
@@ -146,26 +150,26 @@ describe("itemBar", function () {
             const minDate = new Date("2020-01-01");
             const maxDate = new Date("2024-12-31");
 
-            const renderedItem = render(item, y, today, minDate, maxDate);
+            const renderedItem = itemBar.render(item, y, today, minDate, maxDate);
 
             // Append the renderedItem to the container
             container.appendChild(renderedItem);
 
             // Query for elements and attributes using querySelector
             const itemSupported = renderedItem.querySelector(".item-supported");
-            const itemBar = renderedItem.querySelector(".item");
+            const itemUse = renderedItem.querySelector(".item");
             const itemSupportedBorder = renderedItem.querySelector(".item-supported-border");
             const itemLabel = renderedItem.querySelector(".item-label");
 
             // Perform assertions on element presence and attributes
             expect(itemSupported).toBeDefined(); // Check that element is defined
-            expect(itemBar).toBeDefined();
+            expect(itemUse).toBeDefined();
             expect(itemSupportedBorder).toBeDefined();
             expect(itemLabel).toBeDefined();
 
             // Check CSS classes
             expect(itemSupported.classList.contains("item-supported")).toBe(true);
-            expect(itemBar.classList.contains("item")).toBe(true);
+            expect(itemUse.classList.contains("item")).toBe(true);
             expect(itemSupportedBorder.classList.contains("item-supported-border")).toBe(true);
             expect(itemLabel.classList.contains("item-label")).toBe(true);
         });
