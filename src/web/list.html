@@ -36,12 +36,20 @@
                     </g>
                 </svg>
             </div>
+            <div id="action-options" class="header-action">
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <g stroke="#eee" stroke-width="2">
+                        <title>options</title>
+                        <path d="M 3 3 L 16 3 M 3 9 L 16 9 M 3 15 L 16 15" />
+                    </g>
+                </svg>
+            </div>
         </div>
     </header>
 
     <filter-bar id="filter-bar"></filter-bar>
     <item-details-form id="item-details-form"></item-details-form>
-    <information-dialog id="information-dialog" data-project="eolvis">
+    <information-dialog id="information-dialog" data-stylesheet="./css/eolvis.css" style="visibility: hidden;">
         <span slot="dialog-title">About eolvis</span>
         <div slot="dialog-content" style="max-width: 40em;">            
 			<p>
@@ -49,6 +57,7 @@
 			</p>
         </div>
     </information-dialog>
+    <options-dialog id="options-dialog"></options-dialog>
 
     <table id="itemTable" class="item-table">
         <thead>
@@ -72,7 +81,7 @@
         <tbody>
         </tbody>
     </table>
-
+    <br />
     <script type="module" src="list.js"></script>
 </body>
 

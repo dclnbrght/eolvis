@@ -53,7 +53,7 @@ H1 {
     color: #666;
     text-align: left;
     border: none;
-    padding: 0.5rem 1.6rem;
+    padding: 0.7rem 1.4rem;
     box-shadow: 0 0 30px rgba(0,0,0,0.1), 0 0 10px rgba(0,0,0,0.25);
     min-width: 10em;
     max-width: 80vw;
@@ -92,7 +92,13 @@ dialog::backdrop {
 .dialog-button-secondary {
     background-color: #ddd; 
     border: #666;
-    color: #666;
+    color: #444;
+}
+.dialog-button:hover{
+    background-color: #555;
+}
+.dialog-button-secondary:hover{
+    background-color: #ccc;
 }
 .dialog-button-left {
     margin-right: auto;
@@ -104,6 +110,10 @@ dialog::backdrop {
     font-size: 120%;
     margin-top: 0.4em;
     cursor: pointer;
+    border: solid 1px #ddd;
+    padding: 0 0.2em 0.08em 0.2em;
+    background-color: #efefef;
+    line-height: 1.2em;
 }
 
 .form-fieldset {

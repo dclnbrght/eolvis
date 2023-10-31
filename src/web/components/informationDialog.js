@@ -2,7 +2,7 @@
 const template = document.createElement('template');
 template.innerHTML = `
     <dialog id="dialog-information">
-        <div id="dialog-close-x" class="dialog-close-x">X</div>
+        <div id="dialog-close-x" class="dialog-close-x">&#10005</div>
         <h3><slot name="dialog-title">Information</slot></h3>
         <slot name="dialog-content"></slot>
         <div class="dialog-button-container">
@@ -25,13 +25,13 @@ class InformationDialog extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
 
-        // get data-project variable
-        const projectName = this.getAttribute('data-project');
+        // get data-stylesheet variable
+        const projectStylesheet = this.getAttribute('data-stylesheet');
 
-        // Add stylesheets and js libs to the shadow dom
+        // Add project stylesheets to the shadow dom
         const projectStyles = document.createElement("link");
         projectStyles.setAttribute("rel", "stylesheet");
-        projectStyles.setAttribute("href", `./css/${projectName}.css`);
+        projectStyles.setAttribute("href", projectStylesheet);
         shadow.appendChild(projectStyles);
 
         this.dialog = this.shadowRoot.querySelector('#dialog-information');

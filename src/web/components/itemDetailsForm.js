@@ -255,9 +255,9 @@ class ItemDetailsForm extends HTMLElement {
                 'components': newComponents,
             };
 
-            filterBar.addToSelectedFilterValues("selectedNames", this.#curItem.name);
-
             dataAccess.saveDataToStore(newData);
+
+            filterBar.addToSelectedFilterValues("selectedNames", this.#curItem.name);
         } else {
             // updating existing item
             const newComponents = components.map(obj => {

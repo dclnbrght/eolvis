@@ -3,17 +3,16 @@ import * as dataAccess from './js/dataAccess.js';
 import * as dataSearch from './js/dataSearch.js';
 import * as filterBar from './components/filterBar.js';
 import * as informationDialog from './components/informationDialog.js';
+import * as optionsDialog from './components/optionsDialog.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as itemBoard from './components/itemBoard.js';
-import * as options from './js/options.js';
 import * as user from './js/user.js';
 
 const filterBarComponent = document.getElementById("filter-bar");
 const informationDialogComponent = document.getElementById("information-dialog");
+const optionsDialogComponent = document.getElementById("options-dialog");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
 const itemBoardComponent = document.getElementById("item-board");
-
-const pageHeaderHeight = 75;
 
 const minDate = new Date(new Date().getFullYear() - settings.yearsPast, 0, 1);
 const maxDate = new Date(new Date().getFullYear() + settings.yearsFuture, 11, 31);
@@ -74,10 +73,12 @@ const filterSearch = () => {
     }
 };
 
-const positionTimeline = (timeline, pageHeaderHeight) => {
+const positionTimeline = (timeline, relativeToElement) => {
+    const relativeToElementBottom = relativeToElement.offsetTop + relativeToElement.offsetHeight;
+
     let y = window.scrollY;
-    if (y > pageHeaderHeight)
-        timeline.setAttribute("transform", `translate(0, ${y - pageHeaderHeight})`);
+    if (y > relativeToElementBottom)
+        timeline.setAttribute("transform", `translate(0, ${y - relativeToElementBottom})`);
     else
         timeline.removeAttribute("transform");
 }
@@ -89,19 +90,7 @@ document.getElementById("action-new-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
 });
 document.getElementById("action-options").addEventListener("click", (e) => {
-    options.optionsDialogOpen();
-});
-document.getElementById("dialog-options-close").addEventListener("click", (e) => {
-    options.optionsDialogClose();
-});
-document.getElementById("dialog-options-close-x").addEventListener("click", (e) => {
-    options.optionsDialogClose();
-});
-document.getElementById("dialog-options-export-eol").addEventListener("click", (e) => {
-    options.optionsExportEol();
-});
-document.getElementById("dialog-options-export-bom").addEventListener("click", (e) => {
-    options.optionsExportBom();
+    optionsDialogComponent.showModal();
 });
 
 window.onload = () => {
@@ -110,9 +99,8 @@ window.onload = () => {
     itemDetailsFormComponent.setupDialog(dataLoaded);
 };
 window.onscroll = () => {
-    positionTimeline(document.getElementById("timeline"), pageHeaderHeight);
+    positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));
 };
 window.ontouchmove = () => {
-    positionTimeline(document.getElementById("timeline"), pageHeaderHeight);
+    positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));
 };
-

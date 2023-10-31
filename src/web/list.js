@@ -3,11 +3,13 @@ import * as dataAccess from './js/dataAccess.js';
 import * as filterBar from './components/filterBar.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as informationDialog from './components/informationDialog.js';
+import * as optionsDialog from './components/optionsDialog.js';
 import * as dataSearch from './js/dataSearch.js';
 
 const filterBarComponent = document.getElementById("filter-bar");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
 const informationDialogComponent = document.getElementById("information-dialog");
+const optionsDialogComponent = document.getElementById("options-dialog");
 
 const requestData = (callback) => {
     dataAccess.requestDataFromServer(settings.dataPath, callback);
@@ -103,6 +105,9 @@ document.getElementById("action-overview").addEventListener("click", function (e
 });
 document.getElementById("action-new-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
+});
+document.getElementById("action-options").addEventListener("click", (e) => {
+    optionsDialogComponent.showModal();
 });
 
 window.onload = () => {

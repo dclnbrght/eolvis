@@ -47,7 +47,7 @@
     </header>
 
     <filter-bar id="filter-bar"></filter-bar>
-    <information-dialog id="information-dialog" data-project="eolvis">
+    <information-dialog id="information-dialog" data-stylesheet="./css/eolvis.css" style="visibility: hidden;">
         <span slot="dialog-title">About eolvis</span>
         <div slot="dialog-content" style="max-width: 40em;">
             <p>
@@ -91,37 +91,9 @@
             </ul>
         </div>
     </information-dialog>
+    <options-dialog id="options-dialog"></options-dialog>
     <item-details-form id="item-details-form"></item-details-form>
     <item-board id="item-board" class="section-eol"></item-board>
-
-    <dialog id="dialog-options">
-        <div id="dialog-options-close-x" class="dialog-close-x">X</div>
-        <h3>Options</h3>
-
-        <div id="options-exportEol">
-            <h4>Export Data</h4>
-            <p>Export a data file in the Eolvis format.</p>
-            <div class="dialog-button-container">
-                <button id="dialog-options-export-eol" class="dialog-button">Export Data</button>
-            </div>
-        </div>
-        <br />
-        <hr />
-
-        <div id="options-exportSBoM">
-            <h4>Export SBoM</h4>
-            <p>Export a SBoM (Software Bill of Materials) in CycloneDX format.</p>
-            <div class="dialog-button-container">
-                <button id="dialog-options-export-bom" class="dialog-button">Export SBoM</button>
-            </div>
-        </div>
-        <br />
-        <hr />
-
-        <div class="dialog-button-container">
-            <button id="dialog-options-close" class="dialog-button">Close</button>
-        </div>
-    </dialog>
 
     <script type="module" src="index.js"></script>
 </body>
