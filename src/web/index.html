@@ -18,31 +18,12 @@
         </div>
         <h1 id="title">eolvis</h1>
         <div id="header-right">
-            <div id="action-overview" class="header-action">
-                <svg width="20" height="20" viewBox="0 0 20 20">
-                    <g fill="#eee">
-                        <title>overview</title>
-                        <path
-                            d="M 12 2 A 1 1 0 0 0 12 18 A 1 1 0 0 0 12 2 V 4 A 1 1 0 0 1 12 16 A 1 1 0 0 1 12 4 Z M 11 8 V 15 H 12 H 13 V 8 Z M 11 7 H 13 V 5 H 11 Z" />
-                    </g>
-                </svg>
-            </div>
-            <div id="action-new-item" class="header-action">
-                <svg width="20" height="20" viewBox="0 0 20 20">
-                    <g stroke="#eee" stroke-width="2">
-                        <title>add item</title>
-                        <path d="M 9.5 2.5 L 9.5 15.5 M 3 9 L 16 9" />
-                    </g>
-                </svg>
-            </div>
-            <div id="action-options" class="header-action">
-                <svg width="20" height="20" viewBox="0 0 20 20">
-                    <g stroke="#eee" stroke-width="2">
-                        <title>options</title>
-                        <path d="M 3 3 L 16 3 M 3 9 L 16 9 M 3 15 L 16 15" />
-                    </g>
-                </svg>
-            </div>
+            <menu-button id="menu-button-add-item" title="Add Item"
+                icon-svg-path="M 10 2 L 10 18 M 2 10 L 18 10"></menu-button>
+            <menu-button id="menu-button-download" title="Download"
+                icon-svg-path="M 10 2 L 10 14 M 5 10 L 10 14 L 10 14 L 15 10 M 3 14 L 3 18 L 17 18 L 17 14"></menu-button>
+            <menu-button id="menu-button-information" title="About"
+                icon-svg-path="M 2 10 A 1 1 0 0 0 18 10 A 1 1 0 0 0 2 10 M 10 15 L 10 9 M 10 7 L 10 5"></menu-button>
         </div>
     </header>
 
@@ -52,7 +33,8 @@
         <div slot="dialog-content" style="max-width: 40em;">
             <p>
                 The <em>eolvis</em> web application is used to represent the lifecycle of software (and devices) on a
-                timeline, from release to EOL (End-Of-Life). This visualisation helps when managing and planning a technical roadmap.
+                timeline, from release to EOL (End-Of-Life). This visualisation helps when managing and planning a
+                technical roadmap.
             </p>
             <p>
                 Each item is represented as a bar on the timeline:
@@ -91,7 +73,7 @@
             </ul>
         </div>
     </information-dialog>
-    <options-dialog id="options-dialog"></options-dialog>
+    <download-dialog id="download-dialog"></download-dialog>
     <item-details-form id="item-details-form"></item-details-form>
     <item-board id="item-board" class="section-eol"></item-board>
 

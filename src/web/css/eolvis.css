@@ -48,7 +48,7 @@ H1 {
 
 #dialog-information,
 #dialog-details,
-#dialog-options {
+#dialog-download {
     background-color: #fff;
     color: #666;
     text-align: left;
@@ -106,7 +106,7 @@ dialog::backdrop {
 .dialog-close-x {
     float: right;
     font-weight: bold;
-    color: #bbb;
+    color: #999;
     font-size: 120%;
     margin-top: 0.4em;
     cursor: pointer;

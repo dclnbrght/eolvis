@@ -51,9 +51,8 @@ class InformationDialog extends HTMLElement {
     };
 
     showModal = () => {
-        this.dialog.inert = true;
         this.dialog.showModal();
-        this.dialog.inert = false;
+        this.#closeButton.focus();
     }
 }
 

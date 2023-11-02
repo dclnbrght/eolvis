@@ -6,9 +6,9 @@ import * as user from '../js/user.js';
 const template = document.createElement('template');
 template.innerHTML = `
     <dialog id="dialog-details">
-        <h3>Software Details</h3>
+        <h3>Details</h3>
         
-        <p id="dialog-details-message" style="color: darkred; max-width: 24rem;">*** Only saves updates to browser session storage for now although updates can be exported from the options menu ***</p>
+    <p id="dialog-details-message" style="color: darkred; max-width: 26rem; font-size: 90%;">*** Details are only saved to browser session storage for now. The updated file can be downloaded from the export options menu ***</p>
 
         <form id="formDetails" method="post" data-form-sync>
             <fieldset id="formDetails-fieldset" class="form-fieldset">

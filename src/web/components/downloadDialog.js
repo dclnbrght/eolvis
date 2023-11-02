@@ -2,23 +2,23 @@ import * as dataExport from '../js/dataExport.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
-    <dialog id="dialog-options">
+    <dialog id="dialog-download">
         <div id="dialog-close-x" class="dialog-close-x">&#10005</div>
-        <h3>Options</h3>
+        <h3>Data Export</h3>
         <hr />
-        <div id="options-exportEol">
-            <h4>Export Data</h4>
-            <p>Export a data file in the Eolvis format.</p>
+        <div id="download-exportEol">
+            <h4>Export eolvis File</h4>
+            <p>Export a data file in the eolvis JSON format.</p>
             <div class="dialog-button-container">
-                <button id="dialog-options-export-eol" class="dialog-button dialog-button-secondary">Export Data</button>
+                <button id="dialog-download-export-eol" class="dialog-button dialog-button-secondary">Export Data</button>
             </div>
         </div>
         <hr />
-        <div id="options-exportSBoM">
-            <h4>Export SBoM</h4>
+        <div id="download-exportSBoM">
+            <h4>Export SBoM File</h4>
             <p>Export a SBoM (Software Bill of Materials) in CycloneDX format.</p>
             <div class="dialog-button-container">
-                <button id="dialog-options-export-bom" class="dialog-button dialog-button-secondary">Export SBoM</button>
+                <button id="dialog-download-export-bom" class="dialog-button dialog-button-secondary">Export SBoM</button>
             </div>
         </div>
         <hr />        
@@ -28,7 +28,7 @@ template.innerHTML = `
     </dialog>
 `;
 
-class OptionsDialog extends HTMLElement {
+class DownloadDialog extends HTMLElement {
     
     static dialog = null;
     #closeX = null;
@@ -43,12 +43,12 @@ class OptionsDialog extends HTMLElement {
     connectedCallback() {
         this.appendChild(template.content.cloneNode(true));
 
-        this.dialog = this.querySelector('#dialog-options');
+        this.dialog = this.querySelector('#dialog-download');
         this.#closeX = this.querySelector('#dialog-close-x');
         this.#closeButton = this.querySelector('#dialog-button-close');
         
-        this.#exportEolButton = this.querySelector('#dialog-options-export-eol');
-        this.#exportBomButton = this.querySelector('#dialog-options-export-bom');
+        this.#exportEolButton = this.querySelector('#dialog-download-export-eol');
+        this.#exportBomButton = this.querySelector('#dialog-download-export-bom');
 
         this.#setupEventHandlers();
     }
@@ -70,11 +70,10 @@ class OptionsDialog extends HTMLElement {
     };
 
     showModal = () => {
-        this.dialog.inert = true;
         this.dialog.showModal();
-        this.dialog.inert = false;
+        this.#closeButton.focus();
     }
 }
 
-customElements.define('options-dialog', OptionsDialog);
+customElements.define('download-dialog', DownloadDialog);
 

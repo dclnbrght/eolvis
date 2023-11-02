@@ -1,16 +1,17 @@
 import * as settings from './settings.js';
 import * as dataAccess from './js/dataAccess.js';
 import * as dataSearch from './js/dataSearch.js';
+import * as menuButton from './components/menuButton.js';
 import * as filterBar from './components/filterBar.js';
 import * as informationDialog from './components/informationDialog.js';
-import * as optionsDialog from './components/optionsDialog.js';
+import * as downloadDialog from './components/downloadDialog.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as itemBoard from './components/itemBoard.js';
 import * as user from './js/user.js';
 
 const filterBarComponent = document.getElementById("filter-bar");
 const informationDialogComponent = document.getElementById("information-dialog");
-const optionsDialogComponent = document.getElementById("options-dialog");
+const downloadDialogComponent = document.getElementById("download-dialog");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
 const itemBoardComponent = document.getElementById("item-board");
 
@@ -18,7 +19,7 @@ const minDate = new Date(new Date().getFullYear() - settings.yearsPast, 0, 1);
 const maxDate = new Date(new Date().getFullYear() + settings.yearsFuture, 11, 31);
 
 const setupUser = () => {
-    const actionNew = document.getElementById("action-new-item");
+    const actionNew = document.getElementById("menu-button-add-item");
 
     if (user.hasPermission("edit")) {
         actionNew.classList.remove("hidden");
@@ -83,15 +84,16 @@ const positionTimeline = (timeline, relativeToElement) => {
         timeline.removeAttribute("transform");
 }
 
-document.getElementById("action-overview").addEventListener("click", function (e) {    
+document.getElementById("menu-button-information").addEventListener("click", (e) => {
     informationDialogComponent.showModal();
 });
-document.getElementById("action-new-item").addEventListener("click", (e) => {
+document.getElementById("menu-button-add-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
 });
-document.getElementById("action-options").addEventListener("click", (e) => {
-    optionsDialogComponent.showModal();
+document.getElementById("menu-button-download").addEventListener("click", (e) => {
+    downloadDialogComponent.showModal();
 });
+
 
 window.onload = () => {
     setupUser();

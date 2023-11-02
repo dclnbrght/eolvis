@@ -33,8 +33,7 @@ class FilterBar extends HTMLElement {
     #typeNameFilter = null;
     #periodFilter = null;
     #isUpdating = false;
-    #querystringParameters = "";
-    #previousSelectedFilterValues = [];
+    #querystringParameters = null;
 
     constructor() {
         super();
@@ -59,7 +58,6 @@ class FilterBar extends HTMLElement {
         this.#periodFilter = this.querySelector('#periodFilter');
 
         this.#querystringParameters = new URLSearchParams(window.location.search);
-        this.#previousSelectedFilterValues = this.selectedFilterValues();
     }
 
     // Manage  multiple select events firings at once
@@ -95,6 +93,12 @@ class FilterBar extends HTMLElement {
     };
 
     #processFilterChange = () => {
+        // Clear the querystring parameters when a filter is changed
+        if (this.#querystringParameters?.size > 0) {
+            window.history.pushState({}, document.title, window.location.pathname);
+            this.#querystringParameters = null;
+        }
+
         const selectedNames = this.#getSelectBoxValues(this.#typeNameFilter);
         const selectedPeriods = this.#getSelectBoxValues(this.#periodFilter);
         const filterValues = { selectedNames, selectedPeriods };
@@ -127,7 +131,7 @@ class FilterBar extends HTMLElement {
         return result;
     }
 
-    #setupTypeNameFilter = (data, selectElement, querystringParameters, previousSelectedFilterValues) => {
+    #setupTypeNameFilter = (data, selectElement, filterValues) => {
         selectElement.replaceChildren();
 
         const filterArray = this.typeNameFilterArray(data);
@@ -145,11 +149,7 @@ class FilterBar extends HTMLElement {
             selectElement.appendChild(optgroup);
         });
 
-        this.#setSelectBoxValues(this.#typeNameFilter,
-            querystringParameters.get('names')?.split(',')
-            ?? previousSelectedFilterValues.selectedNames
-            ?? ["All"]
-        );
+        this.#setSelectBoxValues(this.#typeNameFilter, filterValues);
 
         tail.select(selectElement, {
             placeholder: 'Type / Name Filter',
@@ -159,7 +159,7 @@ class FilterBar extends HTMLElement {
         }).reload();
     };
 
-    #setupPeriodFilter = (selectElement, querystringParameters, previousSelectedFilterValues) => {
+    #setupPeriodFilter = (selectElement, filterValues) => {
         selectElement.replaceChildren();
 
         Object.entries(settings.periods).forEach(([key, value]) => {
@@ -169,11 +169,7 @@ class FilterBar extends HTMLElement {
             selectElement.appendChild(option);
         });
 
-        this.#setSelectBoxValues(this.#periodFilter,
-            querystringParameters.get('periods')?.split(',')
-            ?? previousSelectedFilterValues.selectedPeriods
-            ?? ["All"]
-        );
+        this.#setSelectBoxValues(this.#periodFilter, filterValues);
 
         tail.select(selectElement, {
             placeholder: 'Period Filter',
@@ -207,18 +203,25 @@ class FilterBar extends HTMLElement {
     };
 
     setupFilters = (data, searchCallback) => {
-        // Set value from: query string || previously selected values in localStorage
-        this.#setupTypeNameFilter(data, this.#typeNameFilter, this.#querystringParameters, this.#previousSelectedFilterValues);
-        this.#setupPeriodFilter(this.#periodFilter, this.#querystringParameters, this.#previousSelectedFilterValues);
+        const filterValues = this.selectedFilterValues();
+        this.#setupTypeNameFilter(data, this.#typeNameFilter, filterValues.selectedNames);
+        this.#setupPeriodFilter(this.#periodFilter, filterValues.selectedPeriods);
         this.#setupEventHandlers(searchCallback);
     };
 
     selectedFilterValues = () => {
-        if (localStorage.getItem(filterBarStoreKey) == null) {
-            return { selectedNames: ["All"], selectedPeriods: ["All"]};
+        // Set values from: query string || previously selected values in localStorage || All
+        if (this.#querystringParameters !== null && this.#querystringParameters?.size > 0) {
+            const querystringNames = this.#querystringParameters.get('names') ? this.#querystringParameters.get('names').split(',') : ["All"];
+            const querystringPeriods = this.#querystringParameters.get('periods') ? this.#querystringParameters.get('periods').split(',') : ["All"];
+            return { selectedNames: querystringNames, selectedPeriods: querystringPeriods };
         }
-
-        return JSON.parse(localStorage.getItem(filterBarStoreKey));
+        else if (localStorage.getItem(filterBarStoreKey) !== null) {
+            return JSON.parse(localStorage.getItem(filterBarStoreKey));
+        }
+        else {
+            return { selectedNames: ["All"], selectedPeriods: ["All"]};
+        }        
     };
 }
 customElements.define('filter-bar', FilterBar);
