@@ -20,6 +20,9 @@ export const warnNearEolDays = 90;
 /* display LTS in the item label where it's set to true  */
 export const displayLtsLabelIfTrue = true;
 
+/* filter exported items */
+export const exportedItemsAreFiltered = true;
+
 /* item types */
 export const types = {
     "device": "Device",

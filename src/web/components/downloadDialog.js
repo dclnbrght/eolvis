@@ -22,6 +22,7 @@ template.innerHTML = `
             </div>
         </div>
         <hr />        
+        <div id="export-message" class="dialog-message hidden"></div>
         <div class="dialog-button-container">
             <button id="dialog-button-close" class="dialog-button">Close</button>
         </div>
@@ -29,24 +30,26 @@ template.innerHTML = `
 `;
 
 class DownloadDialog extends HTMLElement {
-    
+
     static dialog = null;
     #closeX = null;
     #closeButton = null;
+    #exportMessage = null;
     #exportEolButton = null;
     #exportBomButton = null;
 
     constructor() {
         super();
     }
-    
+
     connectedCallback() {
         this.appendChild(template.content.cloneNode(true));
 
         this.dialog = this.querySelector('#dialog-download');
         this.#closeX = this.querySelector('#dialog-close-x');
         this.#closeButton = this.querySelector('#dialog-button-close');
-        
+
+        this.#exportMessage = this.querySelector('#export-message');
         this.#exportEolButton = this.querySelector('#dialog-download-export-eol');
         this.#exportBomButton = this.querySelector('#dialog-download-export-bom');
 
@@ -61,13 +64,23 @@ class DownloadDialog extends HTMLElement {
             this.dialog.close();
         });
 
-        this.#exportEolButton.addEventListener("click", (e) => {            
-            dataExport.exportEol();
+        this.#exportEolButton.addEventListener("click", (e) => {
+            const itemCount = dataExport.exportEol();
+            this.#exportMessage.innerHTML = `eolvis file exported with ${itemCount} items.`;
+            this.#exportMessage.classList.remove("hidden");
+            setTimeout(this.#hideMessage, 5000);
         });
         this.#exportBomButton.addEventListener("click", (e) => {
-            dataExport.exportBom();
+            const itemCount = dataExport.exportBom();
+            this.#exportMessage.innerHTML = `BOM file exported with ${itemCount} items.`;
+            this.#exportMessage.classList.remove("hidden");
+            setTimeout(this.#hideMessage, 5000);
         });
     };
+
+    #hideMessage = () => {
+        this.#exportMessage.classList.add("hidden");
+    }
 
     showModal = () => {
         this.dialog.showModal();

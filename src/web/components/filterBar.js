@@ -27,7 +27,7 @@ const filterBarStoreKey = "eolvisSelectedFilters";
 NOTE: not using the shadow DOM here as tail.select does not work correctly with it,
       the dropdown closes immediately after selecting an option
 */
-class FilterBar extends HTMLElement {
+export class FilterBar extends HTMLElement {
 
     #initialSetupComplete = false;
     #typeNameFilter = null;

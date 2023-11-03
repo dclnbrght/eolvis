@@ -1,18 +1,41 @@
 import * as settings from '../settings.js';
 import * as dataAccess from './dataAccess.js';
+import * as dataSearch from './dataSearch.js';
+import { FilterBar } from '../components/filterBar.js';
 
-const exportEol = () => {
-    const data = dataAccess.requestDataFromStore();
-    const fileName = data.projectKey + ".json";
-    downloadTextFile(JSON.stringify(data, null, 4), fileName);
+const filterItems = (items) => {
+    let exportItems = [];
+
+    if (settings.exportedItemsAreFiltered) {
+        const filterBar = new FilterBar();
+        const filterValues = filterBar.selectedFilterValues();
+        exportItems = dataSearch.search(items, filterValues.selectedNames, filterValues.selectedPeriods, new Date());
+    } else {
+        exportItems = items;
+    }
+
+    return exportItems;
 }
 
-const exportBom = () => {
-    const data = dataAccess.requestDataFromStore();     
+const exportEol = () => {
+    let data = dataAccess.requestDataFromStore();
+    const fileName = data.projectKey + ".json";
+    if (settings.exportedItemsAreFiltered) {
+        data.components = filterItems(data.components);
+    }
+    downloadTextFile(JSON.stringify(data, null, 4), fileName);
+
+    return data.components.length;
+}
+
+const exportBom = () => {    
+    const data = dataAccess.requestDataFromStore(); 
+    const exportItems = filterItems(data.components);
+
     const fileName = data.projectKey + "-bom.json";
 
     // filter out deleted items, and items not in the softwareBomTypeMap
-    const filteredComponents = data.components.filter((item) => {
+    const filteredComponents = exportItems.filter((item) => {
         return !item.isdeleted && settings.softwareBomTypeMap[item.type] !== undefined;
     });
     
@@ -38,6 +61,8 @@ const exportBom = () => {
     };
 
     downloadTextFile(JSON.stringify(bom, null, 4), fileName);
+    
+    return components.length;
 }
 
 const downloadTextFile = (text, name) => {
