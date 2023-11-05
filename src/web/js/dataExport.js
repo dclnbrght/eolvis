@@ -42,13 +42,14 @@ const exportBom = () => {
     const components = [].map.call(filteredComponents, (i) => {
         return {
             "name": i.name,
-            "version": i.version,
+            "version": i.version ?? "",
             "type": settings.softwareBomTypeMap[i.type] ?? i.type,
+            "cpe": i.cpe ?? "",
             "bom-ref": i.id,
             "externalReferences": [
                 {
                     type: "website",
-                    url: i.link
+                    url: i.link ?? ""
                 }
             ]
         };

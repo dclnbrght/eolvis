@@ -28,6 +28,10 @@ template.innerHTML = `
                     <label for="item-type">Type:</label>
                     <select id="item-type" name="type"></select>
                 </div>
+                <div class="form-item">
+                    <label for="item-cpe"><a href="https://nvd.nist.gov/products/cpe" target="_blank">CPE</a>:</label>
+                    <input type="text" id="item-cpe" name="cpe">
+                </div>
                 <hr>
                 <div class="form-item">
                     <label for="supportedFrom">Supported From:</label>
@@ -91,6 +95,7 @@ class ItemDetailsForm extends HTMLElement {
     static dialog = null;
     #dialogDetailsMessage = null;
     #errorBox = null;
+    #form = null;
     #fieldSet = null;
     #saveButton = null;
     #deleteButton = null;
@@ -114,6 +119,7 @@ class ItemDetailsForm extends HTMLElement {
         this.dialog = shadow.querySelector('#dialog-details');
         this.#dialogDetailsMessage = shadow.querySelector('#dialog-details-message');
         this.#errorBox = shadow.querySelector('#dialog-form-error');
+        this.#form = shadow.querySelector('#formDetails');
         this.#fieldSet = shadow.querySelector('#formDetails-fieldset');
         this.#saveButton = shadow.querySelector('#dialog-details-save');
         this.#deleteButton = shadow.querySelector('#dialog-details-delete');
@@ -330,11 +336,11 @@ class ItemDetailsForm extends HTMLElement {
     };
 
     showModal = (item) => {
+        this.#form.reset();
         let isNew = false;
-
         this.#errorBox.classList.add('hidden');
 
-        // adding a new item, clear form
+        // adding a new item
         if (typeof (item.id) === "undefined") {
             isNew = true;
             item = {
@@ -348,6 +354,7 @@ class ItemDetailsForm extends HTMLElement {
                 "useFrom": "",
                 "useTo": "",
                 "link": "",
+                "cpe": "",
                 "notes": "",
                 "lts": false,
                 "type": "",

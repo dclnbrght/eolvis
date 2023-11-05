@@ -222,7 +222,8 @@
             "notes": "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.12.0. Depends on Erlang 25.* or 26.*, https://www.rabbitmq.com/which-erlang.html",
             "lts": false,
             "type": "middleware",
-            "updated": "2023-08-23"
+            "updated": "2023-11-05T22:13:56.233Z",
+            "cpe": "cpe:2.3:a:vmware:rabbitmq:3.12.0:*:*:*:*:*:*:*"
         }
     ]
 }

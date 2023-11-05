@@ -16,7 +16,7 @@ template.innerHTML = `
         <hr />
         <div id="download-exportSBoM">
             <h4>Export SBoM File</h4>
-            <p>Export a SBoM (Software Bill of Materials) in CycloneDX format.</p>
+            <p>Export a SBoM (Software Bill of Materials) in <a href="https://cyclonedx.org/" target="_blank">CycloneDX</a> format.</p>
             <div class="dialog-button-container">
                 <button id="dialog-download-export-bom" class="dialog-button dialog-button-secondary">Export SBoM</button>
             </div>

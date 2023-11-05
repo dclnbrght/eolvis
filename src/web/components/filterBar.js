@@ -121,14 +121,19 @@ export class FilterBar extends HTMLElement {
     }
 
     #getSelectBoxValues = (selectElement) => {
-        let result = [];
+        let optionsSelected = [];
         let options = [...selectElement.options];
-        options.forEach((x) => {
-            if (x.selected) {
-                result.push(x.value);
+        options.forEach((o) => {
+            if (o.selected) {
+                optionsSelected.push(o.value);
             }
         });
-        return result;
+
+        if (optionsSelected.length == options.length) {
+            optionsSelected = ["All"];
+        }
+
+        return optionsSelected;
     }
 
     #setupTypeNameFilter = (data, selectElement, filterValues) => {
