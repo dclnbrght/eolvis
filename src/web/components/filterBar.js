@@ -177,7 +177,7 @@ export class FilterBar extends HTMLElement {
         this.#setSelectBoxValues(this.#periodFilter, filterValues);
 
         tail.select(selectElement, {
-            placeholder: 'Period Filter',
+            placeholder: 'In Use Period Filter',
             multiSelectAll: true,
             search: true,
             searchFocus: false

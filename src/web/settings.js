@@ -45,8 +45,8 @@ export const periods = {
 /* SBoM types */
 export const softwareBomTypeMap = {
     "operating-system": "operating-system",    
-    "middleware": "platform",
-    "platform": "platform",
+    "middleware": "framework",
+    "platform": "framework",
     "framework": "framework",
     "library": "library",
 };

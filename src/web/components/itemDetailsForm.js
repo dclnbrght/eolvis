@@ -44,12 +44,12 @@ template.innerHTML = `
                 <div class="form-item">
                     <label for="item-supportedToExtended">Extended Support To:</label>
                     <input type="date" id="item-supportedToExtended" name="supportedToExtended">
-                    <span><em>(only if purchased)</em></span>
+                    <span><em>(only if applicable)</em></span>
                 </div>
                 <div class="form-item">
                     <label for="item-link">Link:</label>
                     <input type="text" id="item-link" name="link">
-                    <a id="item-link-anchor" href="" target="_blank">(link)</a>
+                    <a id="item-link-anchor" href="" target="_blank">&#128279;</a>
                 </div>
                 <hr>
                 <div class="form-item">
