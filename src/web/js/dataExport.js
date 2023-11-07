@@ -38,6 +38,15 @@ const exportBom = () => {
     const filteredComponents = exportItems.filter((item) => {
         return !item.isdeleted && settings.softwareBomTypeMap[item.type] !== undefined;
     });
+
+    const metadata = {  
+        "timestamp": new Date().toISOString(),
+        "authors": [
+            {
+                "name": "eolvis"
+            }
+        ]
+    };
     
     const components = [].map.call(filteredComponents, (i) => {
         return {
@@ -58,6 +67,7 @@ const exportBom = () => {
     const bom = {
         "bomFormat": "CycloneDX",
         "specVersion": "1.5",
+        "metadata": metadata,
         "components": components
     };
 

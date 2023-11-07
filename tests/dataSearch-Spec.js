@@ -28,6 +28,22 @@ describe("dataSearch", function () {
                 useFrom: "2024-03-01",
                 useTo: "2024-09-01",
             },
+            {
+                name: "Item 4",
+                supportedFrom: "2022-06-01",
+                supportedTo: "2022-10-01",
+                supportedToExtended: "",
+                useFrom: "",
+                useTo: "",
+            },
+            {
+                name: "Item 5",
+                supportedFrom: "2024-06-01",
+                supportedTo: "2024-10-01",
+                supportedToExtended: "",
+                useFrom: "",
+                useTo: "",
+            },
         ];
 
         it("should return all items when no filters are selected", function () {
@@ -36,7 +52,7 @@ describe("dataSearch", function () {
 
             const result = search(items, names, periods, today);
 
-            expect(result.length).toBe(3);
+            expect(result.length).toBe(5);
         });
 
         it("should return only items matching the selected names", function () {
@@ -64,7 +80,7 @@ describe("dataSearch", function () {
             
             const result = search(items, names, periods, today);
 
-            expect(result.length).toBe(1);
+            expect(result.length).toBe(2);
         });
 
         it("should return only items matching the selected periods - past, current", function () {
@@ -73,7 +89,7 @@ describe("dataSearch", function () {
 
             const result = search(items, names, periods, today);
 
-            expect(result.length).toBe(2);
+            expect(result.length).toBe(3);
         });
 
         it("should return only items matching the selected periods - future", function () {
@@ -82,7 +98,7 @@ describe("dataSearch", function () {
 
             const result = search(items, names, periods, today);
 
-            expect(result.length).toBe(1);
+            expect(result.length).toBe(2);
         });
 
         it("should return only items matching the selected names and periods", function () {

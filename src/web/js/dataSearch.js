@@ -13,12 +13,16 @@ const search = (items, names, periods, refDate) => {
     );
 }
 
+const isEmpty = (value) => {
+    return (value == null || (typeof value === "string" && value.trim().length === 0)) ? null : value;
+}
+
 const getUseFromDate = (item) => {
-    return new Date(item.useFrom ?? item.supportedFrom);
+    return new Date(isEmpty(item.useFrom) ?? item.supportedFrom);
 }
 
 const getUseToDate = (item) => {
-    return new Date(item.useTo ?? item.supportedToExtended ?? item.supportedTo ?? item.supportedFrom);
+    return new Date(isEmpty(item.useTo) ?? isEmpty(item.supportedToExtended) ?? isEmpty(item.supportedTo) ?? item.supportedFrom);
 }
 
 export {
