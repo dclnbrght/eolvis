@@ -35,6 +35,23 @@ export const types = {
     "protocol": "Protocol"
 };
 
+export const licenseTypes = {
+    "": "",
+    "Apache-2.0": "Apache 2.0",
+    "BSD-2-Clause": "BSD 2",
+    "BSD-3-Clause": "BSD 3",
+    "Commercial": "Commercial",
+    "GPL-2.0": "GPL 2.0",
+    "GPL-2.0-with-classpath-exception": "GPL 2.0 classpath exception",
+    "GPL-3.0": "GPL 3.0",
+    "LGPL-2.1": "LGPL 2.1",
+    "LGPL-3.0": "LGPL 3.0",
+    "MIT": "MIT",
+    "MPL-1.1": "MPL 1.1",
+    "MPL-2.0": "MPL 2.0",
+    "Other": "Other"
+};
+
 /* periods */
 export const periods = {
     "past": "Past",
@@ -44,7 +61,7 @@ export const periods = {
 
 /* SBoM types */
 export const softwareBomTypeMap = {
-    "operating-system": "operating-system",    
+    "operating-system": "operating-system",
     "middleware": "framework",
     "platform": "framework",
     "framework": "framework",

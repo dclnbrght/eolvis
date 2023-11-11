@@ -29,6 +29,10 @@ template.innerHTML = `
                     <select id="item-type" name="type"></select>
                 </div>
                 <div class="form-item">
+                    <label for="item-license">License:</label>
+                    <select id="item-license" name="license"></select>
+                </div>
+                <div class="form-item">
                     <label for="item-cpe"><a href="https://nvd.nist.gov/products/cpe" target="_blank">CPE</a>:</label>
                     <input type="text" id="item-cpe" name="cpe">
                 </div>
@@ -47,7 +51,7 @@ template.innerHTML = `
                     <span><em>(only if applicable)</em></span>
                 </div>
                 <div class="form-item">
-                    <label for="item-link">Link:</label>
+                    <label for="item-link">Source URL:</label>
                     <input type="text" id="item-link" name="link">
                     <a id="item-link-anchor" href="" target="_blank">&#128279;</a>
                 </div>
@@ -153,6 +157,16 @@ class ItemDetailsForm extends HTMLElement {
                 option.value = type;
                 option.innerHTML = typeDisplay;
                 itemTypeSelect.appendChild(option);
+            });
+        }
+        
+        const itemLicenseSelect = this.shadowRoot.getElementById('item-license');
+        if (itemLicenseSelect.options.length == 0) {
+            Object.entries(settings.licenseTypes).forEach(([license, licenseDisplay]) => {
+                var option = document.createElement("option");
+                option.value = license;
+                option.innerHTML = licenseDisplay;
+                itemLicenseSelect.appendChild(option);
             });
         }
 
@@ -346,18 +360,19 @@ class ItemDetailsForm extends HTMLElement {
             item = {
                 "name": "",
                 "version": "",
+                "lts": false,
+                "type": "",
+                "license": "",
+                "cpe": "",
                 "supportedFrom": "",
                 "supportedTo": "",
                 "supportedToExtended": "",
+                "link": "",
                 "latestPatch": "",
                 "latestPatchReleased": "",
                 "useFrom": "",
                 "useTo": "",
-                "link": "",
-                "cpe": "",
                 "notes": "",
-                "lts": false,
-                "type": "",
             };
         }
 

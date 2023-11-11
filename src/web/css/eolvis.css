@@ -75,7 +75,7 @@ dialog::backdrop {
     background-color: #ce8585;
     border-radius: 0.25rem;
     margin: 0.5rem 0 0 0;
-    max-width: 360px;
+    max-width: 80vw;
 }
 .dialog-message {
     position: absolute;

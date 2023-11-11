@@ -80,7 +80,8 @@ const renderItemTable = (items) => {
             <td>${item.version}</td>
             <td>${item.lts ? "&check;" : ""}</td>
             <td>${settings.types[item.type]}</td>
-            <td>${typeof(item.cpe) === "undefined" ? "" : "&check;"}</td>
+            <td>${typeof(item.license) === "undefined" || item.license == "" ? "" : "&check;"}</td>
+            <td>${typeof(item.cpe) === "undefined" || item.cpe == "" ? "" : "&check;"}</td>
             <td>${item.supportedFrom}</td>
             <td>${item.supportedTo}</td>
             <td>${item.supportedToExtended}</td>

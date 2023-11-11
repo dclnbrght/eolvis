@@ -18,7 +18,11 @@ const filterItems = (items) => {
 }
 
 const exportEol = () => {
-    let data = dataAccess.requestDataFromStore();
+    let dataFromStore = dataAccess.requestDataFromStore();
+    let data = {
+        ...dataFromStore,                
+        "timestamp": new Date().toISOString()
+    };
     const fileName = data.projectKey + ".json";
     if (settings.exportedItemsAreFiltered) {
         data.components = filterItems(data.components);
@@ -39,7 +43,7 @@ const exportBom = () => {
         return !item.isdeleted && settings.softwareBomTypeMap[item.type] !== undefined;
     });
 
-    const metadata = {  
+    const metadata = {
         "timestamp": new Date().toISOString(),
         "authors": [
             {
@@ -54,11 +58,18 @@ const exportBom = () => {
             "version": i.version ?? "",
             "type": settings.softwareBomTypeMap[i.type] ?? i.type,
             "cpe": i.cpe ?? "",
-            "bom-ref": i.id,
+            "bom-ref": i.id,            
+            "licenses": [
+                {
+                    "license": { 
+                        "id": i.license ?? ""
+                    }
+                }
+            ],
             "externalReferences": [
                 {
-                    type: "website",
-                    url: i.link ?? ""
+                    "type": "website",
+                    "url": i.link ?? ""
                 }
             ]
         };
