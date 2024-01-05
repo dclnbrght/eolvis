@@ -84,11 +84,14 @@ export class ItemBar extends HTMLElement {
 
         // Create item label
         const monthsFromStart = monthsInUseFromStart > 0 ? monthsInUseFromStart : monthsSupportedFromStart;
+        const barCenterX = this.#monthWidth * (monthsFromStart + (monthsInUse > 0 ? monthsInUse : monthsSupported) / 2);
+        const x = barCenterX <= 0 ? 4 : barCenterX;
+        const anchor = barCenterX <= 0 ? "start" : "middle";
         const itemLabel = svgUtils.createSvgText(
             `${item.name} ${item.version} ${settings.displayLtsLabelIfTrue && item.lts ? "(LTS)" : ""}`,
-            this.#monthWidth * (monthsFromStart + (monthsInUse > 0 ? monthsInUse : monthsSupported) / 2),
+            x,
             y + 15,
-            "middle",
+            anchor,
             ["item-label"]
         );
 
