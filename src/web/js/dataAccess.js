@@ -44,8 +44,86 @@ const requestDataFromStore = () => {
     }
 }
 
+const createNewId = () => {
+    // create a UUID v4
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+        .replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+}
+
+const addItem = (item) => {
+    const data = requestDataFromStore();
+    const components = data.components;
+
+    const newComponents = components.concat([
+        {
+            'id': createNewId(),
+            ...item,
+            'updated': new Date().toISOString()
+        }]
+    );
+
+    const newData = {
+        ...data,
+        'components': newComponents,
+    };
+
+    saveDataToStore(newData);
+}
+
+const updateItem = (item) => {
+    const data = requestDataFromStore();
+    const components = data.components;
+
+    const newComponents = components.map(obj => {
+        if (obj.id === item.id) {
+            return {
+                ...item,
+                'updated': new Date().toISOString()
+            };
+        }
+        return obj;
+    });
+
+    const newData = {
+        ...data,
+        'components': newComponents,
+    };
+
+    saveDataToStore(newData);
+}
+
+const deleteItem = (id) => {
+    const data = requestDataFromStore();
+    const components = data.components;
+
+    const newComponents = components.map(obj => {
+        if (obj.id === id) {
+            return {
+                ...obj,
+                'updated': new Date().toISOString(),
+                'isdeleted': true
+            };
+        }
+        return obj;
+    });
+
+    const newData = {
+        ...data,
+        'components': newComponents,
+    };
+
+    saveDataToStore(newData);
+}
+
 export {
     requestDataFromServer,
     requestDataFromStore,
-    saveDataToStore
+    saveDataToStore,
+    addItem,
+    updateItem,
+    deleteItem
 }; 

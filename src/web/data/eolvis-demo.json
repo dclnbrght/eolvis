@@ -1,7 +1,7 @@
 {
     "projectName": "eolvis Demo",
     "projectKey": "eolvis-demo",
-    "timestamp": "2023-11-11T19:49:08.023Z",
+    "timestamp": "2024-03-15T15:37:26.423Z",
     "components": [
         {
             "id": "b1ec1a24-c1ed-4bef-87c3-87e663e4be37",
@@ -236,6 +236,25 @@
             "updated": "2023-11-11T19:30:45.297Z",
             "cpe": "cpe:2.3:a:vmware:rabbitmq:3.12.0:*:*:*:*:*:*:*",
             "license": "MPL-2.0"
+        },
+        {
+            "id": "04b7608b-4316-4165-acf9-5fed22cf2adb",
+            "name": "RabbitMQ",
+            "version": "3.13",
+            "supportedFrom": "2024-02-22",
+            "supportedTo": "2025-03-01",
+            "supportedToExtended": "",
+            "latestPatch": "",
+            "latestPatchReleased": "",
+            "useFrom": "2024-05-01",
+            "useTo": "2025-02-28",
+            "link": "https://rabbitmq.com/versions.html",
+            "notes": "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.13.0.\nRequires Erlang 26.x.\nhttps://www.rabbitmq.com/docs/which-erlang",
+            "lts": false,
+            "type": "middleware",
+            "updated": "2024-03-15T15:36:55.863Z",
+            "license": "MPL-2.0",
+            "cpe": "cpe:2.3:a:vmware:rabbitmq:3.13.0:*:*:*:*:*:*:*"
         }
     ]
 }

@@ -17,21 +17,21 @@ export class ItemBar extends HTMLElement {
         const itemBarHeightSupported = 22;
 
         const inUseStart = new Date(item.useFrom);
-        const inUseEndIsSet = item.useTo !== "";
+        const inUseEndIsSet = item.useTo !== null && item.useTo !== "";
         const inUseEndCalc = !inUseEndIsSet ? dateUtils.addMonths(inUseStart, 12) : new Date(item.useTo);
 
         const monthsInUseFromStart = dateUtils.numberOfMonths(minDate, inUseStart) - 1;
         const monthsInUse = dateUtils.numberOfMonths(inUseStart, inUseEndCalc);
 
         const supportedStart = new Date(item.supportedFrom);
-        const supportedEndIsSet = item.supportedTo !== "";
+        const supportedEndIsSet = item.supportedTo !== null && item.supportedTo !== "";
         const supportedEndCalc = !supportedEndIsSet ? inUseEndCalc : new Date(item.supportedTo);
 
         const monthsSupportedFromStart = dateUtils.numberOfMonths(minDate, supportedStart) - 1;
         const monthsSupported = dateUtils.numberOfMonths(supportedStart, supportedEndCalc);
 
         const supportExtendedStart = new Date(item.supportedTo);
-        const supportExtendedEndIsSet = item.supportedToExtended !== "";
+        const supportExtendedEndIsSet = item.supportedToExtended !== null && item.supportedToExtended !== "";
         const supportExtendedEndCalc = !supportExtendedEndIsSet ? supportedEndCalc : new Date(item.supportedToExtended);
 
         const monthsSupportExtendedFromStart = supportedEndIsSet ? dateUtils.numberOfMonths(minDate, supportExtendedStart) : 0;

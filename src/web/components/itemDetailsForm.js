@@ -183,16 +183,6 @@ class ItemDetailsForm extends HTMLElement {
         else itemUpdated.classList.remove('hidden');
     }
 
-    #createNewId = () => {
-        // create a UUID v4
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-            .replace(/[xy]/g, function (c) {
-                const r = Math.random() * 16 | 0,
-                    v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-    }
-
     #displayError = (msg) => {
         this.#errorBox.innerHTML = msg;
         this.#errorBox.classList.remove('hidden');
@@ -258,43 +248,14 @@ class ItemDetailsForm extends HTMLElement {
             return;
         }
 
-        const data = dataAccess.requestDataFromStore();
-        const components = data.components;
-
         if (typeof (this.#curItem.id) === "undefined") {
             // adding new item
-            const newComponents = components.concat([
-                {
-                    'id': this.#createNewId(),
-                    ...this.#curItem,
-                    'updated': new Date().toISOString()
-                }]
-            );
-            const newData = {
-                ...data,
-                'components': newComponents,
-            };
-
-            dataAccess.saveDataToStore(newData);
+            dataAccess.addItem(this.#curItem);
 
             filterBar.addToSelectedFilterValues("selectedNames", this.#curItem.name);
         } else {
             // updating existing item
-            const newComponents = components.map(obj => {
-                if (obj.id === this.#curItem.id) {
-                    return {
-                        ...this.#curItem,
-                        'updated': new Date().toISOString()
-                    };
-                }
-                return obj;
-            });
-            const newData = {
-                ...data,
-                'components': newComponents,
-            };
-
-            dataAccess.saveDataToStore(newData);
+            dataAccess.updateItem(this.#curItem);            
         }
 
         this.dialog.close();
@@ -307,26 +268,8 @@ class ItemDetailsForm extends HTMLElement {
         var result = confirm("Are you sure you want to delete this item?");
         if (!result) return;
 
-        const data = dataAccess.requestDataFromStore();
-        const components = data.components;
-
-        const newComponents = components.map(obj => {
-            if (obj.id === this.#curItem.id) {
-                return {
-                    ...this.#curItem,
-                    'updated': new Date().toISOString(),
-                    'isdeleted': true
-                };
-            }
-            return obj;
-        });
-        const newData = {
-            ...data,
-            'components': newComponents,
-        };
-
-        dataAccess.saveDataToStore(newData);
-
+        dataAccess.deleteItem(this.#curItem.id);
+        
         this.dialog.close();
 
         callback();
@@ -343,7 +286,6 @@ class ItemDetailsForm extends HTMLElement {
             this.#cancelUpdateItem(callback);
         });
     };
-
 
     setupDialog = (callback) => {
         this.#setupEventHandlers(callback);
@@ -389,7 +331,7 @@ class ItemDetailsForm extends HTMLElement {
 
                 switch (elem.type) {
                     case 'date':
-                        elem.value = item[key].split('T')[0];
+                        elem.value = item[key] != null ? item[key].split('T')[0] : '';
                         break;
                     case 'checkbox':
                         elem.checked = !!item[key];
