@@ -16,12 +16,13 @@ export class ItemBar extends HTMLElement {
         const itemBarHeightInUse = 20;
         const itemBarHeightSupported = 22;
 
+        const inUseStartIsSet = item.useFrom !== null && item.useFrom !== "";
         const inUseStart = new Date(item.useFrom);
         const inUseEndIsSet = item.useTo !== null && item.useTo !== "";
         const inUseEndCalc = !inUseEndIsSet ? dateUtils.addMonths(inUseStart, 12) : new Date(item.useTo);
 
         const monthsInUseFromStart = dateUtils.numberOfMonths(minDate, inUseStart) - 1;
-        const monthsInUse = dateUtils.numberOfMonths(inUseStart, inUseEndCalc);
+        const monthsInUse = inUseStartIsSet ? dateUtils.numberOfMonths(inUseStart, inUseEndCalc) : 0;
 
         const supportedStart = new Date(item.supportedFrom);
         const supportedEndIsSet = item.supportedTo !== null && item.supportedTo !== "";

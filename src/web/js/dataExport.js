@@ -1,7 +1,9 @@
 import * as settings from '../settings.js';
-import * as dataAccess from './dataAccess.js';
+import * as dataAccessContext from './dataAccessContext.js';
 import * as dataSearch from './dataSearch.js';
 import { FilterBar } from '../components/filterBar.js';
+
+const dataAccess = dataAccessContext.create(settings.dataStoreType);
 
 const filterItems = (items) => {
     let exportItems = [];
@@ -18,7 +20,7 @@ const filterItems = (items) => {
 }
 
 const exportEol = () => {
-    let dataFromStore = dataAccess.requestDataFromStore();
+    let dataFromStore = dataAccess.getComponentState();
     let data = {
         ...dataFromStore,                
         "timestamp": new Date().toISOString()
@@ -33,7 +35,7 @@ const exportEol = () => {
 }
 
 const exportBom = () => {    
-    const data = dataAccess.requestDataFromStore(); 
+    const data = dataAccess.getComponentState(); 
     const exportItems = filterItems(data.components);
 
     const fileName = data.projectKey + "-bom.json";

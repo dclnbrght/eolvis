@@ -1,6 +1,11 @@
 
 /* the path to the data file */
-export const dataPath = "data/eolvis-demo.json";
+export const dataPath = "data/";
+
+export const defaultProject = "eolvis-demo";
+
+/* the data store type; dataAccessApi or dataAccessLocal */
+export const dataStoreType = 'dataAccessLocal';
 
 /* read write mode */
 export const readWriteMode = true;
@@ -19,6 +24,9 @@ export const warnNearEolDays = 90;
 
 /* display LTS in the item label where it's set to true  */
 export const displayLtsLabelIfTrue = true;
+
+/* display the form info message */
+export const displayFormInfoMessage = true;
 
 /* filter exported items */
 export const exportedItemsAreFiltered = true;

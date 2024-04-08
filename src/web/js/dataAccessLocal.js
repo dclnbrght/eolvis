@@ -1,8 +1,9 @@
+import * as settings from '../settings.js';
 
-const dataStoreKey = "eolvisDataStore";
+const componentsStateStorageKey = "eolvisComponentState";
 
-const requestDataFromServer = (filePath, callback) => {
-    fetch(filePath)
+const requestDataFromServer = (callback) => {
+    fetch(settings.dataPath + settings.defaultProject + '.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -10,7 +11,7 @@ const requestDataFromServer = (filePath, callback) => {
             return response.json();
         })
         .then(data => {
-            saveDataToStore(data);
+            saveComponentState(data);
             callback();
         })
         .catch(error => {
@@ -20,9 +21,9 @@ const requestDataFromServer = (filePath, callback) => {
         });
 }
 
-const saveDataToStore = (data) => {
+const saveComponentState = (data) => {
     try {
-        sessionStorage.setItem(dataStoreKey, JSON.stringify(data));    
+        sessionStorage.setItem(componentsStateStorageKey, JSON.stringify(data));    
     } catch (error) {
         const msg = `Error saving data to store \r\n\r\n${error}`;
         console.error(msg);
@@ -30,17 +31,17 @@ const saveDataToStore = (data) => {
     }
 }
 
-const dataExistsInStore = () => {
-    return ((sessionStorage.getItem(dataStoreKey) === null) ? false : true);
+const componentStateExists = () => {
+    return ((sessionStorage.getItem(componentsStateStorageKey) === null) ? false : true);
 }
 
-const requestDataFromStore = () => {
-    if (!dataExistsInStore()) {
+const getComponentState = () => {
+    if (!componentStateExists()) {
         alert("Ooops, that's not good, we've lost the data, please reload the app ....");
         return JSON.parse('[]');
     }
     else {
-        return JSON.parse(sessionStorage.getItem(dataStoreKey));
+        return JSON.parse(sessionStorage.getItem(componentsStateStorageKey));
     }
 }
 
@@ -55,7 +56,7 @@ const createNewId = () => {
 }
 
 const addItem = (item) => {
-    const data = requestDataFromStore();
+    const data = getComponentState();
     const components = data.components;
 
     const newComponents = components.concat([
@@ -71,11 +72,11 @@ const addItem = (item) => {
         'components': newComponents,
     };
 
-    saveDataToStore(newData);
+    saveComponentState(newData);
 }
 
 const updateItem = (item) => {
-    const data = requestDataFromStore();
+    const data = getComponentState();
     const components = data.components;
 
     const newComponents = components.map(obj => {
@@ -93,11 +94,11 @@ const updateItem = (item) => {
         'components': newComponents,
     };
 
-    saveDataToStore(newData);
+    saveComponentState(newData);
 }
 
 const deleteItem = (id) => {
-    const data = requestDataFromStore();
+    const data = getComponentState();
     const components = data.components;
 
     const newComponents = components.map(obj => {
@@ -116,13 +117,12 @@ const deleteItem = (id) => {
         'components': newComponents,
     };
 
-    saveDataToStore(newData);
+    saveComponentState(newData);
 }
 
 export {
     requestDataFromServer,
-    requestDataFromStore,
-    saveDataToStore,
+    getComponentState,
     addItem,
     updateItem,
     deleteItem

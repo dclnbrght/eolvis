@@ -1,5 +1,5 @@
 import * as settings from './settings.js';
-import * as dataAccess from './js/dataAccess.js';
+import * as dataAccessContext from './js/dataAccessContext.js';
 import * as menuButton from './components/menuButton.js';
 import * as filterBar from './components/filterBar.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
@@ -7,18 +7,20 @@ import * as informationDialog from './components/informationDialog.js';
 import * as downloadDialog from './components/downloadDialog.js';
 import * as dataSearch from './js/dataSearch.js';
 
+const dataAccess = dataAccessContext.create(settings.dataStoreType);
+
 const filterBarComponent = document.getElementById("filter-bar");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
 const informationDialogComponent = document.getElementById("information-dialog");
 const downloadDialogComponent = document.getElementById("download-dialog");
 
 const requestData = (callback) => {
-    dataAccess.requestDataFromServer(settings.dataPath, callback);
+    dataAccess.requestDataFromServer(callback);
 }
 
 const dataLoaded = () => {
     try {
-        const data = dataAccess.requestDataFromStore();
+        const data = dataAccess.getComponentState();
 
         filterBarComponent.setupFilters(data, filterSearch);
 
@@ -36,7 +38,7 @@ const dataLoaded = () => {
 const filterSearch = () => {
     try {
         const filterValues = filterBarComponent.selectedFilterValues();
-        const data = dataAccess.requestDataFromStore();
+        const data = dataAccess.getComponentState();
 
         const items = data.components;
 

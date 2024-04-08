@@ -1,15 +1,17 @@
-import * as dataAccess from '../js/dataAccess.js';
+import * as dataAccessContext from '../js/dataAccessContext.js';
 import * as filterBar from '../components/filterBar.js';
 import * as settings from '../settings.js';
 import * as user from '../js/user.js';
 
+const dataAccess = dataAccessContext.create(settings.dataStoreType);
+
 const template = document.createElement('template');
 template.innerHTML = `
     <dialog id="dialog-details">
-        <h3>Details</h3>
-        
-    <p id="dialog-details-message" style="color: darkred; max-width: 26rem; font-size: 90%;">*** Details are only saved to browser session storage for now. The updated file can be downloaded from the export options menu ***</p>
+        <h3 id="dialog-title">Details</h3>
 
+        <p id="dialog-details-message" class="hidden" style="color: darkred; max-width: 26rem; font-size: 90%;">*** Details are only saved to browser session storage for now. The updated file can be downloaded from the export options menu ***</p>
+        
         <form id="formDetails" method="post" data-form-sync>
             <fieldset id="formDetails-fieldset" class="form-fieldset">
                 <div class="form-item">
@@ -88,8 +90,8 @@ template.innerHTML = `
         <div id="dialog-form-error" class="dialog-form-error hidden"></div>
         <div class="dialog-button-container">
             <button id="dialog-details-delete" class="dialog-button dialog-button-secondary dialog-button-left">Delete</button>
-            <button id="dialog-details-cancel" class="dialog-button dialog-button-secondary">Cancel</button>
             <button id="dialog-details-save" class="dialog-button">Save</button>
+            <button id="dialog-details-cancel" class="dialog-button dialog-button-secondary">Cancel</button>
         </div>
     </dialog>
 `;
@@ -97,6 +99,7 @@ template.innerHTML = `
 class ItemDetailsForm extends HTMLElement {
 
     static dialog = null;
+    #dialogTitle = null;
     #dialogDetailsMessage = null;
     #errorBox = null;
     #form = null;
@@ -121,6 +124,7 @@ class ItemDetailsForm extends HTMLElement {
         shadow.appendChild(eolvisStyles);
 
         this.dialog = shadow.querySelector('#dialog-details');
+        this.#dialogTitle = shadow.querySelector('#dialog-title');
         this.#dialogDetailsMessage = shadow.querySelector('#dialog-details-message');
         this.#errorBox = shadow.querySelector('#dialog-form-error');
         this.#form = shadow.querySelector('#formDetails');
@@ -138,7 +142,8 @@ class ItemDetailsForm extends HTMLElement {
             this.#saveButton.classList.remove("hidden");
             this.#cancelButton.classList.add("dialog-button-secondary");
             this.#deleteButton.classList.remove("hidden");
-            this.#dialogDetailsMessage.classList.remove("hidden");
+            if (settings.displayFormInfoMessage)
+                this.#dialogDetailsMessage.classList.remove("hidden");
         } else {
             this.#fieldSet.disabled = true;
             this.#saveButton.classList.add("hidden");
@@ -208,10 +213,11 @@ class ItemDetailsForm extends HTMLElement {
         if (item.type === "")
             return { isValid, msg: "Please select a Type" };
 
-        if (item.supportedFrom === "")
+        if (item.supportedFrom === "" || item.supportedFrom === null)
             return { isValid, msg: "Please enter a Supported From date" };
 
-        if (item.supportedFrom !== "" && item.supportedTo !== ""
+        if (item.supportedFrom !== "" && item.supportedFrom !== null 
+            && item.supportedTo !== "" && item.supportedTo !== null
             && new Date(item.supportedFrom) >= new Date(item.supportedTo))
             return { isValid, msg: "The Supported To date must be greater than the Supported From date" };
 
@@ -221,11 +227,13 @@ class ItemDetailsForm extends HTMLElement {
         if (item.latestPatch !== "" && item.latestPatch.length > 50)
             return { isValid, msg: "Latest Patch must be less than 50 characters" };
 
-        if (item.useFrom !== "" && item.useTo !== ""
+        if (item.useFrom !== "" && item.useFrom !== null
+            && item.useTo !== "" && item.useTo !== null
             && new Date(item.useFrom) >= new Date(item.useTo))
             return { isValid, msg: "The Use To date must be greater than the Use From date" };
 
-        if (item.supportedFrom !== "" && item.useFrom !== ""
+        if (item.supportedFrom !== "" && item.supportedFrom !== null
+            && item.useFrom !== "" && item.useFrom !== null
             && new Date(item.useFrom) < new Date(item.supportedFrom))
             return { isValid, msg: "The Use From date must be greater than the Supported From date" };
 
@@ -249,13 +257,11 @@ class ItemDetailsForm extends HTMLElement {
         }
 
         if (typeof (this.#curItem.id) === "undefined") {
-            // adding new item
-            dataAccess.addItem(this.#curItem);
+            dataAccess.addItem(this.#curItem, callback);
 
             filterBar.addToSelectedFilterValues("selectedNames", this.#curItem.name);
         } else {
-            // updating existing item
-            dataAccess.updateItem(this.#curItem);            
+            dataAccess.updateItem(this.#curItem, callback);            
         }
 
         this.dialog.close();
@@ -268,7 +274,7 @@ class ItemDetailsForm extends HTMLElement {
         var result = confirm("Are you sure you want to delete this item?");
         if (!result) return;
 
-        dataAccess.deleteItem(this.#curItem.id);
+        dataAccess.deleteItem(this.#curItem.id, callback);
         
         this.dialog.close();
 
@@ -300,20 +306,21 @@ class ItemDetailsForm extends HTMLElement {
         if (typeof (item.id) === "undefined") {
             isNew = true;
             item = {
+                "projectKey": "",
                 "name": "",
                 "version": "",
                 "lts": false,
                 "type": "",
                 "license": "",
                 "cpe": "",
-                "supportedFrom": "",
-                "supportedTo": "",
-                "supportedToExtended": "",
+                "supportedFrom": null,
+                "supportedTo": null,
+                "supportedToExtended": null,
                 "link": "",
                 "latestPatch": "",
-                "latestPatchReleased": "",
-                "useFrom": "",
-                "useTo": "",
+                "latestPatchReleased": null,
+                "useFrom": null,
+                "useTo": null,
                 "notes": "",
             };
         }
@@ -321,6 +328,12 @@ class ItemDetailsForm extends HTMLElement {
         this.#setupForm(isNew);
 
         this.#curItem = item;
+
+        if (!isNew) {
+            this.#dialogTitle.textContent = `${settings.types[item.type]} Details`;
+        } else {
+            this.#dialogTitle.textContent = "New Item Details";
+        }
 
         // Populate the form
         Object.keys(item).forEach(key => {
