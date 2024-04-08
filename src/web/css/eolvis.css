@@ -59,15 +59,15 @@ H1 {
     color: #666;
     text-align: left;
     border: none;
-    padding: 0.7rem 1.4rem;
-    box-shadow: 0 0 30px rgba(0,0,0,0.1), 0 0 10px rgba(0,0,0,0.25);
+    padding: 0.5rem 1.4rem;
+    box-shadow: 0 0 2rem rgba(0,0,0,0.6);
     min-width: 10em;
     max-width: 80vw;
     border-radius: 0.5em;
 }
 dialog::backdrop {
     background: rgba(100,100,100,.5);
-    backdrop-filter: blur(0.04em);
+    backdrop-filter: blur(0.08em);
 }
 .dialog-form-error {
     padding: 0.75rem;
@@ -235,6 +235,7 @@ svg {
     stroke: #666;
     stroke-width: 2;
     stroke-linejoin: round;
+    rx: 0.2rem;
 }
 .item-supported-border-stopColour {
     stop-color: #666;
@@ -253,10 +254,12 @@ svg {
     stroke-width: 2;
     stroke-linejoin: round;
     stroke-dasharray: 4 2;
+    rx: 0.2rem;
 }
 
 .item {
     fill: #888;
+    rx: 0.2rem;
 }
 .item-inuse {
     fill: #548235;
