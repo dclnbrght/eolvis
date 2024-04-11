@@ -4,7 +4,7 @@ const projectStateStorageKey = "eolvisProjectState";
 const componentsStateStorageKey = "eolvisComponentState";
 
 const requestDataFromServer = (callback) => {
-    fetch(settings.dataPath + "projects" + '/' + settings.defaultProject)
+    fetch(`${settings.dataPath}/projects/${settings.defaultProject}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -15,7 +15,7 @@ const requestDataFromServer = (callback) => {
             saveProjectState(data);
         })
         .then(() => {
-            fetch(settings.dataPath + "components")
+            fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(response.statusText);
@@ -89,12 +89,14 @@ const getComponentState = () => {
 }
 
 const addItem = (item, callback) => {
-    fetch(settings.dataPath + "components", { method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify([item])
-    })  
+    fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components`, 
+        { method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([item])
+        }
+    )  
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -111,12 +113,14 @@ const addItem = (item, callback) => {
 }
 
 const updateItem = (item, callback) => {
-    fetch(settings.dataPath + "components" + '/' + item.id, { method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(item)
-    })  
+    fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components/${item.id}`, 
+        { method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        }
+    )
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -133,7 +137,9 @@ const updateItem = (item, callback) => {
 }
 
 const deleteItem = (id, callback) => {
-    fetch(settings.dataPath + "components" + '/' + id, { method: 'DELETE' })
+    fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components/${id}`, 
+        { method: 'DELETE' }
+    )
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
