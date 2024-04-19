@@ -1,5 +1,5 @@
 
-class MenuButton extends HTMLElement {
+class IconButton extends HTMLElement {
 
     constructor() {
         super();
@@ -14,12 +14,24 @@ class MenuButton extends HTMLElement {
                     display: inline-block;
                     margin: 0.3em;
                 }
+                button {
+                    background-color: transparent;
+                    border: none;
+                    margin: 0;
+                    padding: 0;
+                    text-align: inherit;
+                    font: inherit;
+                    border-radius: 0;
+                    cursor: pointer;
+                }
             </style>
-            <svg width="20" height="20" viewBox="0 0 20 20">
-                <g fill="none" stroke="${this.strokeColour}" stroke-width="${this.strokeWidth}">
-                    <path d="${this.iconPath}" />
-                </g>
-            </svg>
+            <button>
+                <svg width="20" height="20" viewBox="0 0 20 20">
+                    <g fill="none" stroke="${this.strokeColour}" stroke-width="${this.strokeWidth}">
+                        <path d="${this.iconPath}" />
+                    </g>
+                </svg>
+            </button>
         `;
 
         const shadow = this.attachShadow({ mode: 'open' });
@@ -37,4 +49,4 @@ class MenuButton extends HTMLElement {
     }
 }
 
-customElements.define('menu-button', MenuButton);
+customElements.define('icon-button', IconButton);

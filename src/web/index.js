@@ -1,7 +1,7 @@
 import * as settings from './settings.js';
 import * as dataAccessContext from './js/dataAccessContext.js';
 import * as dataSearch from './js/dataSearch.js';
-import * as menuButton from './components/menuButton.js';
+import * as iconButton from './components/iconButton.js';
 import * as filterBar from './components/filterBar.js';
 import * as informationDialog from './components/informationDialog.js';
 import * as downloadDialog from './components/downloadDialog.js';
@@ -21,7 +21,7 @@ const minDate = new Date(new Date().getFullYear() - settings.yearsPast, 0, 1);
 const maxDate = new Date(new Date().getFullYear() + settings.yearsFuture, 11, 31);
 
 const setupUser = () => {
-    const actionNew = document.getElementById("menu-button-add-item");
+    const actionNew = document.getElementById("icon-button-add-item");
 
     if (user.hasPermission("edit")) {
         actionNew.classList.remove("hidden");
@@ -86,13 +86,13 @@ const positionTimeline = (timeline, relativeToElement) => {
         timeline.removeAttribute("transform");
 }
 
-document.getElementById("menu-button-information").addEventListener("click", (e) => {
+document.getElementById("icon-button-information").addEventListener("click", (e) => {
     informationDialogComponent.showModal();
 });
-document.getElementById("menu-button-add-item").addEventListener("click", (e) => {
+document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
 });
-document.getElementById("menu-button-download").addEventListener("click", (e) => {
+document.getElementById("icon-button-download").addEventListener("click", (e) => {
     downloadDialogComponent.showModal();
 });
 

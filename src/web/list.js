@@ -1,6 +1,6 @@
 import * as settings from './settings.js';
 import * as dataAccessContext from './js/dataAccessContext.js';
-import * as menuButton from './components/menuButton.js';
+import * as iconButton from './components/iconButton.js';
 import * as filterBar from './components/filterBar.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as informationDialog from './components/informationDialog.js';
@@ -105,13 +105,13 @@ const renderItemTable = (items) => {
     });
 }
 
-document.getElementById("menu-button-information").addEventListener("click", (e) => {
+document.getElementById("icon-button-information").addEventListener("click", (e) => {
     informationDialogComponent.showModal();
 });
-document.getElementById("menu-button-add-item").addEventListener("click", (e) => {
+document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
 });
-document.getElementById("menu-button-download").addEventListener("click", (e) => {
+document.getElementById("icon-button-download").addEventListener("click", (e) => {
     downloadDialogComponent.showModal();
 });
 
