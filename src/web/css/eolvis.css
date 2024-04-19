@@ -88,8 +88,7 @@ dialog::backdrop {
     color: #444;
 }
 .dialog-button-container {
-    display: flex;
-    justify-content: center;
+    text-align: center;
     margin: 1.4em 0 1.4em 0;
 }
 .dialog-button,
@@ -117,7 +116,7 @@ dialog::backdrop {
     background-color: #ccc;
 }
 .dialog-button-left {
-    margin-right: auto;
+    float: inline-start;
 }
 .dialog-close-x {
     float: right;

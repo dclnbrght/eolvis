@@ -94,11 +94,12 @@ template.innerHTML = `
             </fieldset>
         </form>
         <div id="dialog-form-error" class="dialog-form-error hidden"></div>
-        <div class="dialog-button-container">
-            <button id="dialog-details-delete" class="dialog-button dialog-button-secondary dialog-button-left">Delete</button>
-            <button id="dialog-details-save" class="dialog-button">Save</button>
-            <button id="dialog-details-cancel" class="dialog-button dialog-button-secondary">Cancel</button>
-        </div>
+            <div class="dialog-button-container">
+                <menu-button id="dialog-details-delete" title="Delete" stroke-colour="#999" class="dialog-button-left"
+                    icon-svg-path="m 4 3 v 14 H 16 V 3 M 2 3 L 18 3 M 8 15 V 5 M 12 15 V 5 M 6 2 H 14"></menu-button>
+                <button id="dialog-details-save" class="dialog-button">Save</button>
+                <button id="dialog-details-cancel" class="dialog-button dialog-button-secondary">Cancel</button>
+            </div>
     </dialog>
 `;
 
