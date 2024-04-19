@@ -79,7 +79,7 @@ dialog::backdrop {
 }
 .dialog-message {
     position: absolute;
-    top: 1.3em;
+    top: 1em;
     width: calc(100% - 4.5em);
     text-align: center;
     padding: 0.6em;
@@ -90,7 +90,7 @@ dialog::backdrop {
 .dialog-button-container {
     display: flex;
     justify-content: center;
-    margin: 2em 0 1.4em 0;
+    margin: 1.4em 0 1.4em 0;
 }
 .dialog-button,
 .dialog-button-secondary {
@@ -157,6 +157,11 @@ dialog::backdrop {
 .form-item #item-link-anchor {
     text-decoration: none;
 }
+#item-updated-wrapper,
+#item-updated-wrapper input {
+    color: #777;
+}
+
 .hidden {
     display: none;
 }

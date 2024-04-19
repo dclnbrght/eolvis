@@ -23,7 +23,7 @@ template.innerHTML = `
                     <input type="text" id="item-version" name="version">
                 </div>
                 <div class="form-item">
-                    <label for="item-lts">LTS:</label>
+                    <label for="item-lts"><a href="https://en.wikipedia.org/wiki/Long-term_support" target="_blank">LTS</a>:</label>
                     <input type="checkbox" id="item-lts" name="lts" checked>
                 </div>
                 <div class="form-item">
@@ -81,9 +81,15 @@ template.innerHTML = `
                     <textarea id="item-notes" name="notes"></textarea>
                 </div>
                 <hr>
-                <div id="item-updated-wrapper" class="form-item">
-                    <label for="item-updated">Last Updated:</label>
-                    <input type="date" id="item-updated" name="updated" readonly>
+                <div id="item-updated-wrapper" class="hidden">
+                    <div class="form-item">
+                        <label for="item-updated">Last Updated:</label>
+                        <input type="date" id="item-updated" name="updated" readonly>
+                    </div>
+                    <div class="form-item hidden">
+                        <label for="item-updatedBy">Updated By:</label>
+                        <input type="text" id="item-updatedBy" name="updatedBy" readonly>
+                    </div>
                 </div>
             </fieldset>
         </form>
@@ -183,9 +189,11 @@ class ItemDetailsForm extends HTMLElement {
             }
         }
 
-        const itemUpdated = this.shadowRoot.getElementById('item-updated-wrapper');
-        if (isNew) itemUpdated.classList.add('hidden');
-        else itemUpdated.classList.remove('hidden');
+        const itemUpdatedWrapper = this.shadowRoot.getElementById('item-updated-wrapper');
+        if (!isNew) 
+            itemUpdatedWrapper.classList.remove('hidden');
+        else 
+            itemUpdatedWrapper.classList.add('hidden');
     }
 
     #displayError = (msg) => {
@@ -364,6 +372,13 @@ class ItemDetailsForm extends HTMLElement {
         } else {
             anchorLink.classList.add('hidden');
         }
+
+        // Setup Updated By
+        const itemUpdatedBy = this.#fieldSet.querySelector('#item-updatedBy');
+        if (itemUpdatedBy.value !== "")
+            itemUpdatedBy.parentNode.classList.remove('hidden');
+        else 
+            itemUpdatedBy.parentNode.classList.add('hidden');
 
         // Event handler to update from form input
         // Only run on form with data-form-sync attribute

@@ -73,7 +73,8 @@
             "lts": true,
             "type": "platform",
             "updated": "2023-11-11T19:46:03.222Z",
-            "license": "MIT"
+            "license": "MIT",
+            "updatedBy": "user123"
         },
         {
             "id": "91e48010-4857-440f-be87-3c8c4258e214",
