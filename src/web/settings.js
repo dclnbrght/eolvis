@@ -7,7 +7,7 @@ export const defaultProject = "eolvis-demo";
 /* the data store type; dataAccessApi or dataAccessLocal */
 export const dataStoreType = 'dataAccessLocal';
 
-/* read write mode */
+/* read write mode, when using dataAccessLocal */
 export const readWriteMode = true;
 
 /* the number of years in the past to show on the timeline */

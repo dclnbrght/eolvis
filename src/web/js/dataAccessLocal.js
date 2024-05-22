@@ -1,6 +1,49 @@
 import * as settings from '../settings.js';
 
+const userProfileStateStorageKey = "eolvisUserState";
 const componentsStateStorageKey = "eolvisComponentState";
+
+const requestUserProfile = (callback) => {
+    let userProfile = {
+        username: "eolvis",
+        permissions: [
+            "read"
+        ]
+    };
+
+    if (settings.readWriteMode) {
+        userProfile.permissions.push("insert");
+        userProfile.permissions.push("update");
+        userProfile.permissions.push("delete");
+    }
+
+    saveUserProfileState(userProfile);
+    callback();
+}
+
+const saveUserProfileState = (data) => {
+    try {
+        sessionStorage.setItem(userProfileStateStorageKey, JSON.stringify(data));    
+    } catch (error) {
+        const msg = `Error saving user profile to store \r\n\r\n${error}`;
+        console.error(msg);
+    }
+}
+
+const userProfileStateExists = () => {
+    return ((sessionStorage.getItem(userProfileStateStorageKey) === null) ? false : true);
+}
+
+const getUserProfileState = () => {
+    if (!userProfileStateExists()) {
+        alert("Error, cannot retrieve user profile!");
+        return JSON.parse('{}');
+    }
+    else {
+        return JSON.parse(sessionStorage.getItem(userProfileStateStorageKey));
+    }
+}
+
 
 const requestDataFromServer = (callback) => {
     fetch(settings.dataPath + settings.defaultProject + '.json')
@@ -121,6 +164,8 @@ const deleteItem = (id) => {
 }
 
 export {
+    requestUserProfile,
+    getUserProfileState,
     requestDataFromServer,
     getComponentState,
     addItem,

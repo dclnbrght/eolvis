@@ -1,7 +1,51 @@
 import * as settings from '../settings.js';
 
+const userProfileStateStorageKey = "eolvisUserState";
 const projectStateStorageKey = "eolvisProjectState";
 const componentsStateStorageKey = "eolvisComponentState";
+
+const requestUserProfile = (callback) => {
+    fetch(`${settings.dataPath}/user/profile`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            saveUserProfileState(data);
+            callback();
+        })
+        .catch(error => {
+            const msg = `Error retrieving the user profile from the server \r\n\r\n${error}`;
+            console.error(msg);
+            alert(msg);
+        });
+}
+
+const saveUserProfileState = (data) => {
+    try {
+        sessionStorage.setItem(userProfileStateStorageKey, JSON.stringify(data));    
+    } catch (error) {
+        const msg = `Error saving user profile to store \r\n\r\n${error}`;
+        console.error(msg);
+    }
+}
+
+const userProfileStateExists = () => {
+    return ((sessionStorage.getItem(userProfileStateStorageKey) === null) ? false : true);
+}
+
+const getUserProfileState = () => {
+    if (!userProfileStateExists()) {
+        alert("Error, cannot retrieve user profile!");
+        return JSON.parse('[]');
+    }
+    else {
+        return JSON.parse(sessionStorage.getItem(userProfileStateStorageKey));
+    }
+}
+
 
 const requestDataFromServer = (callback) => {
     fetch(`${settings.dataPath}/projects/${settings.defaultProject}`)
@@ -28,7 +72,7 @@ const requestDataFromServer = (callback) => {
                 })
         })
         .catch(error => {
-            const msg = `Error retrieving the data file from the server, please check the filepath in settings \r\n\r\n${error}`;
+            const msg = `Error retrieving the data from the server \r\n\r\n${error}`;
             console.error(msg);
             alert(msg);
         });
@@ -156,6 +200,8 @@ const deleteItem = (id, callback) => {
 }
 
 export {
+    requestUserProfile,
+    getUserProfileState,
     requestDataFromServer,
     getComponentState,
     addItem,

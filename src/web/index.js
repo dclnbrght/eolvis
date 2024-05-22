@@ -7,7 +7,6 @@ import * as informationDialog from './components/informationDialog.js';
 import * as downloadDialog from './components/downloadDialog.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as itemBoard from './components/itemBoard.js';
-import * as user from './js/user.js';
 
 const dataAccess = dataAccessContext.create(settings.dataStoreType);
 
@@ -20,14 +19,22 @@ const itemBoardComponent = document.getElementById("item-board");
 const minDate = new Date(new Date().getFullYear() - settings.yearsPast, 0, 1);
 const maxDate = new Date(new Date().getFullYear() + settings.yearsFuture, 11, 31);
 
-const setupUser = () => {
-    const actionNew = document.getElementById("icon-button-add-item");
+const setupUser = (callback) => {
+    dataAccess.requestUserProfile(callback);
+}
 
-    if (user.hasPermission("edit")) {
+const userLoaded = () => {
+    const userProfile = dataAccess.getUserProfileState();
+
+    const actionNew = document.getElementById("icon-button-add-item");
+    if (userProfile.permissions.includes("insert")) {
         actionNew.classList.remove("hidden");
     } else {
         actionNew.classList.add("hidden");
     }
+
+    requestData(dataLoaded);
+    itemDetailsFormComponent.setupDialog(dataLoaded);
 }
 
 const requestData = (callback) => {
@@ -98,9 +105,7 @@ document.getElementById("icon-button-download").addEventListener("click", (e) =>
 
 
 window.onload = () => {
-    setupUser();
-    requestData(dataLoaded);
-    itemDetailsFormComponent.setupDialog(dataLoaded);
+    setupUser(userLoaded);
 };
 window.onscroll = () => {
     positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));

@@ -1,7 +1,6 @@
 import * as dataAccessContext from '../js/dataAccessContext.js';
 import * as filterBar from '../components/filterBar.js';
 import * as settings from '../settings.js';
-import * as user from '../js/user.js';
 
 const dataAccess = dataAccessContext.create(settings.dataStoreType);
 
@@ -139,16 +138,15 @@ class ItemDetailsForm extends HTMLElement {
         this.#saveButton = shadow.querySelector('#dialog-details-save');
         this.#deleteButton = shadow.querySelector('#dialog-details-delete');
         this.#cancelButton = shadow.querySelector('#dialog-details-cancel');
-
-        this.#setupUserPermissions();
     }
 
     #setupUserPermissions = () => {
-        if (user.hasPermission("edit")) {
+        const userProfile = dataAccess.getUserProfileState();
+        
+        if (userProfile.permissions.includes("update")) {
             this.#fieldSet.disabled = false;
             this.#saveButton.classList.remove("hidden");
             this.#cancelButton.classList.add("dialog-button-secondary");
-            this.#deleteButton.classList.remove("hidden");
             if (settings.displayFormInfoMessage)
                 this.#dialogDetailsMessage.classList.remove("hidden");
         } else {
@@ -156,12 +154,19 @@ class ItemDetailsForm extends HTMLElement {
             this.#saveButton.classList.add("hidden");
             this.#cancelButton.textContent = "Close";
             this.#cancelButton.classList.remove("dialog-button-secondary");
-            this.#deleteButton.classList.add("hidden");
             this.#dialogDetailsMessage.classList.add("hidden");
         }
+        
+        if (userProfile.permissions.includes("delete")) {
+            this.#deleteButton.classList.remove("hidden");
+        } else {
+            this.#deleteButton.classList.add("hidden");
+        } 
     }
 
     #setupForm = (isNew) => {
+        this.#setupUserPermissions();
+
         const itemTypeSelect = this.shadowRoot.getElementById('item-type');
         if (itemTypeSelect.options.length == 0) {
             Object.entries(settings.types).forEach(([type, typeDisplay]) => {
@@ -184,8 +189,9 @@ class ItemDetailsForm extends HTMLElement {
 
         const deleteAction = this.shadowRoot.getElementById('dialog-details-delete');
         if (isNew) deleteAction.classList.add('hidden');
-        else {
-            if (user.hasPermission("edit")) {
+        else {            
+            const userProfile = dataAccess.getUserProfileState();
+            if (userProfile.permissions.includes("delete")) {
                 deleteAction.classList.remove('hidden');
             }
         }
