@@ -38,6 +38,8 @@ export class ItemBar extends HTMLElement {
         const monthsSupportExtendedFromStart = supportedEndIsSet ? dateUtils.numberOfMonths(minDate, supportExtendedStart) : 0;
         const monthsSupportExtended = supportedEndIsSet ? dateUtils.numberOfMonths(supportExtendedStart, supportExtendedEndCalc) - 1 : 0;
 
+        const monthsSupportTotal = monthsSupported + monthsSupportExtended;
+
         // Create item supported bar
         const itemSupportedRect = svgUtils.createSvgRect(
             this.#monthWidth * monthsSupportedFromStart,
@@ -85,7 +87,7 @@ export class ItemBar extends HTMLElement {
 
         // Create item label
         const monthsFromStart = monthsInUseFromStart > 0 && displayInUseBar ? monthsInUseFromStart : monthsSupportedFromStart;
-        const barCenterX = this.#monthWidth * (monthsFromStart + (monthsInUse > 0 && displayInUseBar ? monthsInUse : monthsSupported) / 2);
+        const barCenterX = this.#monthWidth * (monthsFromStart + (monthsInUse > 0 && displayInUseBar ? monthsInUse : monthsSupportTotal) / 2);
         const x = barCenterX <= 0 ? 4 : barCenterX;
         const anchor = barCenterX <= 0 ? "start" : "middle";
         const itemLabel = svgUtils.createSvgText(

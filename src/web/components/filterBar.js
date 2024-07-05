@@ -225,8 +225,8 @@ export class FilterBar extends HTMLElement {
         const filterValues = this.selectedFilterValues();
         this.#setupTypeNameFilter(data, this.#typeNameFilter, filterValues.selectedNames);
         this.#setupPeriodFilter(this.#periodFilter, filterValues.selectedPeriods);
-        this.#setupEventHandlers(searchCallback);
         this.#displayInUseToggle.checked = filterValues.displayInUseBar;
+        this.#setupEventHandlers(searchCallback);
     };
 
     selectedFilterValues = () => {
