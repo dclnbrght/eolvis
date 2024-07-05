@@ -10,8 +10,12 @@ const filterItems = (items) => {
 
     if (settings.exportedItemsAreFiltered) {
         const filterBar = new FilterBar();
-        const filterValues = filterBar.selectedFilterValues();
-        exportItems = dataSearch.search(items, filterValues.selectedNames, filterValues.selectedPeriods, new Date());
+        const filterValues = filterBar.selectedFilterValues();        
+        const filterByInUse = 'displayInUseBar' in filterValues ? filterValues.displayInUseBar : true;
+        const minDate = new Date(new Date().getFullYear() - settings.yearsPast, 0, 1);
+        const maxDate = new Date(new Date().getFullYear() + settings.yearsFuture, 11, 31);
+
+        exportItems = dataSearch.search(items, minDate, maxDate, filterValues.selectedNames, filterValues.selectedPeriods, filterByInUse, new Date());
     } else {
         exportItems = items;
     }
