@@ -1,4 +1,5 @@
 import * as settings from '../settings.js';
+import { ToggleSwitch } from './toggleSwitch.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -9,6 +10,7 @@ template.innerHTML = `
         }
         .filter-container {
             display: inline-block;
+            vertical-align: top;
         }
     </style>
     <section class="filter-bar">
@@ -17,6 +19,9 @@ template.innerHTML = `
         </div>
         <div id="periodFilter-container" class="filter-container">
             <select id="periodFilter" multiple></select>
+        </div>
+        <div id="inUseDisplayToggle-container" class="filter-container">            
+            <toggle-switch id="displayInUseToggle" checked left-value="Display In Use:"></toggle-switch>
         </div>
     </section>
 `;
@@ -32,6 +37,7 @@ export class FilterBar extends HTMLElement {
     #initialSetupComplete = false;
     #typeNameFilter = null;
     #periodFilter = null;
+    #displayInUseToggle = null;
     #isUpdating = false;
     #querystringParameters = null;
 
@@ -56,6 +62,7 @@ export class FilterBar extends HTMLElement {
 
         this.#typeNameFilter = this.querySelector('#typeNameFilter');
         this.#periodFilter = this.querySelector('#periodFilter');
+        this.#displayInUseToggle = this.querySelector('#displayInUseToggle');
 
         this.#querystringParameters = new URLSearchParams(window.location.search);
     }
@@ -89,6 +96,10 @@ export class FilterBar extends HTMLElement {
             this.#changeEventFunc(e, searchCallback);
         });
 
+        this.#displayInUseToggle.addEventListener("toggle", (e) => {
+            this.#changeEventFunc(e, searchCallback);
+        });
+
         this.#initialSetupComplete = true
     };
 
@@ -101,7 +112,10 @@ export class FilterBar extends HTMLElement {
 
         const selectedNames = this.#getSelectBoxValues(this.#typeNameFilter);
         const selectedPeriods = this.#getSelectBoxValues(this.#periodFilter);
-        const filterValues = { selectedNames, selectedPeriods };
+        const displayInUseBar = this.#displayInUseToggle.checked;
+
+        const filterValues = { selectedNames, selectedPeriods, displayInUseBar };
+        
         localStorage.setItem(filterBarStoreKey, JSON.stringify(filterValues));
     }
 
@@ -212,6 +226,7 @@ export class FilterBar extends HTMLElement {
         this.#setupTypeNameFilter(data, this.#typeNameFilter, filterValues.selectedNames);
         this.#setupPeriodFilter(this.#periodFilter, filterValues.selectedPeriods);
         this.#setupEventHandlers(searchCallback);
+        this.#displayInUseToggle.checked = filterValues.displayInUseBar;
     };
 
     selectedFilterValues = () => {
@@ -225,7 +240,7 @@ export class FilterBar extends HTMLElement {
             return JSON.parse(localStorage.getItem(filterBarStoreKey));
         }
         else {
-            return { selectedNames: ["All"], selectedPeriods: ["All"]};
+            return { selectedNames: ["All"], selectedPeriods: ["All"], displayInUseBar: true };
         }        
     };
 }

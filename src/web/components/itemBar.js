@@ -12,7 +12,7 @@ export class ItemBar extends HTMLElement {
         super();
     }
 
-    #renderBarsAndLabel = (item, y, refDate, minDate, maxDate) => {
+    #renderBarsAndLabel = (item, y, refDate, minDate, maxDate, displayInUseBar) => {
         const itemBarHeightInUse = 20;
         const itemBarHeightSupported = 22;
 
@@ -57,7 +57,7 @@ export class ItemBar extends HTMLElement {
         );
 
         // Create item in use bar
-        const itemInUseRect = svgUtils.createSvgRect(
+        const itemInUseRect = !displayInUseBar ? svgUtils.createSvgElement("g") : svgUtils.createSvgRect(
             this.#monthWidth * monthsInUseFromStart,
             y + 1,
             this.#monthWidth * monthsInUse,
@@ -84,12 +84,12 @@ export class ItemBar extends HTMLElement {
         );
 
         // Create item label
-        const monthsFromStart = monthsInUseFromStart > 0 ? monthsInUseFromStart : monthsSupportedFromStart;
-        const barCenterX = this.#monthWidth * (monthsFromStart + (monthsInUse > 0 ? monthsInUse : monthsSupported) / 2);
+        const monthsFromStart = monthsInUseFromStart > 0 && displayInUseBar ? monthsInUseFromStart : monthsSupportedFromStart;
+        const barCenterX = this.#monthWidth * (monthsFromStart + (monthsInUse > 0 && displayInUseBar ? monthsInUse : monthsSupported) / 2);
         const x = barCenterX <= 0 ? 4 : barCenterX;
         const anchor = barCenterX <= 0 ? "start" : "middle";
         const itemLabel = svgUtils.createSvgText(
-            `${item.name} ${item.version} ${settings.displayLtsLabelIfTrue && item.lts ? "(LTS)" : ""}`,
+            `${item.name} ${item.version}${settings.displayLtsLabelIfTrue && item.lts ? " (LTS)" : ""}`,
             x,
             y + 15,
             anchor,
@@ -125,7 +125,7 @@ export class ItemBar extends HTMLElement {
         return classNames;
     };
 
-    render = (item, y, refDate, minDate, maxDate) => {
+    render = (item, y, refDate, minDate, maxDate, displayInUseBar) => {
 
         const [itemSupportedRect,
             itemSupportExtendedRect,
@@ -138,7 +138,8 @@ export class ItemBar extends HTMLElement {
                 y,
                 refDate,
                 minDate,
-                maxDate
+                maxDate,
+                displayInUseBar
             );
 
         const itemGroupAnchor = svgUtils.createSvgElement("a");

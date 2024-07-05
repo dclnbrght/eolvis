@@ -73,8 +73,10 @@ const filterSearch = () => {
             new Date()
         );
 
+        const displayInUseBar = filterValues.displayInUseBar;
+
         const today = new Date();
-        itemBoardComponent.render(settings.types, filteredItems, today, minDate, maxDate);
+        itemBoardComponent.render(settings.types, filteredItems, today, minDate, maxDate, displayInUseBar);
 
     } catch (error) {
         const msg = `Error searching \r\n\r\n${error}`;

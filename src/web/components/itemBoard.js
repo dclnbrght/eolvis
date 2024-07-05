@@ -66,7 +66,7 @@ class ItemBoard extends HTMLElement {
             || a.version.localeCompare(b.version, undefined, { 'numeric': true });
     };
 
-    #renderItems = (container, types, items, refDate, minDate, maxDate) => {
+    #renderItems = (container, types, items, refDate, minDate, maxDate, displayInUseBar) => {
 
         let containerY = this.#timelineHeight;
         Object.entries(types).forEach(([type, typeDisplay]) => {
@@ -102,7 +102,7 @@ class ItemBoard extends HTMLElement {
 
                 // group items
                 itemGroupItems.map((itemData) => {
-                    const itemRendered = new ItemBar().render(itemData, containerY, refDate, minDate, maxDate);
+                    const itemRendered = new ItemBar().render(itemData, containerY, refDate, minDate, maxDate, displayInUseBar);
                     itemGroup.appendChild(itemRendered);
                     containerY += this.#itemHeight;
                 });
@@ -125,14 +125,14 @@ class ItemBoard extends HTMLElement {
         svg.setAttribute("height", containerY);
     };
 
-    render = (types, items, refDate, minDate, maxDate) => {
+    render = (types, items, refDate, minDate, maxDate, displayInUseBar) => {
 
         const itemContainer = document.getElementById("itemContainer");
         itemContainer.replaceChildren(); // empty container before re-rendering
 
         this.#renderTimelineMonthLines(itemContainer, minDate, maxDate);
 
-        const containerY = this.#renderItems(itemContainer, types, items, refDate, minDate, maxDate);
+        const containerY = this.#renderItems(itemContainer, types, items, refDate, minDate, maxDate, displayInUseBar);
 
         this.#renderTimeline(itemContainer, minDate, maxDate);
 

@@ -149,8 +149,9 @@ describe("itemBar", function () {
             const today = new Date("2023-01-01");
             const minDate = new Date("2020-01-01");
             const maxDate = new Date("2024-12-31");
+            const displayInUseBar = true;
 
-            const renderedItem = itemBar.render(item, y, today, minDate, maxDate);
+            const renderedItem = itemBar.render(item, y, today, minDate, maxDate, displayInUseBar);
 
             // Append the renderedItem to the container
             container.appendChild(renderedItem);
