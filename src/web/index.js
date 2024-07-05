@@ -45,7 +45,7 @@ const dataLoaded = () => {
     try {
         const data = dataAccess.getComponentState();
 
-        filterBarComponent.setupFilters(data, filterSearch);
+        filterBarComponent.setupFilters(data, true, filterSearch);
         
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
@@ -60,20 +60,23 @@ const dataLoaded = () => {
 
 const filterSearch = () => {
     try {
-        const filterValues = filterBarComponent.selectedFilterValues();         
+        const filterValues = filterBarComponent.selectedFilterValues();
+        const displayInUseBar = 'displayInUseBar' in filterValues ? filterValues.displayInUseBar : true;
+
         const data = dataAccess.getComponentState();
 
-        const items = data.components;
+        const items = data.components;        
 
         // filter items by name and period
         const filteredItems = dataSearch.search(
             items,
+            minDate, 
+            maxDate, 
             filterValues.selectedNames,
             filterValues.selectedPeriods,
+            displayInUseBar,
             new Date()
         );
-
-        const displayInUseBar = filterValues.displayInUseBar;
 
         const today = new Date();
         itemBoardComponent.render(settings.types, filteredItems, today, minDate, maxDate, displayInUseBar);

@@ -21,7 +21,7 @@ template.innerHTML = `
             <select id="periodFilter" multiple></select>
         </div>
         <div id="inUseDisplayToggle-container" class="filter-container">            
-            <toggle-switch id="displayInUseToggle" checked left-value="Display In Use:"></toggle-switch>
+            <toggle-switch id="displayInUseToggle" checked left-value="Display In Use:" class="hidden"></toggle-switch>
         </div>
     </section>
 `;
@@ -191,7 +191,7 @@ export class FilterBar extends HTMLElement {
         this.#setSelectBoxValues(this.#periodFilter, filterValues);
 
         tail.select(selectElement, {
-            placeholder: 'In Use Period Filter',
+            placeholder: 'Period Filter',
             multiSelectAll: true,
             search: true,
             searchFocus: false
@@ -221,11 +221,14 @@ export class FilterBar extends HTMLElement {
         return filterArray;
     };
 
-    setupFilters = (data, searchCallback) => {
+    setupFilters = (data, inUseToggleEnabled, searchCallback) => {
+        if (inUseToggleEnabled)
+            this.#displayInUseToggle.classList.remove("hidden");
+
         const filterValues = this.selectedFilterValues();
         this.#setupTypeNameFilter(data, this.#typeNameFilter, filterValues.selectedNames);
         this.#setupPeriodFilter(this.#periodFilter, filterValues.selectedPeriods);
-        this.#displayInUseToggle.checked = filterValues.displayInUseBar;
+        this.#displayInUseToggle.checked = filterValues.displayInUseBar;        
         this.#setupEventHandlers(searchCallback);
     };
 

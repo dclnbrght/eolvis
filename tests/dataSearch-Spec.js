@@ -3,6 +3,8 @@ import { search } from '../src/web/js/dataSearch.js';
 describe("dataSearch", function () {
     describe("search", function () {
         const today = new Date("2023-06-01");
+        const minDate = new Date(2018, 0, 1);
+        const maxDate = new Date(2030, 11, 31);
         const items = [
             {
                 name: "Item 1",
@@ -32,17 +34,17 @@ describe("dataSearch", function () {
                 name: "Item 4",
                 supportedFrom: "2022-06-01",
                 supportedTo: "2022-10-01",
-                supportedToExtended: "",
-                useFrom: "",
-                useTo: "",
+                supportedToExtended: null,
+                useFrom: null,
+                useTo: null,
             },
             {
                 name: "Item 5",
                 supportedFrom: "2024-06-01",
                 supportedTo: "2024-10-01",
-                supportedToExtended: "",
-                useFrom: "",
-                useTo: "",
+                supportedToExtended: null,
+                useFrom: null,
+                useTo: null,
             },
         ];
 
@@ -50,7 +52,7 @@ describe("dataSearch", function () {
             const names = ["All"];
             const periods = ["All"];
 
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(5);
         });
@@ -59,7 +61,7 @@ describe("dataSearch", function () {
             const names = ["Item 1"];
             const periods = ["past", "current", "future"];
 
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(1);
             expect(result[0].name).toBe("Item 1");
@@ -69,7 +71,7 @@ describe("dataSearch", function () {
             const names = ["Item X"];
             const periods = ["past", "current", "future"];
 
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(0);
         });
@@ -78,7 +80,7 @@ describe("dataSearch", function () {
             const names = ["All"];
             const periods = ["past"];
             
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(2);
         });
@@ -87,7 +89,7 @@ describe("dataSearch", function () {
             const names = ["All"];
             const periods = ["past","current"];
 
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(3);
         });
@@ -96,7 +98,7 @@ describe("dataSearch", function () {
             const names = ["All"];
             const periods = ["future"];
 
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(2);
         });
@@ -105,7 +107,7 @@ describe("dataSearch", function () {
             const names = ["Item 2"];
             const periods = ["current"];
 
-            const result = search(items, names, periods, today);
+            const result = search(items, minDate, maxDate, names, periods, true, today);
 
             expect(result.length).toBe(1);
             expect(result[0].name).toBe("Item 2");

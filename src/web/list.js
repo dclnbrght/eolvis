@@ -14,6 +14,27 @@ const itemDetailsFormComponent = document.getElementById("item-details-form");
 const informationDialogComponent = document.getElementById("information-dialog");
 const downloadDialogComponent = document.getElementById("download-dialog");
 
+const minDate = new Date(new Date().getFullYear() - settings.yearsPast, 0, 1);
+const maxDate = new Date(new Date().getFullYear() + settings.yearsFuture, 11, 31);
+
+const setupUser = (callback) => {
+    dataAccess.requestUserProfile(callback);
+}
+
+const userLoaded = () => {
+    const userProfile = dataAccess.getUserProfileState();
+
+    const actionNew = document.getElementById("icon-button-add-item");
+    if (userProfile.permissions.includes("insert")) {
+        actionNew.classList.remove("hidden");
+    } else {
+        actionNew.classList.add("hidden");
+    }
+
+    requestData(dataLoaded);
+    itemDetailsFormComponent.setupDialog(dataLoaded);
+}
+
 const requestData = (callback) => {
     dataAccess.requestDataFromServer(callback);
 }
@@ -22,7 +43,7 @@ const dataLoaded = () => {
     try {
         const data = dataAccess.getComponentState();
 
-        filterBarComponent.setupFilters(data, filterSearch);
+        filterBarComponent.setupFilters(data, false, filterSearch);
 
         const projectName = data.projectName;
         document.getElementById("title").innerText = projectName;
@@ -45,8 +66,11 @@ const filterSearch = () => {
         // filter items by name and period
         const filteredItems = dataSearch.search(
             items,
+            minDate, 
+            maxDate, 
             filterValues.selectedNames,
             filterValues.selectedPeriods,
+            true,
             new Date()
         );
 
@@ -116,6 +140,5 @@ document.getElementById("icon-button-download").addEventListener("click", (e) =>
 });
 
 window.onload = () => {
-    requestData(dataLoaded);
-    itemDetailsFormComponent.setupDialog(dataLoaded);
+    setupUser(userLoaded);
 };
