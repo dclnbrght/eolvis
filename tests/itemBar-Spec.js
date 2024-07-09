@@ -82,7 +82,6 @@ describe("itemBar", function () {
 
             expect(classNames).toContain("item");
             expect(classNames).toContain("item-inuse");
-            expect(classNames).toContain("item-inuse-eol");
         });
 
         it('should return the correct class names for an item in future use with no end date', () => {
@@ -126,7 +125,112 @@ describe("itemBar", function () {
             document.body.removeChild(container);
         });
 
-        it("should render item bars with correct attributes", function () {
+        it("should render item bars with correct attributes, within support", function () {
+            const item = {
+                "id": "a00feab3-6c0f-4bc3-a14d-53e7afaf2161",
+                "name": "Test OS",
+                "version": "1",
+                "supportedFrom": "2022-01-01",
+                "supportedTo": "2023-04-30",
+                "supportedToExtended": "",
+                "latestPatch": "",
+                "latestPatchReleased": "",
+                "useFrom": "2022-02-01",
+                "useTo": "2023-02-30",
+                "link": "",
+                "notes": "",
+                "lts": false,
+                "type": "operating-system",
+                "updated": "2023-06-23"
+            };
+
+            const y = 0;
+            const refDate = new Date("2023-01-01");
+            const minDate = new Date("2020-01-01");
+            const maxDate = new Date("2024-12-31");
+            const displayInUseBar = true;
+
+            const renderedItem = itemBar.render(item, y, refDate, minDate, maxDate, displayInUseBar);
+
+            // Append the renderedItem to the container
+            container.appendChild(renderedItem);
+
+            // Query for elements and attributes using querySelector
+            const itemSupported = renderedItem.querySelector(".item-supported");
+            const itemSupportedBorder = renderedItem.querySelector(".item-supported-border");
+            const itemLabel = renderedItem.querySelector(".item-label");
+            const itemInUse = renderedItem.querySelector(".item-inuse");
+            const itemInUseEol = renderedItem.querySelector(".item-inuse-eol");
+
+            // Perform assertions on element presence or absense
+            expect(itemSupported).toBeTruthy(); 
+            expect(itemSupportedBorder).toBeTruthy();
+            expect(itemLabel).toBeTruthy();
+            expect(itemInUse).toBeTruthy();
+            expect(itemInUseEol).toBeFalsy();
+
+            // Check CSS classes
+            expect(itemSupported.classList.contains("item-supported")).toBe(true);
+            expect(itemSupportedBorder.classList.contains("item-supported-border")).toBe(true);
+            expect(itemLabel.classList.contains("item-label")).toBe(true);
+            expect(itemInUse.classList.contains("item-inuse")).toBe(true);
+        });
+
+        it("should render item bars with correct attributes, within extended support", function () {
+            const item = {
+                "id": "a00feab3-6c0f-4bc3-a14d-53e7afaf2161",
+                "name": "Test OS",
+                "version": "1",
+                "supportedFrom": "2022-01-01",
+                "supportedTo": "2023-04-30",
+                "supportedToExtended": "2023-07-30",
+                "latestPatch": "",
+                "latestPatchReleased": "",
+                "useFrom": "2022-02-01",
+                "useTo": "2023-06-30",
+                "link": "",
+                "notes": "",
+                "lts": false,
+                "type": "operating-system",
+                "updated": "2023-06-23"
+            };
+
+            const y = 0;
+            const refDate = new Date("2023-01-01");
+            const minDate = new Date("2020-01-01");
+            const maxDate = new Date("2024-12-31");
+            const displayInUseBar = true;
+
+            const renderedItem = itemBar.render(item, y, refDate, minDate, maxDate, displayInUseBar);
+
+            // Append the renderedItem to the container
+            container.appendChild(renderedItem);
+
+            // Query for elements and attributes using querySelector
+            const itemSupported = renderedItem.querySelector(".item-supported");
+            const itemSupportedBorder = renderedItem.querySelector(".item-supported-border");
+            const itemSupportExtendedBorder = renderedItem.querySelector(".item-support-extended-border");
+            const itemLabel = renderedItem.querySelector(".item-label");
+            const itemInUse = renderedItem.querySelector(".item-inuse");
+            const itemInUseEol = renderedItem.querySelector(".item-inuse-eol");
+
+            // Perform assertions on element presence or absense
+            expect(itemSupported).toBeTruthy(); 
+            expect(itemSupportedBorder).toBeTruthy();
+            expect(itemSupportExtendedBorder).toBeTruthy();
+            expect(itemLabel).toBeTruthy();
+            expect(itemInUse).toBeTruthy();
+            expect(itemInUseEol).toBeFalsy();
+
+            // Check CSS classes
+            expect(itemSupported.classList.contains("item-supported")).toBe(true);
+            expect(itemSupportedBorder.classList.contains("item-supported-border")).toBe(true);
+            expect(itemSupportExtendedBorder.classList.contains("item-support-extended-border")).toBe(true);
+            expect(itemLabel.classList.contains("item-label")).toBe(true);
+            expect(itemInUse.classList.contains("item-inuse")).toBe(true);
+        });
+
+        it("should render item bars with correct attributes, out of support", function () {
             const item = {
                 "id": "a00feab3-6c0f-4bc3-a14d-53e7afaf2161",
                 "name": "Test OS",
@@ -139,40 +243,43 @@ describe("itemBar", function () {
                 "useFrom": "2022-02-01",
                 "useTo": "2023-06-30",
                 "link": "",
-                "notes": "test near EOL",
+                "notes": "",
                 "lts": false,
                 "type": "operating-system",
                 "updated": "2023-06-23"
             };
 
             const y = 0;
-            const today = new Date("2023-01-01");
+            const refDate = new Date("2023-01-01");
             const minDate = new Date("2020-01-01");
             const maxDate = new Date("2024-12-31");
             const displayInUseBar = true;
 
-            const renderedItem = itemBar.render(item, y, today, minDate, maxDate, displayInUseBar);
+            const renderedItem = itemBar.render(item, y, refDate, minDate, maxDate, displayInUseBar);
 
             // Append the renderedItem to the container
             container.appendChild(renderedItem);
 
             // Query for elements and attributes using querySelector
             const itemSupported = renderedItem.querySelector(".item-supported");
-            const itemUse = renderedItem.querySelector(".item");
             const itemSupportedBorder = renderedItem.querySelector(".item-supported-border");
             const itemLabel = renderedItem.querySelector(".item-label");
+            const itemInUse = renderedItem.querySelector(".item-inuse");
+            const itemInUseEol = renderedItem.querySelector(".item-inuse-eol");
 
-            // Perform assertions on element presence and attributes
-            expect(itemSupported).toBeDefined(); // Check that element is defined
-            expect(itemUse).toBeDefined();
-            expect(itemSupportedBorder).toBeDefined();
-            expect(itemLabel).toBeDefined();
+            // Perform assertions on element presence or absense
+            expect(itemSupported).toBeTruthy(); 
+            expect(itemSupportedBorder).toBeTruthy();
+            expect(itemLabel).toBeTruthy();
+            expect(itemInUse).toBeTruthy();
+            expect(itemInUseEol).toBeTruthy();
 
             // Check CSS classes
             expect(itemSupported.classList.contains("item-supported")).toBe(true);
-            expect(itemUse.classList.contains("item")).toBe(true);
             expect(itemSupportedBorder.classList.contains("item-supported-border")).toBe(true);
             expect(itemLabel.classList.contains("item-label")).toBe(true);
+            expect(itemInUse.classList.contains("item-inuse")).toBe(true);
+            expect(itemInUseEol.classList.contains("item-inuse-eol")).toBe(true);
         });
 
     });

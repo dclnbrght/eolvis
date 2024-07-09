@@ -18,7 +18,9 @@ export class ItemBar extends HTMLElement {
 
         const inUseStartIsSet = item.useFrom !== null && item.useFrom !== "";
         const inUseStart = new Date(item.useFrom);
+
         const inUseEndIsSet = item.useTo !== null && item.useTo !== "";
+        const inUseEnd = new Date(item.useTo);
         const inUseEndCalc = !inUseEndIsSet ? dateUtils.addMonths(inUseStart, 12) : new Date(item.useTo);
 
         const monthsInUseFromStart = dateUtils.numberOfMonths(minDate, inUseStart) - 1;
@@ -67,6 +69,23 @@ export class ItemBar extends HTMLElement {
             this.getClassNamesForItemInUse(refDate, inUseStart, inUseEndIsSet, inUseEndCalc, supportExtendedEndCalc)
         );
 
+        const isInUseAndOutOfSupport = () =>
+        {
+            return (displayInUseBar 
+                && (inUseStartIsSet && inUseStart < refDate) 
+                && (inUseEndIsSet && inUseEnd > refDate) 
+                && (supportedEndIsSet && inUseEnd > supportExtendedEndCalc))
+                ? true : false;
+        }
+
+        const itemInUseUnsupportedRect = !isInUseAndOutOfSupport() ? svgUtils.createSvgElement("g") : svgUtils.createSvgRect(
+            this.#monthWidth * (monthsSupportedFromStart + monthsSupported + monthsSupportExtended),
+            y + 1,
+            this.#monthWidth * ((monthsInUseFromStart + monthsInUse) - (monthsSupportedFromStart + monthsSupported) - monthsSupportExtended),
+            itemBarHeightInUse,
+            ["item", "item-inuse-eol"]
+        );
+
         // Create item supported border
         const itemSupportedBorder = svgUtils.createSvgRect(
             this.#monthWidth * monthsSupportedFromStart,
@@ -98,7 +117,7 @@ export class ItemBar extends HTMLElement {
             ["item-label"]
         );
 
-        return [itemSupportedRect, itemSupportExtendedRect, itemInUseRect, itemSupportedBorder, itemSupportExtendedBorder, itemLabel];
+        return [itemSupportedRect, itemSupportExtendedRect, itemInUseRect, itemInUseUnsupportedRect, itemSupportedBorder, itemSupportExtendedBorder, itemLabel];
     };
 
     // Get the CSS classes for the item in use bar
@@ -117,11 +136,8 @@ export class ItemBar extends HTMLElement {
             classNames.push("item-inuse-future");
         } else if (inUseStart < refDate
             && inUseEnd > refDate
-            && inUseEnd > supportedEnd) {
-            classNames.push("item-inuse-eol");
-        } else if (inUseStart < refDate
-            && inUseEnd > refDate
-            && supportedEnd < new Date(refDate.getTime() + (settings.warnNearEolDays * 24 * 3600000))) {
+            && supportedEnd < new Date(refDate.getTime() + (settings.warnNearEolDays * 24 * 3600000))
+            && supportedEnd > refDate ) {
             classNames.push("item-inuse-near-eol");
         }
         return classNames;
@@ -132,6 +148,7 @@ export class ItemBar extends HTMLElement {
         const [itemSupportedRect,
             itemSupportExtendedRect,
             itemInUseRect,
+            itemInUseUnsupportedRect,
             itemSupportedBorder,
             itemSupportExtendedBorder,
             itemLabel]
@@ -154,6 +171,7 @@ export class ItemBar extends HTMLElement {
         itemGroup.appendChild(itemSupportedRect);
         itemGroup.appendChild(itemSupportExtendedRect);
         itemGroup.appendChild(itemInUseRect);
+        itemGroup.appendChild(itemInUseUnsupportedRect);
         itemGroup.appendChild(itemSupportedBorder);
         itemGroup.appendChild(itemSupportExtendedBorder);
         itemGroup.appendChild(itemLabel);
