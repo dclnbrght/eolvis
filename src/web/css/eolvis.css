@@ -226,7 +226,7 @@ svg {
 }
 
 .item-supported {
-    fill: hsla(0, 0%, 33%, 0.5);
+    fill: hsla(0, 0%, 20%, 0.5);
 }
 .item-supported-stopColour {
     stop-color: #555;
