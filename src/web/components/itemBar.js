@@ -48,7 +48,7 @@ export class ItemBar extends HTMLElement {
             y,
             this.#monthWidth * monthsSupported,
             itemBarHeightSupported,
-            ["item-supported", (supportedEndIsSet ? "" : "item-supported-noEnd")]
+            ["item-supported", (supportedEndIsSet ? "" : "item-supported-noEnd"), ((!displayInUseBar && supportedEndIsSet) ? "item-no-inuse" : "")]
         );
 
         // Create item supported bar
@@ -57,7 +57,7 @@ export class ItemBar extends HTMLElement {
             y,
             this.#monthWidth * monthsSupportExtended,
             itemBarHeightSupported,
-            ["item-support-extended", (supportExtendedEndIsSet ? "" : "item-supported-noEnd")]
+            ["item-support-extended", (supportExtendedEndIsSet ? "" : "item-supported-noEnd"), ((!displayInUseBar && supportExtendedEndIsSet) ? "item-extended-no-inuse" : "")]
         );
 
         // Create item in use bar
@@ -101,7 +101,7 @@ export class ItemBar extends HTMLElement {
             y,
             this.#monthWidth * monthsSupportExtended,
             itemBarHeightSupported,
-            ["item-support-extended-border", supportExtendedEndIsSet ? "" : "item-supported-border-noEnd"]
+            ["item-support-extended-border", (supportExtendedEndIsSet ? "" : "item-supported-border-noEnd")]
         );
 
         // Create item label

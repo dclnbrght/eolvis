@@ -221,12 +221,9 @@ svg {
 .item-link {
     fill: #ccc;
 }
-.item-link-icon {
-    fill: #ccc;
-}
 
 .item-supported {
-    fill: hsla(0, 0%, 20%, 0.5);
+    fill: hsla(0, 0%, 33%, 0.5);
 }
 .item-supported-stopColour {
     stop-color: #555;
@@ -247,7 +244,6 @@ svg {
 .item-supported-border-noEnd {
     stroke: url(#item-supported-border-fadeRight);
 }
-
 
 .item-support-extended {
     fill: hsla(0, 0%, 33%, 0.4);
@@ -288,6 +284,12 @@ svg {
 }
 .item-inuse-eol {
     fill: rgb(220, 20, 20);
+}
+.item-no-inuse {
+    fill: #888;
+}
+.item-extended-no-inuse {
+    fill: #999;
 }
 
 @media only screen and (min-width: 600px) {
