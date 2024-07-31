@@ -28,7 +28,7 @@ export class ItemBar extends HTMLElement {
 
         const supportedStart = new Date(item.supportedFrom);
         const supportedEndIsSet = item.supportedTo !== null && item.supportedTo !== "";
-        const supportedEndCalc = !supportedEndIsSet ? inUseEndCalc : new Date(item.supportedTo);
+        const supportedEndCalc = !supportedEndIsSet ? (inUseEndIsSet ? inUseEndCalc : dateUtils.addMonths(supportedStart, 12)) : new Date(item.supportedTo);
 
         const monthsSupportedFromStart = dateUtils.numberOfMonths(minDate, supportedStart) - 1;
         const monthsSupported = dateUtils.numberOfMonths(supportedStart, supportedEndCalc);
@@ -51,7 +51,7 @@ export class ItemBar extends HTMLElement {
             ["item-supported", (supportedEndIsSet ? "" : "item-supported-noEnd"), ((!displayInUseBar && supportedEndIsSet) ? "item-no-inuse" : "")]
         );
 
-        // Create item supported bar
+        // Create item supported extended bar
         const itemSupportExtendedRect = svgUtils.createSvgRect(
             this.#monthWidth * monthsSupportExtendedFromStart,
             y,
@@ -78,6 +78,7 @@ export class ItemBar extends HTMLElement {
                 ? true : false;
         }
 
+        // Create item inuse but supported bar
         const itemInUseUnsupportedRect = !isInUseAndOutOfSupport() ? svgUtils.createSvgElement("g") : svgUtils.createSvgRect(
             this.#monthWidth * (monthsSupportedFromStart + monthsSupported + monthsSupportExtended),
             y + 1,
