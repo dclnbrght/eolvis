@@ -395,7 +395,7 @@ class ItemDetailsForm extends HTMLElement {
 
             switch (event.target.type) {
                 case 'date':
-                    this.#curItem[event.target.name] = event.target.value;
+                    this.#curItem[event.target.name] = event.target.value === '' ? null : event.target.value;
                     break;
                 case 'checkbox':
                     this.#curItem[event.target.name] = event.target.checked;
