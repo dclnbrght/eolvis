@@ -27,7 +27,7 @@ class IconButton extends HTMLElement {
             </style>
             <button>
                 <svg width="20" height="20" viewBox="0 0 20 20">
-                    <g fill="none" stroke="${this.strokeColour}" stroke-width="${this.strokeWidth}">
+                    <g fill="${this.fill}" stroke="${this.strokeColour}" stroke-width="${this.strokeWidth}">
                         <path d="${this.iconPath}" />
                     </g>
                 </svg>
@@ -40,6 +40,9 @@ class IconButton extends HTMLElement {
 
     get iconPath() {
         return this.getAttribute('icon-svg-path') || '';
+    }
+    get fill() {
+        return this.getAttribute('fill') || 'none';
     }
     get strokeWidth() {
         return this.getAttribute('stroke-width') || '2';

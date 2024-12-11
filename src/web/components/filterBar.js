@@ -20,7 +20,7 @@ template.innerHTML = `
         <div id="periodFilter-container" class="filter-container">
             <select id="periodFilter" multiple></select>
         </div>
-        <div id="inUseDisplayToggle-container" class="filter-container">            
+        <div id="inUseDisplayToggle-container" class="filter-container">
             <toggle-switch id="displayInUseToggle" checked left-value="Display In Use:" class="hidden"></toggle-switch>
         </div>
     </section>
@@ -72,7 +72,7 @@ export class FilterBar extends HTMLElement {
     #changeEventFunc = (e, searchCallback) => {
         if (this.#isUpdating) {
             e.preventDefault();
-            e.stopPropagation();            
+            e.stopPropagation();
         } else {
             this.#isUpdating = true;
             setTimeout(() => {
@@ -228,7 +228,7 @@ export class FilterBar extends HTMLElement {
         const filterValues = this.selectedFilterValues();
         this.#setupTypeNameFilter(data, this.#typeNameFilter, filterValues.selectedNames);
         this.#setupPeriodFilter(this.#periodFilter, filterValues.selectedPeriods);
-        this.#displayInUseToggle.checked = filterValues.displayInUseBar;        
+        this.#displayInUseToggle.checked = filterValues.displayInUseBar;
         this.#setupEventHandlers(searchCallback);
     };
 

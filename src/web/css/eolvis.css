@@ -24,7 +24,7 @@ header {
 #title {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis ;
+    text-overflow: ellipsis;
 }
 #header-logo {
     width: 1.6em;
