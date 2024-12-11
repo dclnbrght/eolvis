@@ -108,14 +108,14 @@ const renderItemTable = (items) => {
             <td>${settings.types[item.type]}</td>
             <td>${typeof(item.license) === "undefined" || item.license == "" ? "" : "&check;"}</td>
             <td>${typeof(item.cpe) === "undefined" || item.cpe == "" ? "" : "&check;"}</td>
-            <td>${item.supportedFrom}</td>
-            <td>${item.supportedTo}</td>
-            <td>${item.supportedToExtended}</td>
+            <td>${item.supportedFrom === null ? "" : item.supportedFrom}</td>
+            <td>${item.supportedTo === null ? "" : item.supportedTo}</td>
+            <td>${item.supportedToExtended === null ? "" : item.supportedToExtended}</td>
             <td>${item.link.length > 0 ? '<a href="' + item.link + '" target="_blank" style="text-decoration:none;">&#128279;</a>' : ''}</td>
             <td>${item.latestPatch}</td>
-            <td>${item.latestPatchReleased}</td>
-            <td>${item.useFrom}</td>
-            <td>${item.useTo}</td>
+            <td>${item.latestPatchReleased === null ? "" : item.latestPatchReleased}</td>
+            <td>${item.useFrom === null ? "" : item.useFrom}</td>
+            <td>${item.useTo === null ? "" : item.useTo}</td>
             <td>${new Date(item.updated).toISOString().split('T')[0]}</td>
             <td><button type="button" class="table-button">Edit</button></td>
         `;
