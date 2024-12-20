@@ -54,7 +54,6 @@ const dataLoaded = () => {
     } catch (error) {
         const msg = `Error loading data \r\n\r\n${error}`;
         console.error(msg);
-        alert(msg);
     }
 };
 
@@ -98,23 +97,29 @@ const positionTimeline = (timeline, relativeToElement) => {
         timeline.removeAttribute("transform");
 }
 
-document.getElementById("icon-button-information").addEventListener("click", (e) => {
-    informationDialogComponent.showModal();
-});
-document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
-    itemDetailsFormComponent.showModalNew();
-});
-document.getElementById("icon-button-download").addEventListener("click", (e) => {
-    downloadDialogComponent.showModal();
-});
+const setupWindowEventHandlers = () => {
+    window.onload = () => {
+        setupUser(userLoaded);
+    };
+    window.onscroll = () => {
+        positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));
+    };
+    window.ontouchmove = () => {
+        positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));
+    };
+};
 
+const setupDocumentEventListeners = () => {
+    document.getElementById("icon-button-information").addEventListener("click", (e) => {
+        informationDialogComponent.showModal();
+    });
+    document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
+        itemDetailsFormComponent.showModalNew();
+    });
+    document.getElementById("icon-button-download").addEventListener("click", (e) => {
+        downloadDialogComponent.showModal();
+    });
+};
 
-window.onload = () => {
-    setupUser(userLoaded);
-};
-window.onscroll = () => {
-    positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));
-};
-window.ontouchmove = () => {
-    positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));
-};
+setupWindowEventHandlers();
+setupDocumentEventListeners();

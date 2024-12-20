@@ -57,7 +57,7 @@ export class FilterBar extends HTMLElement {
         const tailLib = document.createElement('script');
         tailLib.type = 'text/javascript';
         tailLib.async = true;
-        tailLib.setAttribute("src", "./libs/tail.select-full.min.js");
+        tailLib.setAttribute("src", "./libs/tail.select.min.js");
         this.appendChild(tailLib);
 
         this.#typeNameFilter = this.querySelector('#typeNameFilter');
