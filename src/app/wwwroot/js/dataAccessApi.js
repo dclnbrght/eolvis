@@ -5,7 +5,7 @@ const projectStateStorageKey = "eolvisProjectState";
 const componentsStateStorageKey = "eolvisComponentState";
 
 const requestUserProfile = (callback) => {
-    fetch(`${settings.dataPath}/user/profile`)
+    fetch(`api/user/profile`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -48,7 +48,7 @@ const getUserProfileState = () => {
 
 
 const requestDataFromServer = (callback) => {
-    fetch(`${settings.dataPath}/projects/${settings.defaultProject}`)
+    fetch(`api/projects/${settings.defaultProject}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
@@ -59,7 +59,7 @@ const requestDataFromServer = (callback) => {
             saveProjectState(data);
         })
         .then(() => {
-            fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components`)
+            fetch(`api/projects/${settings.defaultProject}/components`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(response.statusText);
@@ -133,7 +133,7 @@ const getComponentState = () => {
 }
 
 const addItem = (item, callback) => {
-    fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components`, 
+    fetch(`api/projects/${settings.defaultProject}/components`, 
         { method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -157,7 +157,7 @@ const addItem = (item, callback) => {
 }
 
 const updateItem = (item, callback) => {
-    fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components/${item.id}`, 
+    fetch(`api/projects/${settings.defaultProject}/components/${item.id}`, 
         { method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -181,7 +181,7 @@ const updateItem = (item, callback) => {
 }
 
 const deleteItem = (id, callback) => {
-    fetch(`${settings.dataPath}/projects/${settings.defaultProject}/components/${id}`, 
+    fetch(`api/projects/${settings.defaultProject}/components/${id}`, 
         { method: 'DELETE' }
     )
         .then(response => {

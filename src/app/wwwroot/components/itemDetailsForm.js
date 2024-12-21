@@ -8,8 +8,6 @@ const template = document.createElement('template');
 template.innerHTML = `
     <dialog id="dialog-details">
         <h3 id="dialog-title">Details</h3>
-
-        <p id="dialog-details-message" class="hidden" style="color: darkred; max-width: 26rem; font-size: 90%;">*** Details are only saved to browser session storage for now. The updated file can be downloaded from the export options menu ***</p>
         
         <form id="formDetails" method="post" data-form-sync>
             <fieldset id="formDetails-fieldset" class="form-fieldset">
@@ -106,7 +104,6 @@ class ItemDetailsForm extends HTMLElement {
 
     static dialog = null;
     #dialogTitle = null;
-    #dialogDetailsMessage = null;
     #errorBox = null;
     #form = null;
     #fieldSet = null;
@@ -131,7 +128,6 @@ class ItemDetailsForm extends HTMLElement {
 
         this.dialog = shadow.querySelector('#dialog-details');
         this.#dialogTitle = shadow.querySelector('#dialog-title');
-        this.#dialogDetailsMessage = shadow.querySelector('#dialog-details-message');
         this.#errorBox = shadow.querySelector('#dialog-form-error');
         this.#form = shadow.querySelector('#formDetails');
         this.#fieldSet = shadow.querySelector('#formDetails-fieldset');
@@ -147,14 +143,11 @@ class ItemDetailsForm extends HTMLElement {
             this.#fieldSet.disabled = false;
             this.#saveButton.classList.remove("hidden");
             this.#cancelButton.classList.add("dialog-button-secondary");
-            if (settings.displayFormInfoMessage)
-                this.#dialogDetailsMessage.classList.remove("hidden");
         } else {
             this.#fieldSet.disabled = true;
             this.#saveButton.classList.add("hidden");
             this.#cancelButton.textContent = "Close";
             this.#cancelButton.classList.remove("dialog-button-secondary");
-            this.#dialogDetailsMessage.classList.add("hidden");
         }
         
         if (userProfile.permissions.includes("delete")) {
