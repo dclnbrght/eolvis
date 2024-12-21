@@ -1,4 +1,4 @@
-import { ItemBar } from '../src/web/components/itemBar.js';
+import { ItemBar } from '../src/app/wwwroot/components/itemBar.js';
 
 describe("itemBar", function () {
 

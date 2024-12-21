@@ -1,4 +1,4 @@
-import { search } from '../src/web/js/dataSearch.js';
+import { search } from '../src/app/wwwroot/js/dataSearch.js';
 
 describe("dataSearch", function () {
     describe("search", function () {

@@ -1,4 +1,4 @@
-import { numberOfMonths, addMonths } from '../src/web/js/dateUtils.js';
+import { numberOfMonths, addMonths } from '../src/app/wwwroot/js/dateUtils.js';
 
 describe("dateUtils", function () {
 

@@ -1,4 +1,4 @@
-import { createSvgElement, createSvgRect, createSvgText } from '../src/web/js/svgUtils.js';
+import { createSvgElement, createSvgRect, createSvgText } from '../src/app/wwwroot/js/svgUtils.js';
 
 describe("svgUtils", function () {
 

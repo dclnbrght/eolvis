@@ -1,11 +1,12 @@
-import * as filterBar from '../src/web/components/filterBar.js';
+import { FilterBar } from '../src/app/wwwroot/components/filterBar.js';
+import * as tail from '../src/app/wwwroot/libs/tail.select.min.js';
 
 describe("filterBar", function () {
 
   let mockFilterBar = null;
 
   beforeEach(function () {
-    mockFilterBar = document.createElement('filter-bar');
+    mockFilterBar = new FilterBar();
     mockFilterBar.id = "filter-bar";
   });
 

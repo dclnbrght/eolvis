@@ -1,4 +1,4 @@
-import * as itemDetailsForm from '../src/web/components/itemDetailsForm.js';
+import * as itemDetailsForm from '../src/app/wwwroot/components/itemDetailsForm.js';
 
 describe("dataUpdate", function () {
     describe("validateItem", function () {
