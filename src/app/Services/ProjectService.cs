@@ -74,7 +74,7 @@ namespace Eolvis.App.Services
 
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
             var tenantKey = _configuration.GetValue<string>("tenantKey");
-            var filterExpression = $"PartitionKey eq '{tenantKey}'";
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {tenantKey}");
 
             Pageable<Project> queryResultsFilter = tableClient.Query<Project>(filter: filterExpression);
 
@@ -93,7 +93,7 @@ namespace Eolvis.App.Services
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
 
             var tenantKey = _configuration.GetValue<string>("tenantKey");
-            var filterExpression = $"PartitionKey eq '{tenantKey}' and RowKey eq '{projectKey}'";
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {tenantKey} and RowKey eq {projectKey}");
 
             var project = tableClient.Query<Project>(filter: filterExpression).FirstOrDefault();
 

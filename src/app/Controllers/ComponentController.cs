@@ -5,20 +5,24 @@ using System.Threading.Tasks;
 using Eolvis.App.Models;
 using Eolvis.App.Services;
 using Eolvis.App.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eolvis.App.Controllers;
 
+[Authorize]
 [Route("api/projects/{projectKey}/components")]
 [ApiController]
 public class ComponentController : ControllerBase
 {
     private readonly IComponentService _componentService;
+    private readonly ILogger<ComponentController> _logger;
 
-    public ComponentController(IComponentService componentService)
+    public ComponentController(IComponentService componentService, ILogger<ComponentController> logger)
     {
         _componentService = componentService;
+        _logger = logger;
     }
 
     [HttpGet("")]
@@ -69,11 +73,17 @@ public class ComponentController : ControllerBase
         }
         catch (UnauthorizedAccessException uaex) 
         {
-            return Unauthorized(uaex.Message);
+            _logger.LogWarning(uaex, "Unauthorized attempt to create components by {User}", getUsername());
+            return Unauthorized(ErrorResponse.Unauthorized(uaex.Message, HttpContext.TraceIdentifier));
+        }
+        catch (ArgumentException aex)
+        {
+            return BadRequest(ErrorResponse.BadRequest(aex.Message, HttpContext.TraceIdentifier));
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            _logger.LogError(ex, "Error creating components for project {ProjectKey}", projectKey);
+            return StatusCode(500, ErrorResponse.InternalError(HttpContext.TraceIdentifier));
         }
     }
 
@@ -93,11 +103,17 @@ public class ComponentController : ControllerBase
         }
         catch (UnauthorizedAccessException uaex) 
         {
-            return Unauthorized(uaex.Message);
+            _logger.LogWarning(uaex, "Unauthorized attempt to update component {ComponentId} by {User}", componentId, getUsername());
+            return Unauthorized(ErrorResponse.Unauthorized(uaex.Message, HttpContext.TraceIdentifier));
+        }
+        catch (ArgumentException aex)
+        {
+            return BadRequest(ErrorResponse.BadRequest(aex.Message, HttpContext.TraceIdentifier));
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            _logger.LogError(ex, "Error updating component {ComponentId} in project {ProjectKey}", componentId, projectKey);
+            return StatusCode(500, ErrorResponse.InternalError(HttpContext.TraceIdentifier));
         }
     }
 
@@ -112,11 +128,17 @@ public class ComponentController : ControllerBase
         }
         catch (UnauthorizedAccessException uaex) 
         {
-            return Unauthorized(uaex.Message);
+            _logger.LogWarning(uaex, "Unauthorized attempt to delete component {ComponentId} by {User}", componentId, getUsername());
+            return Unauthorized(ErrorResponse.Unauthorized(uaex.Message, HttpContext.TraceIdentifier));
+        }
+        catch (ArgumentException aex)
+        {
+            return BadRequest(ErrorResponse.BadRequest(aex.Message, HttpContext.TraceIdentifier));
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            _logger.LogError(ex, "Error deleting component {ComponentId} in project {ProjectKey}", componentId, projectKey);
+            return StatusCode(500, ErrorResponse.InternalError(HttpContext.TraceIdentifier));
         }
     }
 

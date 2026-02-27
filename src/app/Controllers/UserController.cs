@@ -7,11 +7,13 @@ using System.Web;
 using Eolvis.App.Models;
 using Eolvis.App.Services;
 using Eolvis.App.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eolvis.App.Controllers;
 
+[Authorize]
 [Route("api/user")]
 [ApiController]
 public class UserController : ControllerBase

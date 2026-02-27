@@ -273,8 +273,6 @@ class ItemDetailsForm extends HTMLElement {
         }
 
         this.dialog.close();
-
-        callback();
     }
 
     #deleteItem = (callback) => {
@@ -285,8 +283,6 @@ class ItemDetailsForm extends HTMLElement {
         dataAccess.deleteItem(this.#curItem.id, callback);
         
         this.dialog.close();
-
-        callback();
     }
 
     #setupEventHandlers = (callback) => {

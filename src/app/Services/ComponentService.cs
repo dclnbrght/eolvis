@@ -62,9 +62,9 @@ namespace Eolvis.App.Services
             }
         }
 
-        private bool hasPermission(string userName, string permissionName)
+        private async Task<bool> hasPermission(string userName, string permissionName)
         {
-            var userProfile = _userProfileService.GetUserProfile(userName).Result;
+            var userProfile = await _userProfileService.GetUserProfile(userName);
 
             if (userProfile != null && userProfile.Permissions != null)
             {
@@ -83,7 +83,7 @@ namespace Eolvis.App.Services
 
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
 
-            var filterExpression = $"PartitionKey eq '{projectKey}'";
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {projectKey}");
 
             Pageable<Component> queryResultsFilter = tableClient.Query<Component>(filter: filterExpression);
 
@@ -99,7 +99,7 @@ namespace Eolvis.App.Services
         {
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
 
-            var filterExpression = $"PartitionKey eq '{projectKey}' and RowKey eq '{componentId}'";
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {projectKey} and RowKey eq {componentId.ToString()}");
 
             var component = tableClient.Query<Component>(filter: filterExpression).FirstOrDefault();
 
@@ -110,7 +110,7 @@ namespace Eolvis.App.Services
         {
             var tableClient = tableServiceClient.GetTableClient(commandTableName);
 
-            var filterExpression = $"PartitionKey eq '{componentId}'";
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {componentId.ToString()}");
 
             var commands = tableClient.Query<ComponentCommand>(filter: filterExpression).ToList();
 
@@ -119,7 +119,7 @@ namespace Eolvis.App.Services
 
         public async Task InsertCommand(string projectKey, Component component, string username)
         {
-            if (hasPermission(username, "insert"))
+            if (await hasPermission(username, "insert"))
             {
                 if (component.RowKey == null || component.RowKey == string.Empty)
                     component.RowKey = Guid.NewGuid().ToString();
@@ -130,7 +130,7 @@ namespace Eolvis.App.Services
 
         public async Task UpdateCommand(string projectKey, Component component, string username)
         {
-            if (hasPermission(username, "update"))
+            if (await hasPermission(username, "update"))
             {
                 await SaveCommand(projectKey, component, "update", username);
             }
@@ -138,7 +138,7 @@ namespace Eolvis.App.Services
 
         public async Task DeleteCommand(string projectKey, Guid componentId, string username)
         {
-            if (hasPermission(username, "delete"))
+            if (await hasPermission(username, "delete"))
             {
                 var component = await GetComponentById(projectKey, componentId);
 
@@ -276,7 +276,7 @@ namespace Eolvis.App.Services
 
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
 
-            await tableClient.DeleteEntityAsync(projectKey, component.RowKey, component.ETag);
+            await tableClient.DeleteEntityAsync(projectKey, component.RowKey, ETag.All);
         }
 
     }

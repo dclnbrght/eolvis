@@ -327,7 +327,7 @@ export class ToggleSwitch extends HTMLElement {
 
     get leftValue()
     {
-        return  this._jellyLeftLabel.innerText = newValue;
+        return  this._jellyLeftLabel.innerText;
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

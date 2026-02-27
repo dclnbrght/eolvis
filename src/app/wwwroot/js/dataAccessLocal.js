@@ -163,6 +163,9 @@ const deleteItem = (id) => {
     saveComponentState(newData);
 }
 
+// No-op for local data access — auth replay not applicable.
+const replayPendingMutation = async () => ({ replayed: false });
+
 export {
     requestUserProfile,
     getUserProfileState,
@@ -170,5 +173,6 @@ export {
     getComponentState,
     addItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    replayPendingMutation
 }; 

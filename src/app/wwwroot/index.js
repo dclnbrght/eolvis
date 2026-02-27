@@ -7,6 +7,7 @@ import * as informationDialog from './components/informationDialog.js';
 import * as downloadDialog from './components/downloadDialog.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as itemBoard from './components/itemBoard.js';
+import { showToast } from './components/toastNotification.js';
 
 const dataAccess = dataAccessContext.create(settings.dataStoreType);
 
@@ -81,9 +82,9 @@ const filterSearch = () => {
         itemBoardComponent.render(settings.types, filteredItems, today, minDate, maxDate, displayInUseBar);
 
     } catch (error) {
-        const msg = `Error searching \r\n\r\n${error}`;
+        const msg = `Error searching: ${error}`;
         console.error(msg);
-        alert(msg);
+        showToast(msg, 'error');
     }
 };
 
@@ -98,8 +99,12 @@ const positionTimeline = (timeline, relativeToElement) => {
 }
 
 const setupWindowEventHandlers = () => {
-    window.onload = () => {
-        setupUser(userLoaded);
+    window.onload = async () => {
+        setupUser(async () => {
+            // Replay any pending mutation that was interrupted by session expiry
+            await dataAccess.replayPendingMutation(dataLoaded);
+            userLoaded();
+        });
     };
     window.onscroll = () => {
         positionTimeline(document.getElementById("timeline"), document.getElementById("filter-bar"));

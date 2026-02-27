@@ -73,7 +73,7 @@ namespace Eolvis.App.Services
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
 
             var tenantKey = _configuration.GetValue<string>("tenantKey");
-            var filterExpression = $"PartitionKey eq '{tenantKey}' and RowKey eq '{userName}'";
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {tenantKey} and RowKey eq {userName}");
 
             var userProfile = tableClient.Query<UserProfile>(filter: filterExpression).FirstOrDefault();
 

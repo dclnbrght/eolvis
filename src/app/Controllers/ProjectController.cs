@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Eolvis.App.Models;
 using Eolvis.App.Services;
 using Eolvis.App.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eolvis.App.Controllers;
 
+[Authorize]
 [Route("api/projects")]
 [ApiController]
 public class ProjectController : ControllerBase

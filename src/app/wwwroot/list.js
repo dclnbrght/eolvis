@@ -6,6 +6,7 @@ import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as informationDialog from './components/informationDialog.js';
 import * as downloadDialog from './components/downloadDialog.js';
 import * as dataSearch from './js/dataSearch.js';
+import { showToast } from './components/toastNotification.js';
 
 const dataAccess = dataAccessContext.create(settings.dataStoreType);
 
@@ -50,9 +51,9 @@ const dataLoaded = () => {
 
         filterSearch();
     } catch (error) {
-        const msg = `Error loading data \r\n\r\n${error}`;
+        const msg = `Error loading data: ${error}`;
         console.error(msg);
-        alert(msg);
+        showToast(msg, 'error');
     }
 };
 
@@ -82,10 +83,17 @@ const filterSearch = () => {
         renderItemTable(sortedItems);
 
     } catch (error) {
-        const msg = `Error searching \r\n\r\n${error}`;
+        const msg = `Error searching: ${error}`;
         console.error(msg);
-        alert(msg);
+        showToast(msg, 'error');
     }
+};
+
+const escapeHtml = (text) => {
+    if (text === null || text === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = String(text);
+    return div.innerHTML;
 };
 
 const renderItemTable = (items) => {
@@ -101,29 +109,70 @@ const renderItemTable = (items) => {
         }
 
         const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.version}</td>
-            <td>${item.lts ? "&check;" : ""}</td>
-            <td>${settings.types[item.type]}</td>
-            <td>${typeof(item.license) === "undefined" || item.license == "" ? "" : "&check;"}</td>
-            <td>${typeof(item.cpe) === "undefined" || item.cpe == "" ? "" : "&check;"}</td>
-            <td>${item.supportedFrom === null ? "" : item.supportedFrom}</td>
-            <td>${item.supportedTo === null ? "" : item.supportedTo}</td>
-            <td>${item.supportedToExtended === null ? "" : item.supportedToExtended}</td>
-            <td>${item.link.length > 0 ? '<a href="' + item.link + '" target="_blank" style="text-decoration:none;">&#128279;</a>' : ''}</td>
-            <td>${item.latestPatch}</td>
-            <td>${item.latestPatchReleased === null ? "" : item.latestPatchReleased}</td>
-            <td>${item.useFrom === null ? "" : item.useFrom}</td>
-            <td>${item.useTo === null ? "" : item.useTo}</td>
-            <td>${new Date(item.updated).toISOString().split('T')[0]}</td>
-            <td><button type="button" class="table-button">Edit</button></td>
-        `;
 
-        const buttonEdit = row.getElementsByTagName("button")[0];
+        const createTextCell = (text) => {
+            const td = document.createElement("td");
+            td.textContent = text ?? '';
+            return td;
+        };
+
+        const createCheckCell = (condition) => {
+            const td = document.createElement("td");
+            if (condition) td.innerHTML = "&check;";
+            return td;
+        };
+
+        const createDateCell = (dateValue) => {
+            const td = document.createElement("td");
+            td.textContent = dateValue === null ? "" : dateValue;
+            return td;
+        };
+
+        row.appendChild(createTextCell(item.name));
+        row.appendChild(createTextCell(item.version));
+        row.appendChild(createCheckCell(item.lts));
+        row.appendChild(createTextCell(settings.types[item.type]));
+        row.appendChild(createCheckCell(typeof(item.license) !== "undefined" && item.license !== ""));
+        row.appendChild(createCheckCell(typeof(item.cpe) !== "undefined" && item.cpe !== ""));
+        row.appendChild(createDateCell(item.supportedFrom));
+        row.appendChild(createDateCell(item.supportedTo));
+        row.appendChild(createDateCell(item.supportedToExtended));
+
+        // Link cell — validate URL scheme
+        const linkTd = document.createElement("td");
+        if (item.link && item.link.length > 0) {
+            try {
+                const url = new URL(item.link);
+                if (url.protocol === "http:" || url.protocol === "https:") {
+                    const anchor = document.createElement("a");
+                    anchor.href = url.href;
+                    anchor.target = "_blank";
+                    anchor.style.textDecoration = "none";
+                    anchor.innerHTML = "&#128279;";
+                    linkTd.appendChild(anchor);
+                }
+            } catch (e) {
+                // invalid URL — render nothing
+            }
+        }
+        row.appendChild(linkTd);
+
+        row.appendChild(createTextCell(item.latestPatch));
+        row.appendChild(createDateCell(item.latestPatchReleased));
+        row.appendChild(createDateCell(item.useFrom));
+        row.appendChild(createDateCell(item.useTo));
+        row.appendChild(createTextCell(new Date(item.updated).toISOString().split('T')[0]));
+
+        const editTd = document.createElement("td");
+        const buttonEdit = document.createElement("button");
+        buttonEdit.type = "button";
+        buttonEdit.className = "table-button";
+        buttonEdit.textContent = "Edit";
         buttonEdit.addEventListener("click", (e) => {
             itemDetailsFormComponent.showModal(item);
         });
+        editTd.appendChild(buttonEdit);
+        row.appendChild(editTd);
 
         itemTableBody.appendChild(row);
     });
@@ -139,6 +188,10 @@ document.getElementById("icon-button-download").addEventListener("click", (e) =>
     downloadDialogComponent.showModal();
 });
 
-window.onload = () => {
-    setupUser(userLoaded);
+window.onload = async () => {
+    setupUser(async () => {
+        // Replay any pending mutation that was interrupted by session expiry
+        await dataAccess.replayPendingMutation(dataLoaded);
+        userLoaded();
+    });
 };
