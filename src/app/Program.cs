@@ -1,13 +1,22 @@
 using Eolvis.App.Services;
 using Eolvis.App.Services.Interfaces;
-using Microsoft.Extensions.Logging;
+using Eolvis.App.Mcp;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ── Configuration ──────────────────────────────────────────────────────────────
+builder.Configuration.AddEnvironmentVariables("EOLVIS_");
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddAzureWebAppDiagnostics();
+
+// ── Services ───────────────────────────────────────────────────────────────────
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,64 +24,74 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IUserProfileService, UserProfileService>();
 builder.Services.AddSingleton<IProjectService, ProjectService>();
 builder.Services.AddSingleton<IComponentService, ComponentService>();
+builder.Services.AddHttpContextAccessor();
 
-// Only register OIDC auth when AzureAD is configured (i.e. not local dev with placeholder values).
-var tenantId = builder.Configuration.GetValue<string>("AzureAD:TenantId");
-var isAuthConfigured = !string.IsNullOrWhiteSpace(tenantId)
-    && !tenantId.Contains("Enter_the_", StringComparison.OrdinalIgnoreCase);
+builder.Services
+    .AddMcpServer()
+    .WithHttpTransport()
+    .WithTools<ComponentSearchTool>();
+
+// ── Authentication ─────────────────────────────────────────────────────────────
+// In Azure App Service, Easy Auth stores the client secret in an env var.
+// Use it as a fallback when appsettings has a placeholder.
+var clientSecret = builder.Configuration["AzureAD:ClientSecret"];
+var easyAuthSecret = Environment.GetEnvironmentVariable("MICROSOFT_PROVIDER_AUTHENTICATION_SECRET");
+var isPlaceholder = string.IsNullOrWhiteSpace(clientSecret) || clientSecret.Contains("Enter_the_");
+
+if (isPlaceholder && !string.IsNullOrWhiteSpace(easyAuthSecret))
+    builder.Configuration["AzureAD:ClientSecret"] = easyAuthSecret;
+
+var isAuthConfigured = !string.IsNullOrWhiteSpace(builder.Configuration["AzureAD:TenantId"])
+    && !string.IsNullOrWhiteSpace(builder.Configuration["AzureAD:ClientSecret"])
+    && !builder.Configuration["AzureAD:ClientSecret"]!.Contains("Enter_the_");
 
 if (isAuthConfigured)
 {
     builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAD"));
+        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAD"));
 
-    // Return 401 for API requests instead of redirecting to the login page.
-    // This allows the frontend fetch() calls to detect expired sessions
-    // and redirect to the auth endpoint explicitly.
+    builder.Services.AddAuthentication()
+        .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAD"));
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("McpAccess", policy =>
+            policy.RequireAuthenticatedUser()
+                  .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+    });
+
+    // Return 401 for API/MCP requests instead of redirecting to the login page.
     builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
-        var existingRedirectHandler = options.Events?.OnRedirectToIdentityProvider;
         options.Events ??= new OpenIdConnectEvents();
-        options.Events.OnRedirectToIdentityProvider = async context =>
+        options.Events.OnRedirectToIdentityProvider = context =>
         {
-            if (context.Request.Path.StartsWithSegments("/api"))
+            if (context.Request.Path.StartsWithSegments("/api") ||
+                context.Request.Path.StartsWithSegments("/mcp"))
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 context.HandleResponse();
-                return;
             }
-
-            if (existingRedirectHandler != null)
-            {
-                await existingRedirectHandler(context);
-            }
+            return Task.CompletedTask;
         };
     });
 }
 else
 {
-    // No-op auth for local development: allow all requests through [Authorize] attributes.
     builder.Services.AddAuthorization(options =>
     {
-        options.DefaultPolicy = new AuthorizationPolicyBuilder()
-            .RequireAssertion(_ => true)
-            .Build();
+        var allowAll = new AuthorizationPolicyBuilder().RequireAssertion(_ => true).Build();
+        options.DefaultPolicy = allowAll;
+        options.AddPolicy("McpAccess", allowAll);
     });
-    Console.WriteLine("WARNING: AzureAD TenantId is not configured. Running without authentication. Do NOT use this in production.");
+    Console.WriteLine("WARNING: AzureAD not configured. Running without authentication.");
 }
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
- if (builder.Environment.IsDevelopment())
-{
-        builder.Configuration.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
-}
-builder.Configuration.AddEnvironmentVariables("EOLVIS_");
-
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddAzureWebAppDiagnostics();
-
+// ── Middleware pipeline ────────────────────────────────────────────────────────
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+    app.UseDeveloperExceptionPage();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -81,51 +100,59 @@ if (isAuthConfigured)
 {
     app.UseAuthentication();
 
-    // Require authentication for page requests (/, *.html) before serving static files.
-    // This triggers the OIDC login flow on the very first visit, so users never see
-    // the app shell without a valid session.
+    // MCP: return 401 + WWW-Authenticate with resource metadata for unauthenticated requests.
+    app.Use(async (context, next) =>
+    {
+        if (context.Request.Path.StartsWithSegments("/mcp"))
+        {
+            var auth = context.Request.Headers.Authorization.ToString();
+            if (string.IsNullOrEmpty(auth) || !auth.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
+                context.Response.StatusCode = 401;
+                context.Response.Headers["WWW-Authenticate"] =
+                    $"Bearer resource_metadata=\"{baseUrl}/.well-known/oauth-protected-resource/mcp\"";
+                return;
+            }
+        }
+        await next();
+    });
+
+    // Require login for page requests before static files are served.
     app.Use(async (context, next) =>
     {
         var path = context.Request.Path.Value ?? "";
-        var isPageRequest = path == "/" || path.EndsWith(".html", StringComparison.OrdinalIgnoreCase);
-
-        if (isPageRequest && !(context.User.Identity?.IsAuthenticated ?? false))
+        if ((path == "/" || path.EndsWith(".html", StringComparison.OrdinalIgnoreCase))
+            && !(context.User.Identity?.IsAuthenticated ?? false))
         {
             await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme);
             return;
         }
-
         await next();
     });
 }
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
 app.UseAuthorization();
 
-// CSRF protection: require X-Requested-With header on mutating API requests.
-// Browsers enforce a CORS preflight for custom headers, so cross-origin POST/PUT/DELETE
-// requests from malicious sites will be blocked. Same-origin SPA requests include the
-// header via fetchWithAuth. SameSite=Lax on auth cookies provides defence-in-depth.
+// CSRF: require X-Requested-With header on mutating API requests.
 app.Use(async (context, next) =>
 {
     var method = context.Request.Method;
-    var isMutating = method == "POST" || method == "PUT" || method == "DELETE" || method == "PATCH";
-
-    if (isMutating && context.Request.Path.StartsWithSegments("/api"))
+    if ((method is "POST" or "PUT" or "DELETE" or "PATCH")
+        && context.Request.Path.StartsWithSegments("/api")
+        && !context.Request.Headers.ContainsKey("X-Requested-With"))
     {
-        if (!context.Request.Headers.ContainsKey("X-Requested-With"))
-        {
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-            await context.Response.WriteAsync("Forbidden: missing required request header.");
-            return;
-        }
+        context.Response.StatusCode = 403;
+        await context.Response.WriteAsync("Forbidden: missing required request header.");
+        return;
     }
-
     await next();
 });
 
 app.MapControllers();
+app.MapOAuthProxyEndpoints();
+app.MapMcp("/mcp").RequireAuthorization("McpAccess");
 
 app.Run();
