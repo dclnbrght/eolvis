@@ -33,6 +33,28 @@ public class ComponentController : ControllerBase
         return Ok(components);
     }
 
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<Component>>> SearchComponents(string projectKey, [FromQuery] string name, [FromQuery] string? version = null)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return BadRequest(ErrorResponse.BadRequest("The 'name' query parameter is required.", HttpContext.TraceIdentifier));
+        }
+
+        List<Component> components;
+
+        if (!string.IsNullOrWhiteSpace(version))
+        {
+            components = await _componentService.SearchComponentsByNameAndVersion(projectKey, name, version);
+        }
+        else
+        {
+            components = await _componentService.SearchComponentsByName(projectKey, name);
+        }
+
+        return Ok(components);
+    }
+
     [HttpGet("{componentId}")]
     public async Task<ActionResult<Component>> GetComponentById(string projectKey, Guid componentId)
     {

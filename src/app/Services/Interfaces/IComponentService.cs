@@ -8,6 +8,10 @@ public interface IComponentService
 {
     Task<List<Component>> GetAllComponents(string projectKey);
 
+    Task<List<Component>> SearchComponentsByName(string projectKey, string name);
+
+    Task<List<Component>> SearchComponentsByNameAndVersion(string projectKey, string name, string version);
+
     Task<Component?> GetComponentById(string projectKey, Guid componentId);
 
     Task<List<ComponentCommand>> GetComponentCommandsById(string projectKey, Guid componentId);

@@ -95,6 +95,38 @@ namespace Eolvis.App.Services
             return await Task.FromResult(components);
         }
 
+        public async Task<List<Component>> SearchComponentsByName(string projectKey, string name)
+        {
+            var tableClient = tableServiceClient.GetTableClient(itemTableName);
+
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {projectKey}");
+
+            var allComponents = tableClient.Query<Component>(filter: filterExpression);
+
+            // Azure Table Storage has no "contains" operator, so filter in memory.
+            var matched = allComponents
+                .Where(c => c.Name != null && c.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return await Task.FromResult(matched);
+        }
+
+        public async Task<List<Component>> SearchComponentsByNameAndVersion(string projectKey, string name, string version)
+        {
+            var tableClient = tableServiceClient.GetTableClient(itemTableName);
+
+            string filterExpression = TableClient.CreateQueryFilter($"PartitionKey eq {projectKey}");
+
+            var allComponents = tableClient.Query<Component>(filter: filterExpression);
+
+            var matched = allComponents
+                .Where(c => c.Name != null && c.Name.Contains(name, StringComparison.OrdinalIgnoreCase)
+                          && c.Version != null && c.Version.Contains(version, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return await Task.FromResult(matched);
+        }
+
         public Task<Component?> GetComponentById(string projectKey, Guid componentId)
         {
             var tableClient = tableServiceClient.GetTableClient(itemTableName);
