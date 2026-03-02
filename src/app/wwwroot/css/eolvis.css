@@ -163,6 +163,7 @@ dialog[open]::backdrop {
     padding: 0 0.2em 0.08em 0.2em;
     background-color: #efefef;
     line-height: 1.2em;
+    border-radius: 24%;
 }
 
 .form-fieldset {
