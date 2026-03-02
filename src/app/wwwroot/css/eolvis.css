@@ -187,7 +187,8 @@ dialog[open]::backdrop {
     min-width: 18em;
     min-height: 6em;
 }
-.form-item #item-link-anchor {
+.form-item #item-link-anchor,
+.form-item #item-useWorkItemLink-anchor {
     text-decoration: none;
 }
 #item-updated-wrapper,

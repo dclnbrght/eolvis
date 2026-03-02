@@ -65,6 +65,11 @@ template.innerHTML = `
                 </div>
                 <hr>
                 <div class="form-item">
+                    <label for="item-useWorkItemLink">Work Item URL:</label>
+                    <input type="text" id="item-useWorkItemLink" name="useWorkItemLink">
+                    <a id="item-useWorkItemLink-anchor" href="" target="_blank" class="hidden">&#128279;</a>
+                </div>
+                <div class="form-item">
                     <label for="item-useFrom">Use From:</label>
                     <input type="date" id="item-useFrom" name="useFrom">
                 </div>
@@ -235,6 +240,9 @@ class ItemDetailsForm extends HTMLElement {
         if (item.latestPatch !== "" && item.latestPatch.length > 50)
             return { isValid, msg: "Latest Patch must be less than 50 characters" };
 
+        if (item.useWorkItemLink !== "" && item.useWorkItemLink.length > 500)
+            return { isValid, msg: "Work Item Link must be less than 500 characters" };
+
         if (item.useFrom !== "" && item.useFrom !== null
             && item.useTo !== "" && item.useTo !== null
             && new Date(item.useFrom) >= new Date(item.useTo))
@@ -287,12 +295,15 @@ class ItemDetailsForm extends HTMLElement {
 
     #setupEventHandlers = (callback) => {
         this.#saveButton.addEventListener("click", (e) => {
+            e.preventDefault();
             this.#updateItem(callback);
         })
         this.#deleteButton.addEventListener("click", (e) => {
+            e.preventDefault();
             this.#deleteItem(callback);
         });
         this.#cancelButton.addEventListener("click", (e) => {
+            e.preventDefault();
             this.#cancelUpdateItem(callback);
         });
     };
@@ -323,6 +334,7 @@ class ItemDetailsForm extends HTMLElement {
                 "link": "",
                 "latestPatch": "",
                 "latestPatchReleased": null,
+                "useWorkItemLink": "",
                 "useFrom": null,
                 "useTo": null,
                 "notes": "",
@@ -360,13 +372,21 @@ class ItemDetailsForm extends HTMLElement {
             }
         });
 
-        // Setup link
+        // Setup links
         const anchorLink = this.#fieldSet.querySelector('#item-link-anchor');
         if (item['link'] && item['link'].length > 0) {
             anchorLink.classList.remove('hidden');
             anchorLink.href = item['link'];
         } else {
             anchorLink.classList.add('hidden');
+        }
+
+        const anchorWorkItemLink = this.#fieldSet.querySelector('#item-useWorkItemLink-anchor');
+        if (item['useWorkItemLink'] && item['useWorkItemLink'].length > 0) {
+            anchorWorkItemLink.classList.remove('hidden');
+            anchorWorkItemLink.href = item['useWorkItemLink'];
+        } else {
+            anchorWorkItemLink.classList.add('hidden');
         }
 
         // Setup Updated By

@@ -248,6 +248,9 @@ namespace Eolvis.App.Services
             if (!string.IsNullOrEmpty(component.LatestPatch) && component.LatestPatch.Length > 50)
                 throw new ArgumentException("Latest Patch must be less than 50 characters");
 
+            if (!string.IsNullOrEmpty(component.UseWorkItemLink) && component.UseWorkItemLink.Length > 500)
+                throw new ArgumentException("Use Work Item Link must be less than 500 characters");
+
             if (component.UseFrom != null && component.UseTo != null
                 && component.UseFrom >= component.UseTo)
                 throw new ArgumentException("The Use To date must be greater than the Use From date");

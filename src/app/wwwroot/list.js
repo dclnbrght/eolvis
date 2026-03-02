@@ -32,6 +32,7 @@ const userLoaded = () => {
         actionNew.classList.add("hidden");
     }
 
+    setupTableHeader();
     requestData(dataLoaded);
     itemDetailsFormComponent.setupDialog(dataLoaded);
 }
@@ -96,6 +97,47 @@ const escapeHtml = (text) => {
     return div.innerHTML;
 };
 
+const createLinkCell = (url) => {
+    const td = document.createElement("td");
+    if (url && url.length > 0) {
+        try {
+            const parsedUrl = new URL(url);
+            if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+                const anchor = document.createElement("a");
+                anchor.href = parsedUrl.href;
+                anchor.target = "_blank";
+                anchor.style.textDecoration = "none";
+                anchor.innerHTML = "&#128279;";
+                td.appendChild(anchor);
+            }
+        } catch (e) {
+            // invalid URL — render nothing
+        }
+    }
+    return td;
+};
+
+const setupTableHeader = () => {
+    const itemTable = document.getElementById("itemTable");
+    const thead = itemTable.getElementsByTagName("thead")[0];
+    
+    const headerRow = document.createElement("tr");
+    const headers = [
+        "Name", "Version", "LTS", "Type", "License", "CPE",
+        "Supported From", "Supported To", "Ext. Support To", "Source",
+        "Latest Patch", "Patch Released", "Work Item", "Use From", "Use To",
+        "Updated", ""
+    ];
+    
+    headers.forEach(headerText => {
+        const th = document.createElement("th");
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+    });
+    
+    thead.appendChild(headerRow);
+};
+
 const renderItemTable = (items) => {
     const itemTable = document.getElementById("itemTable");
     const itemTableBody = itemTable.getElementsByTagName("tbody")[0];
@@ -138,27 +180,13 @@ const renderItemTable = (items) => {
         row.appendChild(createDateCell(item.supportedTo));
         row.appendChild(createDateCell(item.supportedToExtended));
 
-        // Link cell — validate URL scheme
-        const linkTd = document.createElement("td");
-        if (item.link && item.link.length > 0) {
-            try {
-                const url = new URL(item.link);
-                if (url.protocol === "http:" || url.protocol === "https:") {
-                    const anchor = document.createElement("a");
-                    anchor.href = url.href;
-                    anchor.target = "_blank";
-                    anchor.style.textDecoration = "none";
-                    anchor.innerHTML = "&#128279;";
-                    linkTd.appendChild(anchor);
-                }
-            } catch (e) {
-                // invalid URL — render nothing
-            }
-        }
-        row.appendChild(linkTd);
+        row.appendChild(createLinkCell(item.link));
 
         row.appendChild(createTextCell(item.latestPatch));
         row.appendChild(createDateCell(item.latestPatchReleased));
+
+        row.appendChild(createLinkCell(item.useWorkItemLink));
+
         row.appendChild(createDateCell(item.useFrom));
         row.appendChild(createDateCell(item.useTo));
         row.appendChild(createTextCell(new Date(item.updated).toISOString().split('T')[0]));

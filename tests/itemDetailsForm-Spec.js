@@ -21,6 +21,7 @@ describe("dataUpdate", function () {
                 supportedTo: "2024-01-01",
                 link: "",
                 latestPatch: "",
+                useWorkItemLink: "",
                 useFrom: "2023-01-01",
                 useTo: "2024-01-01",
                 notes: "",
@@ -95,6 +96,7 @@ describe("dataUpdate", function () {
                 supportedTo: "2022-01-01", // Invalid date range
                 link: "",
                 latestPatch: "",
+                useWorkItemLink: "",
                 useFrom: "2023-01-01",
                 useTo: "2024-01-01",
                 notes: "",
@@ -118,6 +120,7 @@ describe("dataUpdate", function () {
                 supportedTo: "2024-01-01",
                 link: "",
                 latestPatch: "",
+                useWorkItemLink: "",
                 useFrom: "2023-01-01",
                 useTo: "2022-01-01", // Invalid date range
                 notes: "",
@@ -141,6 +144,7 @@ describe("dataUpdate", function () {
                 supportedTo: "2024-01-01",
                 link: "",
                 latestPatch: "",
+                useWorkItemLink: "",
                 useFrom: "2022-01-01", // Invalid date
                 useTo: "2024-01-01",
                 notes: "",
@@ -164,6 +168,7 @@ describe("dataUpdate", function () {
                 supportedTo: "2024-01-01",
                 link: "",
                 latestPatch: "",
+                useWorkItemLink: "",
                 useFrom: "2023-01-01",
                 useTo: "2024-01-01",
                 notes: "",

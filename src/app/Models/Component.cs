@@ -49,6 +49,8 @@ namespace Eolvis.App.Models
 
         public DateTime? LatestPatchReleased { get; set; }
 
+        public string UseWorkItemLink { get; set; } = string.Empty;
+
         public DateTime? UseFrom { get; set; }
 
         public DateTime? UseTo { get; set; }
