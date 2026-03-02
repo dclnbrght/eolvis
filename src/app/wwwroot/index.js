@@ -3,7 +3,7 @@ import * as dataAccessContext from './js/dataAccessContext.js';
 import * as dataSearch from './js/dataSearch.js';
 import * as iconButton from './components/iconButton.js';
 import * as filterBar from './components/filterBar.js';
-import * as informationDialog from './components/informationDialog.js';
+import * as aboutDialog from './components/aboutDialog.js';
 import * as downloadDialog from './components/downloadDialog.js';
 import * as itemDetailsForm from './components/itemDetailsForm.js';
 import * as itemBoard from './components/itemBoard.js';
@@ -12,7 +12,7 @@ import { showToast } from './components/toastNotification.js';
 const dataAccess = dataAccessContext.create(settings.dataStoreType);
 
 const filterBarComponent = document.getElementById("filter-bar");
-const informationDialogComponent = document.getElementById("information-dialog");
+const aboutDialogComponent = document.getElementById("about-dialog");
 const downloadDialogComponent = document.getElementById("download-dialog");
 const itemDetailsFormComponent = document.getElementById("item-details-form");
 const itemBoardComponent = document.getElementById("item-board");
@@ -116,7 +116,7 @@ const setupWindowEventHandlers = () => {
 
 const setupDocumentEventListeners = () => {
     document.getElementById("icon-button-information").addEventListener("click", (e) => {
-        informationDialogComponent.showModal();
+        aboutDialogComponent.showModal();
     });
     document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
         itemDetailsFormComponent.showModalNew();
