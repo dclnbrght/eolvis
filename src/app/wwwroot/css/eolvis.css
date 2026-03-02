@@ -64,10 +64,44 @@ H1 {
     min-width: 10em;
     max-width: 80vw;
     border-radius: 0.5em;
+    opacity: 0;
+    transform: translateY(0.4rem) scale(0.985);
+    transition:
+        opacity 300ms ease,
+        transform 300ms ease,
+        display 300ms ease allow-discrete,
+        overlay 300ms ease allow-discrete;
+}
+#dialog-information[open],
+#dialog-details[open],
+#dialog-download[open] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 dialog::backdrop {
     background: rgba(100,100,100,.5);
     backdrop-filter: blur(0.08em);
+    opacity: 0;
+    transition:
+        opacity 300ms ease,
+        display 300ms ease allow-discrete,
+        overlay 300ms ease allow-discrete;
+}
+dialog[open]::backdrop {
+    opacity: 1;
+}
+
+@starting-style {
+    #dialog-information[open],
+    #dialog-details[open],
+    #dialog-download[open] {
+        opacity: 0;
+        transform: translateY(0.4rem) scale(0.985);
+    }
+
+    dialog[open]::backdrop {
+        opacity: 0;
+    }
 }
 .dialog-form-error {
     padding: 0.75rem;
