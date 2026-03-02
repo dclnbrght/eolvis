@@ -184,6 +184,9 @@ document.getElementById("icon-button-information").addEventListener("click", (e)
 document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
     itemDetailsFormComponent.showModalNew();
 });
+document.getElementById("icon-button-view-timeline").addEventListener("click", (e) => {
+    window.location.href = "index.html";
+});
 document.getElementById("icon-button-download").addEventListener("click", (e) => {
     downloadDialogComponent.showModal();
 });

@@ -121,6 +121,9 @@ const setupDocumentEventListeners = () => {
     document.getElementById("icon-button-add-item").addEventListener("click", (e) => {
         itemDetailsFormComponent.showModalNew();
     });
+    document.getElementById("icon-button-view-list").addEventListener("click", (e) => {
+        window.location.href = "list.html";
+    });
     document.getElementById("icon-button-download").addEventListener("click", (e) => {
         downloadDialogComponent.showModal();
     });
