@@ -47,9 +47,8 @@ H1 {
     padding: 0.3em;
     white-space: nowrap;
 }
-.header-action {
-    margin: 0 0.3em;
-    display: inline-block;
+icon-button {
+    --icon-button-hover-stroke: #94efff;
 }
 
 #dialog-information,

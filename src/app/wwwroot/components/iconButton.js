@@ -24,10 +24,16 @@ class IconButton extends HTMLElement {
                     border-radius: 0;
                     cursor: pointer;
                 }
+                g {
+                    stroke: var(--icon-button-stroke, #eee);
+                }
+                button:hover g {
+                    stroke: var(--icon-button-hover-stroke, var(--icon-button-stroke, #eee));
+                }
             </style>
             <button>
                 <svg width="20" height="20" viewBox="0 0 20 20">
-                    <g fill="${this.fill}" stroke="${this.strokeColour}" stroke-width="${this.strokeWidth}">
+                    <g fill="${this.fill}" stroke-width="${this.strokeWidth}">
                         <path d="${this.iconPath}" />
                     </g>
                 </svg>
@@ -36,6 +42,7 @@ class IconButton extends HTMLElement {
 
         const shadow = this.attachShadow({ mode: 'open' });
         shadow.appendChild(template.content.cloneNode(true));
+        this.style.setProperty('--icon-button-stroke', this.strokeColour);
     }    
 
     get iconPath() {

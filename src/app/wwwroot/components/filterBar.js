@@ -1,5 +1,7 @@
 import * as settings from '../settings.js';
 import { ToggleSwitch } from './toggleSwitch.js';
+import './iconButton.js';
+import { showToast } from './toastNotification.js';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -12,6 +14,9 @@ template.innerHTML = `
             display: inline-block;
             vertical-align: top;
         }
+        .filter-button-container {
+            padding: 0.2em 0;
+        }
     </style>
     <section class="filter-bar">
         <div id="typeNameFilter-container" class="filter-container">
@@ -22,6 +27,12 @@ template.innerHTML = `
         </div>
         <div id="inUseDisplayToggle-container" class="filter-container">
             <toggle-switch id="displayInUseToggle" checked left-value="Display In Use:" class="hidden"></toggle-switch>
+        </div>
+        <div id="createFilterLink-container" class="filter-container filter-button-container">
+            <icon-button id="createFilterLink" title="Copy filtered link to clipboard"
+                icon-svg-path="M 12 6 h 2 A 3 3 0 0 1 14 16 h -2 M 8 16 H 6 A 3 3 0 0 1 6 6 h 2 M 6 11 h 8"
+                stroke-colour="#eee">
+            </icon-button>
         </div>
     </section>
 `;
@@ -38,6 +49,7 @@ export class FilterBar extends HTMLElement {
     #typeNameFilter = null;
     #periodFilter = null;
     #displayInUseToggle = null;
+    #createFilterLinkBtn = null;
     #isUpdating = false;
     #querystringParameters = null;
 
@@ -63,6 +75,7 @@ export class FilterBar extends HTMLElement {
         this.#typeNameFilter = this.querySelector('#typeNameFilter');
         this.#periodFilter = this.querySelector('#periodFilter');
         this.#displayInUseToggle = this.querySelector('#displayInUseToggle');
+        this.#createFilterLinkBtn = this.querySelector('#createFilterLink');
 
         this.#querystringParameters = new URLSearchParams(window.location.search);
     }
@@ -98,6 +111,10 @@ export class FilterBar extends HTMLElement {
 
         this.#displayInUseToggle.addEventListener("toggle", (e) => {
             this.#changeEventFunc(e, searchCallback);
+        });
+
+        this.#createFilterLinkBtn.addEventListener("click", () => {
+            this.#createFilterLink();
         });
 
         this.#initialSetupComplete = true
@@ -198,6 +215,26 @@ export class FilterBar extends HTMLElement {
         }).reload();
     }
 
+    #createFilterLink = () => {
+        const selectedNames = this.#getSelectBoxValues(this.#typeNameFilter);
+        const selectedPeriods = this.#getSelectBoxValues(this.#periodFilter);
+
+        const namesParam = selectedNames[0] === 'All'
+            ? 'All'
+            : selectedNames.map(encodeURIComponent).join(',');
+
+        const periodsParam = selectedPeriods[0] === 'All'
+            ? 'All'
+            : selectedPeriods.map(encodeURIComponent).join(',');
+
+        const baseUrl = `${window.location.origin}${window.location.pathname}`;
+        const url = `${baseUrl}?names=${namesParam}&periods=${periodsParam}`;
+
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Filter link copied to clipboard', 'success');
+        });
+    };
+
     typeNameFilterArray = (data) => {
         const componentNamesByType = {};
 
@@ -235,8 +272,10 @@ export class FilterBar extends HTMLElement {
     selectedFilterValues = () => {
         // Set values from: query string || previously selected values in localStorage || All
         if (this.#querystringParameters !== null && this.#querystringParameters?.size > 0) {
-            const querystringNames = this.#querystringParameters.get('names') ? this.#querystringParameters.get('names').split(',') : ["All"];
-            const querystringPeriods = this.#querystringParameters.get('periods') ? this.#querystringParameters.get('periods').split(',') : ["All"];
+            const rawNames = this.#querystringParameters.get('names');
+            const rawPeriods = this.#querystringParameters.get('periods');
+            const querystringNames = (!rawNames || rawNames.toLowerCase() === 'all') ? ["All"] : rawNames.split(',').map(decodeURIComponent);
+            const querystringPeriods = (!rawPeriods || rawPeriods.toLowerCase() === 'all') ? ["All"] : rawPeriods.split(',').map(decodeURIComponent);
             return { selectedNames: querystringNames, selectedPeriods: querystringPeriods };
         }
         else if (localStorage.getItem(filterBarStoreKey) !== null) {
