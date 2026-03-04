@@ -14,6 +14,14 @@ template.innerHTML = `
             </div>
         </div>
         <hr />
+        <div id="download-exportCsv">
+            <h4>Export CSV File</h4>
+            <p>Export component data as a CSV file.</p>
+            <div class="dialog-button-container">
+                <button id="dialog-download-export-csv" class="dialog-button dialog-button-secondary">Export CSV</button>
+            </div>
+        </div>
+        <hr />
         <div id="download-exportSBoM">
             <h4>Export SBoM File</h4>
             <p>Export a SBoM (Software Bill of Materials) in <a href="https://cyclonedx.org/" target="_blank">CycloneDX</a> format.</p>
@@ -36,6 +44,7 @@ class DownloadDialog extends HTMLElement {
     #closeButton = null;
     #exportMessage = null;
     #exportEolButton = null;
+    #exportCsvButton = null;
     #exportBomButton = null;
 
     constructor() {
@@ -51,6 +60,7 @@ class DownloadDialog extends HTMLElement {
 
         this.#exportMessage = this.querySelector('#export-message');
         this.#exportEolButton = this.querySelector('#dialog-download-export-eol');
+        this.#exportCsvButton = this.querySelector('#dialog-download-export-csv');
         this.#exportBomButton = this.querySelector('#dialog-download-export-bom');
 
         this.#setupEventHandlers();
@@ -67,6 +77,12 @@ class DownloadDialog extends HTMLElement {
         this.#exportEolButton.addEventListener("click", (e) => {
             const itemCount = dataExport.exportEol();
             this.#exportMessage.innerHTML = `eolvis file exported with ${itemCount} items.`;
+            this.#exportMessage.classList.remove("hidden");
+            setTimeout(this.#hideMessage, 5000);
+        });
+        this.#exportCsvButton.addEventListener("click", (e) => {
+            const itemCount = dataExport.exportCsv();
+            this.#exportMessage.innerHTML = `CSV file exported with ${itemCount} items.`;
             this.#exportMessage.classList.remove("hidden");
             setTimeout(this.#hideMessage, 5000);
         });

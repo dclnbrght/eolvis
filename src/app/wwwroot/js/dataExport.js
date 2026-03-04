@@ -93,6 +93,39 @@ const exportBom = () => {
     return components.length;
 }
 
+const toCsvCell = (value) => {
+    if (value === null || value === undefined) {
+        return '""';
+    }
+
+    const text = String(value).replace(/"/g, '""');
+    return `"${text}"`;
+};
+
+const exportCsv = () => {
+    const data = dataAccess.getComponentState();
+    const exportItems = filterItems(data.components).filter((item) => !item.isdeleted);
+    const fileName = data.projectKey + ".csv";
+
+    if (exportItems.length === 0) {
+        downloadTextFile("", fileName);
+        return 0;
+    }
+
+    const headers = Object.keys(exportItems[0]);
+    const csvRows = [
+        headers.map((h) => toCsvCell(h)).join(",")
+    ];
+
+    exportItems.forEach((item) => {
+        const row = headers.map((header) => toCsvCell(item[header])).join(",");
+        csvRows.push(row);
+    });
+
+    downloadTextFile(csvRows.join("\n"), fileName);
+    return exportItems.length;
+}
+
 const downloadTextFile = (text, name) => {
     const a = document.createElement('a');
     const type = name.split(".").pop();
@@ -104,5 +137,6 @@ const downloadTextFile = (text, name) => {
 
 export {
     exportEol,
-    exportBom
+    exportBom,
+    exportCsv
 };
