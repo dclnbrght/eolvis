@@ -176,20 +176,20 @@ const renderItemTable = (items) => {
         row.appendChild(createTextCell(settings.types[item.type]));
         row.appendChild(createCheckCell(typeof(item.license) !== "undefined" && item.license !== ""));
         row.appendChild(createCheckCell(typeof(item.cpe) !== "undefined" && item.cpe !== ""));
-        row.appendChild(createDateCell(item.supportedFrom));
-        row.appendChild(createDateCell(item.supportedTo));
-        row.appendChild(createDateCell(item.supportedToExtended));
+        row.appendChild(createDateCell(item.supportedFrom ? new Date(item.supportedFrom).toISOString().split('T')[0] : ""));
+        row.appendChild(createDateCell(item.supportedTo ? new Date(item.supportedTo).toISOString().split('T')[0] : ""));
+        row.appendChild(createDateCell(item.supportedToExtended ? new Date(item.supportedToExtended).toISOString().split('T')[0] : ""));
 
         row.appendChild(createLinkCell(item.link));
 
         row.appendChild(createTextCell(item.latestPatch));
-        row.appendChild(createDateCell(item.latestPatchReleased));
+        row.appendChild(createDateCell(item.latestPatchReleased ? new Date(item.latestPatchReleased).toISOString().split('T')[0] : ""));
 
         row.appendChild(createLinkCell(item.useWorkItemLink));
 
-        row.appendChild(createDateCell(item.useFrom));
-        row.appendChild(createDateCell(item.useTo));
-        row.appendChild(createTextCell(new Date(item.updated).toISOString().split('T')[0]));
+        row.appendChild(createDateCell(item.useFrom ? new Date(item.useFrom).toISOString().split('T')[0] : ""));
+        row.appendChild(createDateCell(item.useTo ? new Date(item.useTo).toISOString().split('T')[0] : ""));
+        row.appendChild(createTextCell(item.updated ? new Date(item.updated).toISOString().split('T')[0] : ""));
 
         const editTd = document.createElement("td");
         const buttonEdit = document.createElement("button");
