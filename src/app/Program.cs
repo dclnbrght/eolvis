@@ -136,6 +136,26 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
 
+// MCP Streamable HTTP requires Accept to include both application/json and
+// text/event-stream.  Some clients (e.g. Copilot Studio) only send
+// application/json, causing the MCP library to return 406.
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/mcp")
+        && HttpMethods.IsPost(context.Request.Method))
+    {
+        var accept = context.Request.Headers.Accept.ToString();
+        if (!accept.Contains("text/event-stream", StringComparison.OrdinalIgnoreCase))
+        {
+            context.Request.Headers.Accept =
+                string.IsNullOrWhiteSpace(accept)
+                    ? "application/json, text/event-stream"
+                    : $"{accept}, text/event-stream";
+        }
+    }
+    await next();
+});
+
 // CSRF: require X-Requested-With header on mutating API requests.
 app.Use(async (context, next) =>
 {
