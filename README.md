@@ -15,7 +15,7 @@ Edit EOL details form:
 
 ## Development
 
-The application is built using .NET 8, using VS Code.
+The application is built using .NET 10, using VS Code.
 
 The Azure Storage Explorer is required to manage the tables in [Azure Table Storage](https://azure.microsoft.com/en-us/products/storage/tables).
 
