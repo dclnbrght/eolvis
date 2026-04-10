@@ -156,9 +156,14 @@ public static class OAuthProxyEndpoints
                 ["scope"] = GetScopeString(cid)
             };
 
-            // Entra requires client_secret for confidential-client token exchanges.
+            // Include client_secret only for confidential-client flows (no PKCE).
+            // When code_verifier is present the MCP client is using public-client
+            // PKCE auth — adding client_secret would make Entra validate the
+            // redirect_uri against the Web platform (where the loopback URI
+            // isn't registered), causing the token exchange to fail.
+            var isPkce = form.ContainsKey("code_verifier");
             var secret = config["AzureAD:ClientSecret"];
-            if (!string.IsNullOrWhiteSpace(secret))
+            if (!isPkce && !string.IsNullOrWhiteSpace(secret))
                 formData["client_secret"] = secret;
 
             foreach (var field in form)

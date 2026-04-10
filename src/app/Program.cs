@@ -108,7 +108,11 @@ if (isAuthConfigured)
             var auth = context.Request.Headers.Authorization.ToString();
             if (string.IsNullOrEmpty(auth) || !auth.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
             {
-                var baseUrl = $"{context.Request.Scheme}://{context.Request.Host}";
+                var scheme = context.Request.Headers["X-Forwarded-Proto"].FirstOrDefault()
+                             ?? context.Request.Scheme;
+                var host   = context.Request.Headers["X-Forwarded-Host"].FirstOrDefault()
+                             ?? context.Request.Host.ToString();
+                var baseUrl = $"{scheme}://{host}";
                 context.Response.StatusCode = 401;
                 context.Response.Headers["WWW-Authenticate"] =
                     $"Bearer resource_metadata=\"{baseUrl}/.well-known/oauth-protected-resource/mcp\"";
